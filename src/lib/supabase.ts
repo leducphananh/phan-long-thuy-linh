@@ -48,8 +48,8 @@ const INITIAL_GUESTBOOK_WISHES: GuestbookEntry[] = [
 ];
 
 export function getSupabaseConfig(): { url: string; anonKey: string; isConfigured: boolean } {
-  const envUrl = (import.meta as any).env?.VITE_SUPABASE_URL || '';
-  const envKey = (import.meta as any).env?.VITE_SUPABASE_ANON_KEY || '';
+  const envUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+  const envKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
   
   const storedUrl = typeof window !== 'undefined' ? localStorage.getItem(STORAGE_URL_KEY) || '' : '';
   const storedKey = typeof window !== 'undefined' ? localStorage.getItem(STORAGE_ANON_KEY) || '' : '';

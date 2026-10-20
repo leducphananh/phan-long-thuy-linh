@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import { Calendar, Clock, MapPin, ExternalLink, Download, Compass, Check, Heart } from 'lucide-react';
 import { WeddingCouple, WeddingEvent } from '../types/wedding';

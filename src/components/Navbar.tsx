@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import { Heart, Menu, X, Database, Music, Volume2, VolumeX } from 'lucide-react';
 import { getSupabaseConfig } from '../lib/supabase';

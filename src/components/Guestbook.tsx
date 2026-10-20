@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import { Heart, Send, MessageCircle, Clock, Sparkles, User, Database, Smile } from 'lucide-react';
 import { GuestbookEntry } from '../types/wedding';

@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { Heart, ArrowUp, Sparkles } from 'lucide-react';
 import { WeddingCouple } from '../types/wedding';

@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { Heart, MapPin, Sparkles } from 'lucide-react';
 import { StoryMilestone } from '../types/wedding';

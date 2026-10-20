@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { X, ChevronLeft, ChevronRight, Maximize2, Heart } from 'lucide-react';
 import { GalleryPhoto } from '../types/wedding';

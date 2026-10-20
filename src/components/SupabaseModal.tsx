@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import { X, Copy, Check, Database, Code2, Server, FolderTree, ExternalLink } from 'lucide-react';
 import { getSupabaseConfig, saveSupabaseConfig } from '../lib/supabase';

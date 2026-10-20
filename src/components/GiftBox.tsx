@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import { Gift, Copy, Check, QrCode } from 'lucide-react';
 import { WeddingCouple } from '../types/wedding';
