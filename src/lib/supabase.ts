@@ -294,3 +294,61 @@ export async function likeGuestbookWish(id: string): Promise<boolean> {
   }
   return false;
 }
+
+/**
+ * Lắng nghe thay đổi Realtime từ bảng guestbook trên Supabase
+ * Tự động cập nhật giao diện khi có lời chúc mới hoặc lượt thích thay đổi
+ */
+export function subscribeGuestbookRealtime(
+  onInsert?: (entry: GuestbookEntry) => void,
+  onUpdate?: (entry: GuestbookEntry) => void
+): () => void {
+  const client = getSupabaseClient();
+  if (!client) {
+    return () => {};
+  }
+
+  try {
+    const channel = client
+      .channel('guestbook-realtime-channel')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'guestbook',
+        },
+        (payload) => {
+          if (payload.new && onInsert) {
+            onInsert(payload.new as GuestbookEntry);
+          }
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'guestbook',
+        },
+        (payload) => {
+          if (payload.new && onUpdate) {
+            onUpdate(payload.new as GuestbookEntry);
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      try {
+        client.removeChannel(channel);
+      } catch (e) {
+        console.warn('Error removing Supabase channel:', e);
+      }
+    };
+  } catch (err) {
+    console.warn('Realtime subscription error:', err);
+    return () => {};
+  }
+}
+

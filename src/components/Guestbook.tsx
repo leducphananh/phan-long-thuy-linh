@@ -3,7 +3,12 @@
 import React, { useState, useEffect } from 'react';
 import { Heart, Send, MessageCircle, Clock, Sparkles, User, Database, Smile } from 'lucide-react';
 import { GuestbookEntry } from '../types/wedding';
-import { fetchGuestbook, submitGuestbookWish, likeGuestbookWish } from '../lib/supabase';
+import {
+  fetchGuestbook,
+  submitGuestbookWish,
+  likeGuestbookWish,
+  subscribeGuestbookRealtime,
+} from '../lib/supabase';
 import { ScrollReveal } from './ScrollReveal';
 
 export const Guestbook: React.FC = () => {
@@ -18,6 +23,30 @@ export const Guestbook: React.FC = () => {
 
   useEffect(() => {
     loadWishes();
+
+    // Subscribe to realtime Supabase changes
+    const unsubscribe = subscribeGuestbookRealtime(
+      (newEntry) => {
+        setWishes((prev) => {
+          // Avoid duplicate wish if submitted locally
+          if (prev.some((item) => item.id === newEntry.id)) {
+            return prev;
+          }
+          return [newEntry, ...prev];
+        });
+      },
+      (updatedEntry) => {
+        setWishes((prev) =>
+          prev.map((item) =>
+            item.id === updatedEntry.id ? { ...item, ...updatedEntry } : item
+          )
+        );
+      }
+    );
+
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   const loadWishes = async () => {
@@ -44,7 +73,7 @@ export const Guestbook: React.FC = () => {
 
       const res = await submitGuestbookWish(name, message, relationship, randomColor);
       if (res.success) {
-        setWishes((prev) => [res.entry, ...prev]);
+        setWishes((prev) => (prev.some((item) => item.id === res.entry.id) ? prev : [res.entry, ...prev]));
         setName('');
         setMessage('');
         setStorageMode(res.mode);
@@ -214,7 +243,7 @@ export const Guestbook: React.FC = () => {
                 <div className="mt-4 pt-4 border-t border-rose-100 flex items-center justify-between text-xs text-stone-500 font-medium">
                   <span className="flex items-center gap-1.5">
                     <Database className="w-3.5 h-3.5 text-emerald-600" />
-                    {storageMode === 'supabase' ? 'Supabase Live' : 'Demo Local Storage'}
+                    {storageMode === 'supabase' ? 'Supabase Realtime Live' : 'Demo Local Storage'}
                   </span>
                   <span>{wishes.length} lời chúc</span>
                 </div>
