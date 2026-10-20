@@ -88,6 +88,6 @@ insert into public.guestbook (name, message, relationship, avatar_color, likes_c
 values 
   ('Nguyễn Minh Tuấn & Nhóm bạn Đại học', 'Chúc hai bạn trăm năm hạnh phúc, đầu bạc răng long! Chúc cho tổ ấm nhỏ luôn tràn ngập tiếng cười và yêu thương.', 'friend', 'rose', 12),
   ('Chị Thảo & Gia đình', 'Mừng ngày vui của hai em! Chúc hai em luôn đồng hành, thấu hiểu và chia sẻ mọi niềm vui nỗi buồn trong cuộc sống hôn nhân.', 'family', 'amber', 8),
-  ('Đức Huy - Team Công Nghệ', 'Chúc mừng anh Nam và chị Linh! Đám cưới thế kỷ của team mình rồi, chúc hai bạn sớm có thiên thần nhỏ nhé!', 'colleague', 'emerald', 15),
+  ('Đức Huy - Team Công Nghệ', 'Chúc mừng anh Phan Anh và chị Ngọc Yến! Đám cưới tuyệt đẹp, chúc hai bạn trăm năm hạnh phúc và sớm đón thiên thần nhỏ nhé!', 'colleague', 'emerald', 15),
   ('Cô Bảy & Chú Hùng', 'Chúc hai cháu trăm năm tình viên mãn, bạc đầu nghĩa phu thê. Gia đình hai bên luôn tự hào về hai cháu.', 'relative', 'indigo', 6)
 on conflict do nothing;

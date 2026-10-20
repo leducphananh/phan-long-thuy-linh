@@ -21,7 +21,7 @@ export const RSVPForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [storageMode, setStorageMode] = useState<'supabase' | 'local'>('local');
+  const [storageMode, setStorageMode] = useState<'google_sheet' | 'supabase' | 'local'>('local');
 
   const triggerConfetti = () => {
     confetti({
@@ -50,16 +50,55 @@ export const RSVPForm: React.FC = () => {
     setLoading(true);
 
     try {
-      const result = await submitRSVP(formData);
+      const response = await fetch('/api/rsvp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
       if (result.success) {
         setSubmitted(true);
-        setStorageMode(result.mode);
+        setStorageMode(result.mode || 'local');
         triggerConfetti();
+
+        // Also save a safety copy to browser localStorage
+        try {
+          const raw = localStorage.getItem('wedding_local_rsvp_data');
+          const list = raw ? JSON.parse(raw) : [];
+          list.unshift({
+            ...formData,
+            id: 'rsvp-' + Date.now(),
+            created_at: new Date().toISOString(),
+          });
+          localStorage.setItem('wedding_local_rsvp_data', JSON.stringify(list));
+        } catch {
+          // Ignore localStorage write error
+        }
       } else {
-        setErrorMessage(result.message);
+        setErrorMessage(result.message || 'Đã có lỗi xảy ra. Vui lòng thử lại.');
       }
-    } catch (err: any) {
-      setErrorMessage('Đã xảy ra lỗi khi gửi form. Vui lòng thử lại sau.');
+    } catch {
+      // Offline fallback: save to localStorage directly
+      try {
+        const raw = localStorage.getItem('wedding_local_rsvp_data');
+        const list = raw ? JSON.parse(raw) : [];
+        list.unshift({
+          ...formData,
+          id: 'rsvp-' + Date.now(),
+          created_at: new Date().toISOString(),
+        });
+        localStorage.setItem('wedding_local_rsvp_data', JSON.stringify(list));
+
+        setSubmitted(true);
+        setStorageMode('local');
+        triggerConfetti();
+      } catch {
+        setErrorMessage('Đã xảy ra lỗi khi gửi xác nhận. Vui lòng thử lại sau.');
+      }
     } finally {
       setLoading(false);
     }
@@ -121,7 +160,11 @@ export const RSVPForm: React.FC = () => {
                 <div className="mt-4 inline-flex items-center gap-2 text-xs text-stone-600 px-3.5 py-1.5 rounded-xl bg-rose-50/60 border border-rose-200">
                   <span>Trạng thái:</span>
                   <span className="font-semibold text-rose-700">
-                    {storageMode === 'supabase' ? 'Đã đồng bộ trực tiếp lên Supabase' : 'Đã ghi nhận dữ liệu'}
+                    {storageMode === 'google_sheet'
+                      ? 'Đã tự động lưu vào Google Sheet'
+                      : storageMode === 'supabase'
+                      ? 'Đã đồng bộ lên Supabase'
+                      : 'Đã ghi nhận dữ liệu xác nhận'}
                   </span>
                 </div>
 
