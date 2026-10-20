@@ -7,6 +7,10 @@
     --font-cormorant: 'Cormorant Garamond', Georgia, serif;
     --font-sans: 'Montserrat', system-ui, -apple-system, sans-serif;
   }
+
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 .font-serif {
@@ -27,9 +31,9 @@
 
 /* Custom romantic decorative utilities */
 .bg-romantic-pattern {
-  background-color: #FAF8F5;
+  background-color: #FFFDFB;
   background-image: radial-gradient(rgba(217, 119, 87, 0.05) 1px, transparent 1px),
-                    radial-gradient(rgba(217, 119, 87, 0.05) 1px, #FAF8F5 1px);
+                    radial-gradient(rgba(217, 119, 87, 0.05) 1px, #FFFDFB 1px);
   background-size: 40px 40px;
   background-position: 0 0, 20px 20px;
 }
@@ -62,14 +66,14 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #f5f2ed;
+  background: #fdfbf7;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #d6cec7;
+  background: #e2d9d2;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #b8aba2;
+  background: #cbbeb5;
 }

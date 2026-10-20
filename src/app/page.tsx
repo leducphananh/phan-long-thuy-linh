@@ -1,36 +1,35 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
+'use client';
 
 import React, { useState } from 'react';
-import { Navbar } from './components/Navbar';
-import { Hero } from './components/Hero';
-import { Story } from './components/Story';
-import { Invitation } from './components/Invitation';
-import { Gallery } from './components/Gallery';
-import { RSVPForm } from './components/RSVPForm';
-import { Guestbook } from './components/Guestbook';
-import { GiftBox } from './components/GiftBox';
-import { Footer } from './components/Footer';
-import { AudioPlayer } from './components/AudioPlayer';
-import { FloatingPetals } from './components/FloatingPetals';
-import { SupabaseModal } from './components/SupabaseModal';
+import { Navbar } from '@/components/Navbar';
+import { Hero } from '@/components/Hero';
+import { Story } from '@/components/Story';
+import { Invitation } from '@/components/Invitation';
+import { Gallery } from '@/components/Gallery';
+import { RSVPForm } from '@/components/RSVPForm';
+import { Guestbook } from '@/components/Guestbook';
+import { GiftBox } from '@/components/GiftBox';
+import { Footer } from '@/components/Footer';
+import { AudioPlayer } from '@/components/AudioPlayer';
+import { FloatingPetals } from '@/components/FloatingPetals';
+import { SupabaseModal } from '@/components/SupabaseModal';
 import {
   weddingCoupleData,
   storyMilestones,
   weddingEvents,
   galleryPhotos,
-} from './data/weddingData';
+} from '@/data/weddingData';
 
-export default function App() {
+export default function WeddingPage() {
   const [isSupabaseModalOpen, setIsSupabaseModalOpen] = useState(false);
   const [isPlayingMusic, setIsPlayingMusic] = useState(false);
 
   const scrollToSection = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
+    if (typeof window !== 'undefined') {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   };
 
@@ -73,10 +72,10 @@ export default function App() {
         {/* 4. Album Ảnh Cưới (Masonry Grid & Fullscreen Lightbox) */}
         <Gallery photos={galleryPhotos} />
 
-        {/* 5. Xác Nhận Tham Gia (RSVP Form with Supabase Integration) */}
+        {/* 5. Xác Nhận Tham Gia (RSVP Form with Google Sheet & Supabase Integration) */}
         <RSVPForm />
 
-        {/* 6. Sổ Lưu Bút & Lời Chúc (Guestbook with Supabase Integration) */}
+        {/* 6. Sổ Lưu Bút & Lời Chúc (Guestbook with Supabase Realtime) */}
         <Guestbook />
 
         {/* 7. Hộp Mừng Cưới (VietQR & Tài khoản mừng hạnh phúc) */}
@@ -86,7 +85,7 @@ export default function App() {
       {/* Footer */}
       <Footer couple={weddingCoupleData} />
 
-      {/* Supabase Technical & DDL Schema Modal */}
+      {/* Setup / Technical Modal (Google Sheet + Supabase DDL) */}
       <SupabaseModal
         isOpen={isSupabaseModalOpen}
         onClose={() => setIsSupabaseModalOpen(false)}
