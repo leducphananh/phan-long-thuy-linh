@@ -8,8 +8,8 @@ Bạn có thể thay thế toàn bộ ảnh cưới mẫu bằng ảnh cưới t
 
 1. Sao chép các tệp ảnh cưới (`.jpg`, `.jpeg`, `.png`, `.webp`) của bạn vào các thư mục:
    - `public/images/gallery/couple/` — Dành cho **Ảnh chụp chung** của hai bạn
-   - `public/images/gallery/bride/` — Dành cho **Ảnh cô dâu (Ngọc Yến)**
-   - `public/images/gallery/groom/` — Dành cho **Ảnh chú rể (Phan Anh)**
+   - `public/images/gallery/bride/` — Dành cho **Ảnh cô dâu (Thùy Linh)**
+   - `public/images/gallery/groom/` — Dành cho **Ảnh chú rể (Phan Long)**
 
 2. Mở file `src/data/weddingData.ts`, tìm đến mảng `galleryPhotos` và cập nhật đường dẫn ảnh, ví dụ:
    ```typescript
@@ -22,13 +22,13 @@ Bạn có thể thay thế toàn bộ ảnh cưới mẫu bằng ảnh cưới t
    {
      id: 'photo-2',
      url: '/images/gallery/bride/anh-co-dau-1.jpg',
-     title: 'Nàng Thơ Ngọc Yến',
+     title: 'Nàng Thơ Thùy Linh',
      category: 'bride',
    },
    {
      id: 'photo-3',
      url: '/images/gallery/groom/anh-chu-re-1.jpg',
-     title: 'Chú Rể Phan Anh',
+     title: 'Chú Rể Phan Long',
      category: 'groom',
    }
    ```

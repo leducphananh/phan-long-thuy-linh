@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="roseGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fb7185" />
+      <stop offset="100%" stop-color="#e11d48" />
+    </linearGradient>
+    <linearGradient id="pinkGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fda4af" />
+      <stop offset="100%" stop-color="#f43f5e" />
+    </linearGradient>
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a" />
+      <stop offset="100%" stop-color="#f59e0b" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#881337" flood-opacity="0.25" />
+    </filter>
+  </defs>
+
+  <!-- Background Soft Pearl Circle -->
+  <circle cx="32" cy="32" r="30" fill="#FFFDFB" stroke="#FECDD3" stroke-width="2" />
+
+  <!-- Main Left Heart (Groom/Couple) -->
+  <g filter="url(#shadow)">
+    <path d="M 28,47 C 15,37 8,28 8,19 C 8,12 13,8 19,8 C 23.5,8 26.5,10.5 28,13 C 29.5,10.5 32.5,8 37,8 C 43,8 48,12 48,19 C 48,28 41,37 28,47 Z"
+          fill="url(#roseGradient)" />
+  </g>
+
+  <!-- Overlapping Right Little Heart (Bride) -->
+  <g filter="url(#shadow)">
+    <path d="M 44,52 C 34,44 29,37 29,30 C 29,25 33,22 37,22 C 40,22 42.5,24 44,26 C 45.5,24 48,22 51,22 C 55,22 59,25 59,30 C 59,37 54,44 44,52 Z"
+          fill="url(#pinkGradient)"
+          stroke="#FFFDFB"
+          stroke-width="1.5" />
+  </g>
+
+  <!-- Tiny Golden Wedding Sparkle / Rings -->
+  <circle cx="48" cy="14" r="3" fill="url(#goldGradient)" />
+  <path d="M 48,9 L 49.2,12.5 L 52.5,14 L 49.2,15.5 L 48,19 L 46.8,15.5 L 43.5,14 L 46.8,12.5 Z" fill="#F59E0B" opacity="0.9" />
+  <circle cx="16" cy="16" r="1.5" fill="#FFFFFF" opacity="0.8" />
+  <circle cx="36" cy="27" r="1" fill="#FFFFFF" opacity="0.8" />
+</svg>

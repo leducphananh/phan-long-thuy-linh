@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Heart, MapPin, Sparkles } from 'lucide-react';
+import { Heart, MapPin } from 'lucide-react';
 import { StoryMilestone } from '../types/wedding';
 import { ScrollReveal } from './ScrollReveal';
 
@@ -63,8 +63,8 @@ export const Story: React.FC<StoryProps> = ({ milestones }) => {
                   className="relative flex flex-col md:flex-row items-start md:items-center group"
                 >
                   {/* Timeline node icon */}
-                  <div className="absolute left-6 md:left-1/2 -translate-x-1/2 z-10 w-9 h-9 rounded-full bg-white border-2 border-rose-500 shadow-md flex items-center justify-center text-rose-600 group-hover:scale-110 group-hover:bg-rose-50 transition-transform duration-300">
-                    <Sparkles className="w-4 h-4" />
+                  <div className="absolute left-6 md:left-1/2 -translate-x-1/2 z-10 w-9 h-9 rounded-full bg-white border-2 border-rose-500 shadow-md flex items-center justify-center text-rose-500 group-hover:scale-125 group-hover:bg-rose-50 transition-transform duration-300">
+                    <Heart className="w-4 h-4 fill-rose-500 text-rose-500" />
                   </div>
 
                   {/* Content Card Layout with Alternating Slide Animation */}

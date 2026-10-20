@@ -12,7 +12,6 @@ import { GiftBox } from '@/components/GiftBox';
 import { Footer } from '@/components/Footer';
 import { AudioPlayer } from '@/components/AudioPlayer';
 import { FloatingPetals } from '@/components/FloatingPetals';
-import { SupabaseModal } from '@/components/SupabaseModal';
 import {
   weddingCoupleData,
   storyMilestones,
@@ -21,7 +20,6 @@ import {
 } from '@/data/weddingData';
 
 export default function WeddingPage() {
-  const [isSupabaseModalOpen, setIsSupabaseModalOpen] = useState(false);
   const [isPlayingMusic, setIsPlayingMusic] = useState(false);
 
   const scrollToSection = (id: string) => {
@@ -46,7 +44,6 @@ export default function WeddingPage() {
 
       {/* Top Navigation Bar */}
       <Navbar
-        onOpenSupabaseModal={() => setIsSupabaseModalOpen(true)}
         isPlayingMusic={isPlayingMusic}
         onToggleMusic={() => setIsPlayingMusic(!isPlayingMusic)}
       />
@@ -84,12 +81,6 @@ export default function WeddingPage() {
 
       {/* Footer */}
       <Footer couple={weddingCoupleData} />
-
-      {/* Setup / Technical Modal (Google Sheet + Supabase DDL) */}
-      <SupabaseModal
-        isOpen={isSupabaseModalOpen}
-        onClose={() => setIsSupabaseModalOpen(false)}
-      />
     </div>
   );
 }

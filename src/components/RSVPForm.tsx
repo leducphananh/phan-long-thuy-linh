@@ -133,7 +133,7 @@ export const RSVPForm: React.FC = () => {
               <div className="h-px w-12 bg-rose-300" />
             </div>
             <p className="mt-4 text-sm sm:text-base text-stone-600 max-w-lg mx-auto font-medium">
-              Để gia đình có thể chuẩn bị đón tiếp chu đáo nhất, xin Quý khách vui lòng xác nhận sự hiện diện trước ngày <strong className="text-stone-900">15 Tháng 11, 2026</strong>.
+              Để gia đình có thể chuẩn bị đón tiếp chu đáo nhất, xin Quý khách vui lòng xác nhận sự hiện diện trước ngày <strong className="text-stone-900">15 Tháng 12, 2026</strong>.
             </p>
           </div>
         </ScrollReveal>
@@ -280,8 +280,8 @@ export const RSVPForm: React.FC = () => {
                       </label>
                       <div className="grid grid-cols-3 gap-2">
                         {[
-                          { key: 'groom', label: 'Nhà Trai (Phan Anh)' },
-                          { key: 'bride', label: 'Nhà Gái (Ngọc Yến)' },
+                          { key: 'groom', label: 'Nhà Trai (Phan Long)' },
+                          { key: 'bride', label: 'Nhà Gái (Thùy Linh)' },
                           { key: 'both', label: 'Cả Hai' },
                         ].map((item) => (
                           <button
@@ -336,13 +336,13 @@ export const RSVPForm: React.FC = () => {
                 {/* Message to Couple */}
                 <div>
                   <label htmlFor="rsvp-message" className="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
-                    Lời nhắn gửi / Lưu ý chế độ ăn uống (Ăn chay, dị ứng...)
+                    Lời Nhắn Gửi
                   </label>
                   <div className="relative">
                     <textarea
                       id="rsvp-message"
                       rows={3}
-                      placeholder="Gửi vài lời chúc mừng hoặc nhắn gửi về chế độ ăn uống đặc biệt..."
+                      placeholder="Gửi lời chúc mừng hoặc nhắn gửi yêu thương tới Phan Long & Thùy Linh..."
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       className="w-full p-3 rounded-xl border border-stone-200 bg-stone-50/50 text-stone-900 text-sm focus:outline-hidden focus:ring-2 focus:ring-rose-500 focus:bg-white transition-all resize-none"

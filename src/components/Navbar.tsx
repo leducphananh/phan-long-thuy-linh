@@ -1,23 +1,19 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Heart, Menu, X, Database, Music, Volume2, VolumeX } from 'lucide-react';
-import { getSupabaseConfig } from '../lib/supabase';
+import { Heart, Menu, X, Music, Volume2, VolumeX } from 'lucide-react';
 
 interface NavbarProps {
-  onOpenSupabaseModal: () => void;
   isPlayingMusic: boolean;
   onToggleMusic: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
-  onOpenSupabaseModal,
   isPlayingMusic,
   onToggleMusic
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const supabaseConfig = getSupabaseConfig();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -49,25 +45,25 @@ export const Navbar: React.FC<NavbarProps> = ({
     <header
       className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
         isScrolled
-          ? 'bg-white/95 backdrop-blur-md shadow-sm border-b border-stone-200/70 py-2.5 sm:py-3'
-          : 'bg-gradient-to-b from-stone-950/75 via-stone-900/35 to-transparent py-3 sm:py-4 text-white'
+          ? 'bg-white/95 backdrop-blur-md shadow-sm border-b border-stone-200/70 py-2 sm:py-2.5'
+          : 'bg-gradient-to-b from-stone-950/75 via-stone-900/35 to-transparent py-2.5 sm:py-3.5 text-white'
       }`}
     >
       <div className="max-w-7xl mx-auto px-3 sm:px-6 flex items-center justify-between gap-2 sm:gap-4 flex-nowrap">
-        {/* Zone 1: Single text element wordmark - Never wrap */}
+        {/* Zone 1: Wordmark - Always fits on one line, gracefully scales on mobile */}
         <a
           href="#hero"
           onClick={(e) => handleLinkClick(e, '#hero')}
-          className={`font-serif text-lg sm:text-xl font-bold tracking-wider flex items-center gap-1.5 shrink-0 whitespace-nowrap transition-colors ${
+          className={`font-serif text-base sm:text-lg md:text-xl font-bold tracking-tight sm:tracking-wider flex items-center gap-1 sm:gap-1.5 shrink-0 whitespace-nowrap transition-colors ${
             isScrolled ? 'text-stone-900 hover:text-rose-700' : 'text-white hover:text-rose-200'
           }`}
         >
-          <span>Phan Anh</span>
+          <span>Phan Long</span>
           <Heart className="w-3.5 h-3.5 fill-rose-500 text-rose-500 inline-block animate-pulse shrink-0" />
-          <span>Ngọc Yến</span>
+          <span>Thùy Linh</span>
         </a>
 
-        {/* Zone 2: Navigation Links - whitespace-nowrap and shrink-0 on ALL items */}
+        {/* Zone 2: Desktop Navigation Links */}
         <nav className="hidden lg:flex items-center gap-4 xl:gap-7 shrink-0">
           {navLinks.map((link) => (
             <a
@@ -83,13 +79,13 @@ export const Navbar: React.FC<NavbarProps> = ({
           ))}
         </nav>
 
-        {/* Zone 3: Primary Actions - shrink-0 to prevent wrapping */}
+        {/* Zone 3: Primary Actions (Music toggle + RSVP CTA + Mobile Menu Button) */}
         <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
           {/* Music Quick Toggle */}
           <button
             onClick={onToggleMusic}
             aria-label="Bật/Tắt nhạc nền"
-            className={`p-2 rounded-full transition-colors flex items-center justify-center shrink-0 ${
+            className={`p-1.5 sm:p-2 rounded-full transition-colors flex items-center justify-center shrink-0 ${
               isScrolled
                 ? 'bg-stone-100 text-stone-700 hover:bg-stone-200'
                 : 'bg-white/20 text-white backdrop-blur-xs hover:bg-white/30'
@@ -99,36 +95,20 @@ export const Navbar: React.FC<NavbarProps> = ({
             {isPlayingMusic ? <Volume2 className="w-4 h-4 text-rose-600 animate-pulse shrink-0" /> : <VolumeX className="w-4 h-4 shrink-0" />}
           </button>
 
-          {/* Database Setup Modal Trigger */}
-          <button
-            onClick={onOpenSupabaseModal}
-            className={`px-2.5 sm:px-3 py-1.5 text-xs font-medium rounded-lg flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 ${
-              isScrolled
-                ? 'border border-stone-200 text-stone-700 hover:bg-stone-50'
-                : 'border border-white/30 text-white hover:bg-white/10 backdrop-blur-xs'
-            }`}
-            title="Cấu hình kết nối Supabase"
-          >
-            <Database className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-            <span className="hidden sm:inline whitespace-nowrap">
-              {supabaseConfig.isConfigured ? 'Supabase Live' : 'Supabase SQL'}
-            </span>
-          </button>
-
-          {/* Primary Action Button */}
+          {/* Primary Action Button (RSVP) */}
           <a
             href="#rsvp"
             onClick={(e) => handleLinkClick(e, '#rsvp')}
-            className="px-3 sm:px-4 py-1.5 text-xs sm:text-sm font-semibold text-white bg-rose-600 rounded-lg hover:bg-rose-700 transition-colors shadow-xs whitespace-nowrap shrink-0 active:scale-95"
+            className="px-3 sm:px-4 py-1.5 text-xs sm:text-sm font-semibold text-white bg-rose-600 rounded-xl hover:bg-rose-700 transition-colors shadow-xs whitespace-nowrap shrink-0 active:scale-95"
           >
-            <span className="hidden xs:inline">Xác Nhận Tham Dự</span>
-            <span className="xs:hidden">RSVP</span>
+            <span className="hidden sm:inline">Xác Nhận Tham Dự</span>
+            <span className="sm:hidden">RSVP</span>
           </a>
 
-          {/* Mobile/Tablet hamburger button */}
+          {/* Mobile/Tablet hamburger toggle button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className={`lg:hidden p-2 rounded-lg transition-colors shrink-0 ${
+            className={`lg:hidden p-1.5 sm:p-2 rounded-xl transition-colors shrink-0 ${
               isScrolled ? 'text-stone-800 hover:bg-stone-100' : 'text-white hover:bg-white/10'
             }`}
             aria-label="Mở menu"
@@ -140,35 +120,26 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Mobile/Tablet dropdown drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-white/98 backdrop-blur-lg border-b border-stone-200 px-4 pt-3 pb-6 shadow-xl animate-in slide-in-from-top duration-200">
-          <div className="flex flex-col gap-2">
+        <div className="lg:hidden bg-white/98 backdrop-blur-lg border-b border-stone-200 px-4 pt-3 pb-5 shadow-xl animate-in slide-in-from-top duration-200">
+          <div className="flex flex-col gap-1">
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
                 onClick={(e) => handleLinkClick(e, link.href)}
-                className="text-stone-700 hover:text-rose-600 font-medium py-2 px-3 rounded-md hover:bg-stone-50 transition-colors text-base whitespace-nowrap"
+                className="text-stone-700 hover:text-rose-600 font-medium py-2.5 px-3 rounded-xl hover:bg-rose-50/50 transition-colors text-sm sm:text-base whitespace-nowrap"
               >
                 {link.label}
               </a>
             ))}
-            <div className="pt-3 mt-1 border-t border-stone-100 flex items-center justify-between gap-3">
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onOpenSupabaseModal();
-                }}
-                className="flex-1 py-2 px-3 text-xs font-medium border border-stone-200 text-stone-700 rounded-lg hover:bg-stone-50 flex items-center justify-center gap-1.5 whitespace-nowrap"
-              >
-                <Database className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                Cấu hình Supabase
-              </button>
+            <div className="pt-3 mt-2 border-t border-stone-100 flex items-center justify-between">
+              <span className="text-xs text-stone-500 font-medium">Nhạc nền cưới:</span>
               <button
                 onClick={onToggleMusic}
-                className="py-2 px-4 text-xs font-medium bg-rose-50 text-rose-700 rounded-lg hover:bg-rose-100 flex items-center gap-1.5 whitespace-nowrap"
+                className="py-1.5 px-3.5 text-xs font-semibold bg-rose-50 text-rose-700 rounded-xl hover:bg-rose-100 flex items-center gap-1.5 whitespace-nowrap transition-colors"
               >
                 <Music className="w-3.5 h-3.5 shrink-0" />
-                {isPlayingMusic ? 'Tắt nhạc' : 'Bật nhạc'}
+                {isPlayingMusic ? 'Đang phát nhạc' : 'Bật nhạc'}
               </button>
             </div>
           </div>

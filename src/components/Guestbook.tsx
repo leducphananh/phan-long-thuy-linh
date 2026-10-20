@@ -217,7 +217,7 @@ export const Guestbook: React.FC = () => {
                       id="guestbook-message"
                       required
                       rows={4}
-                      placeholder="Viết lời chúc mừng tới Phan Anh & Ngọc Yến..."
+                      placeholder="Viết lời chúc mừng tới Phan Long & Thùy Linh..."
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
                       className="w-full p-3 rounded-xl border border-stone-200 bg-stone-50/50 text-stone-900 text-sm focus:outline-hidden focus:ring-2 focus:ring-rose-500 focus:bg-white transition-all resize-none"

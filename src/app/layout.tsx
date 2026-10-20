@@ -29,11 +29,16 @@ const alexBrush = Alex_Brush({
 });
 
 export const metadata: Metadata = {
-  title: 'Thiệp Cưới Online — Phan Anh & Ngọc Yến | 26.10.2026',
-  description: 'Trân trọng kính mời quý khách đến dự lễ thành hôn của Phan Anh & Ngọc Yến vào ngày 26 tháng 10 năm 2026 tại Diamond Palace Grand Ballroom.',
+  title: 'Thiệp Cưới Online — Phan Long & Thùy Linh | 24.12.2026',
+  description: 'Trân trọng kính mời quý khách đến chung vui ngày hạnh phúc của Phan Long & Thùy Linh vào ngày 24 tháng 12 năm 2026.',
+  icons: {
+    icon: '/icon.svg',
+    shortcut: '/icon.svg',
+    apple: '/icon.svg',
+  },
   openGraph: {
-    title: 'Thiệp Cưới Online — Phan Anh & Ngọc Yến',
-    description: 'Trân trọng kính mời quý khách đến dự lễ thành hôn của Phan Anh & Ngọc Yến vào ngày 26 tháng 10 năm 2026.',
+    title: 'Thiệp Cưới Online — Phan Long & Thùy Linh',
+    description: 'Trân trọng kính mời quý khách đến chung vui ngày hạnh phúc của Phan Long & Thùy Linh vào ngày 24 tháng 12 năm 2026.',
     type: 'website',
     locale: 'vi_VN',
     images: [
@@ -41,7 +46,7 @@ export const metadata: Metadata = {
         url: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=1200',
         width: 1200,
         height: 630,
-        alt: 'Phan Anh & Ngọc Yến Wedding Invitation',
+        alt: 'Phan Long & Thùy Linh Wedding Invitation',
       },
     ],
   },

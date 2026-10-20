@@ -2,8 +2,8 @@ import { WeddingCouple, StoryMilestone, WeddingEvent, GalleryPhoto } from '../ty
 
 export const weddingCoupleData: WeddingCouple = {
   groom: {
-    name: 'Phan Anh',
-    fullName: 'Lê Đức Phan Anh',
+    name: 'Phan Long',
+    fullName: 'Lê Đức Phan Long',
     title: 'Chú Rể',
     fatherName: 'Lê Đức Minh',
     motherName: 'Trần Thị Mai',
@@ -12,13 +12,13 @@ export const weddingCoupleData: WeddingCouple = {
     bankInfo: {
       bankName: 'Vietcombank - Chi nhánh Thăng Long',
       accountNumber: '1029384756',
-      accountName: 'LE DUC PHAN ANH',
-      qrCodeUrl: 'https://img.vietqr.io/image/VCB-1029384756-compact2.png?amount=0&addInfo=Mung%20cuoi%20Phan%20Anh%20Ngoc%20Yen&accountName=LE%20DUC%20PHAN%20ANH'
+      accountName: 'LE DUC PHAN LONG',
+      qrCodeUrl: 'https://img.vietqr.io/image/VCB-1029384756-compact2.png?amount=0&addInfo=Mung%20cuoi%20Phan%20Long%20Thuy%20Linh&accountName=LE%20DUC%20PHAN%20LONG'
     }
   },
   bride: {
-    name: 'Ngọc Yến',
-    fullName: 'Nguyễn Ngọc Yến',
+    name: 'Thùy Linh',
+    fullName: 'Nguyễn Thị Thùy Linh',
     title: 'Cô Dâu',
     fatherName: 'Nguyễn Văn Hùng',
     motherName: 'Hoàng Thị Lan',
@@ -27,13 +27,13 @@ export const weddingCoupleData: WeddingCouple = {
     bankInfo: {
       bankName: 'Techcombank - Chi nhánh Bến Thành',
       accountNumber: '19038472910015',
-      accountName: 'NGUYEN NGOC YEN',
-      qrCodeUrl: 'https://img.vietqr.io/image/TCB-19038472910015-compact2.png?amount=0&addInfo=Mung%20cuoi%20Phan%20Anh%20Ngoc%20Yen&accountName=NGUYEN%20NGOC%20YEN'
+      accountName: 'NGUYEN THI THUY LINH',
+      qrCodeUrl: 'https://img.vietqr.io/image/TCB-19038472910015-compact2.png?amount=0&addInfo=Mung%20cuoi%20Phan%20Long%20Thuy%20Linh&accountName=NGUYEN%20THI%20THUY%20LINH'
     }
   },
-  // Wedding date: 28th November 2026, 18:00
-  weddingDate: '2026-11-28T18:00:00+07:00',
-  lunarDate: 'Ngày 20 tháng 10 năm Bính Ngọ'
+  // Wedding date: 24th December 2026, 18:00
+  weddingDate: '2026-12-24T18:00:00+07:00',
+  lunarDate: 'Ngày 16 tháng 11 năm Bính Ngọ'
 };
 
 export const storyMilestones: StoryMilestone[] = [
@@ -80,7 +80,7 @@ export const storyMilestones: StoryMilestone[] = [
   {
     id: 'story-5',
     year: '2026',
-    date: '28 Tháng 11, 2026',
+    date: '24 Tháng 12, 2026',
     title: 'Ngày Chung Đôi',
     description: 'Hành trình 5 năm yêu thương đơm hoa kết trái. Chúng mình chính thức nắm tay nhau bước vào ngưỡng cửa hôn nhân thiêng liêng trước sự chứng kiến của hai họ và bạn bè.',
     imageUrl: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80',
@@ -93,21 +93,21 @@ export const weddingEvents: WeddingEvent[] = [
   {
     id: 'event-ceremony',
     type: 'ceremony',
-    title: 'LỄ THÀNH HÔN',
-    subtitle: 'Nghi thức cưới truyền thống gia đình hai họ',
-    date: 'Thứ Bảy, 28 Tháng 11, 2026',
+    title: 'LỄ ĂN HỎI & ĐÍNH HÔN',
+    subtitle: 'Nghi thức trao duyên & trao tráp truyền thống hai họ',
+    date: 'Thứ Tư, 23 Tháng 12, 2026',
     time: '09:00 Sáng',
-    lunarTime: 'Giờ Hoàng Đạo (Tỵ)',
-    venueName: 'Tư Gia Nhà Trai',
-    address: 'Số 68 Đường Phan Đình Phùng, Quán Thánh, Ba Đình, Hà Nội',
+    lunarTime: 'Nhằm ngày 15 tháng 11 năm Bính Ngọ (Rằm tháng 11)',
+    venueName: 'Tư Gia Nhà Gái',
+    address: 'Quận 1, TP. Hồ Chí Minh',
     mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3723.863855881389!2d105.83852037596958!3d21.03813278745591!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135aba8c430e335%3A0x6a256a084c7e638!2zUGhhbiDEkMOsbmggUGjDuW5nLCBRdcOhbiBUaMOhbmgsIEJhIMSQw6xuaCwgSMOgIE7hu5lp!5e0!3m2!1svi!2s!4v1700000000000',
-    mapDirectUrl: 'https://maps.google.com/?q=Phan+Dinh+Phung+Ba+Dinh+Ha+Noi',
+    mapDirectUrl: 'https://maps.google.com/?q=Quan+1+TP+Ho+Chi+Minh',
     calendarEvent: {
-      title: 'Lễ Thành Hôn - Phan Anh & Ngọc Yến',
-      details: 'Kính mời quý khách tới tham dự Lễ Thành Hôn trang trọng của Phan Anh & Ngọc Yến tại tư gia.',
-      location: 'Số 68 Đường Phan Đình Phùng, Ba Đình, Hà Nội',
-      startTime: '20261128T020000Z',
-      endTime: '20261128T043000Z'
+      title: 'Lễ Ăn Hỏi & Đính Hôn - Phan Long & Thùy Linh',
+      details: 'Kính mời quý khách tới tham dự Lễ Ăn Hỏi & Đính Hôn trang trọng của Phan Long & Thùy Linh.',
+      location: 'Tư Gia Nhà Gái, Quận 1, TP. Hồ Chí Minh',
+      startTime: '20261223T020000Z',
+      endTime: '20261223T043000Z'
     }
   },
   {
@@ -115,19 +115,19 @@ export const weddingEvents: WeddingEvent[] = [
     type: 'reception',
     title: 'TIỆC CƯỚI MỪNG HẠNH PHÚC',
     subtitle: 'Đón tiếp khách quý & tiệc rượu chúc phúc',
-    date: 'Thứ Bảy, 28 Tháng 11, 2026',
+    date: 'Thứ Năm, 24 Tháng 12, 2026',
     time: '18:00 Tối (Đón khách: 17:30)',
-    lunarTime: 'Nhằm ngày 20 tháng 10 năm Bính Ngọ',
+    lunarTime: 'Nhằm ngày 16 tháng 11 năm Bính Ngọ',
     venueName: 'Trung Tâm Hội Nghị Tiệc Cưới White Palace',
     address: 'Sảnh Grand Ballroom, 194 Hoàng Văn Thụ, Phường 9, Phú Nhuận, TP. Hồ Chí Minh',
     mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.186638841443!2d106.67382027582522!3d10.796985058814769!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317528d7d9f67a21%3A0x6b2e1bf35b2e3292!2sWhite%20Palace%20Hoang%20Van%20Thu!5e0!3m2!1svi!2s!4v1700000000001',
     mapDirectUrl: 'https://maps.google.com/?q=White+Palace+Hoang+Van+Thu+Phu+Nhuan',
     calendarEvent: {
-      title: 'Tiệc Cưới Mừng Hạnh Phúc - Phan Anh & Ngọc Yến',
-      details: 'Trân trọng kính mời quý khách tới chung vui tiệc cưới cùng Phan Anh & Ngọc Yến tại White Palace.',
+      title: 'Tiệc Cưới Mừng Hạnh Phúc - Phan Long & Thùy Linh',
+      details: 'Trân trọng kính mời quý khách tới chung vui tiệc cưới cùng Phan Long & Thùy Linh tại White Palace.',
       location: 'Sảnh Grand Ballroom, White Palace, 194 Hoàng Văn Thụ, Phú Nhuận, TP.HCM',
-      startTime: '20261128T110000Z',
-      endTime: '20261128T143000Z'
+      startTime: '20261224T110000Z',
+      endTime: '20261224T143000Z'
     }
   }
 ];
@@ -192,7 +192,7 @@ export const galleryPhotos: GalleryPhoto[] = [
   // 2. ẢNH CÔ DÂU (BRIDE)
   {
     id: 'bride-1',
-    title: 'Nàng Dâu Ngọc Yến',
+    title: 'Nàng Dâu Thùy Linh',
     subtitle: 'Vẻ đẹp dịu dàng và tinh khôi',
     category: 'bride',
     thumbnailUrl: 'https://images.unsplash.com/photo-1594552072238-b8a33785b261?auto=format&fit=crop&w=800&q=80',
@@ -239,7 +239,7 @@ export const galleryPhotos: GalleryPhoto[] = [
   // 3. ẢNH CHÚ RỂ (GROOM)
   {
     id: 'groom-1',
-    title: 'Chú Rể Phan Anh',
+    title: 'Chú Rể Phan Long',
     subtitle: 'Lịch lãm trong âu phục cưới',
     category: 'groom',
     thumbnailUrl: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=80',

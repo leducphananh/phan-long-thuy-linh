@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Calendar, MapPin, Heart, ChevronDown, Sparkles } from 'lucide-react';
+import { Calendar, MapPin, Heart, ChevronDown } from 'lucide-react';
 import { WeddingCouple } from '../types/wedding';
 import { ScrollReveal } from './ScrollReveal';
 
@@ -58,7 +58,7 @@ export const Hero: React.FC<HeroProps> = ({
       <div className="absolute inset-0 z-0">
         <img
           src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=2000&q=85"
-          alt="Phan Anh & Ngọc Yến Wedding Banner"
+          alt="Phan Long & Thùy Linh Wedding Banner"
           referrerPolicy="no-referrer"
           className="w-full h-full object-cover object-center transform scale-105 transition-transform duration-1000 ease-out"
         />
@@ -98,7 +98,7 @@ export const Hero: React.FC<HeroProps> = ({
         <div className="flex flex-wrap items-center justify-center gap-y-2 gap-x-4 text-xs sm:text-sm text-stone-100 mb-8 max-w-xl font-medium drop-shadow-sm">
           <span className="flex items-center gap-1.5">
             <Calendar className="w-4 h-4 text-rose-300" />
-            28 Tháng 11, 2026
+            24 Tháng 12, 2026
           </span>
           <span aria-hidden="true" className="text-stone-300">·</span>
           <span className="text-stone-200">
@@ -116,9 +116,9 @@ export const Hero: React.FC<HeroProps> = ({
           <div className="w-full max-w-lg mb-10 bg-white/20 backdrop-blur-md border border-white/40 p-4 sm:p-6 rounded-3xl shadow-2xl">
             <div className="text-center mb-3">
               <p className="text-xs uppercase tracking-widest text-white font-semibold flex items-center justify-center gap-1.5 drop-shadow-sm">
-                <Sparkles className="w-3.5 h-3.5 text-rose-300 inline" />
+                <Heart className="w-3.5 h-3.5 fill-rose-400 text-rose-400 inline animate-pulse" />
                 Đếm ngược đến ngày hạnh phúc
-                <Sparkles className="w-3.5 h-3.5 text-rose-300 inline" />
+                <Heart className="w-3.5 h-3.5 fill-rose-400 text-rose-400 inline animate-pulse" />
               </p>
             </div>
 
