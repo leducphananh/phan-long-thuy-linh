@@ -106,15 +106,14 @@ export const RSVPForm: React.FC = () => {
 
   return (
     <section id="rsvp" className="relative py-24 sm:py-32 px-4 sm:px-6 overflow-hidden">
-      {/* Scenic Bright Celebratory Banquet Background Image */}
+      {/* Scenic Wedding Background Image */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <img
-          src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=2000&q=80"
-          alt="Bright wedding celebration background"
-          referrerPolicy="no-referrer"
-          className="w-full h-full object-cover object-center filter blur-[1px] opacity-20 transform scale-105"
+          src="/images/wedding/optimized/_DSC3182.jpg"
+          alt="Wedding celebration background"
+          className="w-full h-full object-cover object-center filter blur-[2px] opacity-15 transform scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#FFFDFB]/90 via-[#FFFDFB]/75 to-[#FFFDFB]/90" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#FFFDFB]/95 via-[#FFFDFB]/85 to-[#FFFDFB]/95" />
       </div>
 
       <div className="relative z-10 max-w-3xl mx-auto">

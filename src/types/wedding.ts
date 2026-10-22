@@ -48,6 +48,19 @@ export interface StoryMilestone {
   location?: string;
 }
 
+export interface WeddingStory {
+  title: string;
+  subtitle: string;
+  quote: string;
+  paragraphs: string[];
+  signature: string;
+  featuredImages: {
+    url: string;
+    alt: string;
+    caption?: string;
+  }[];
+}
+
 export interface WeddingEvent {
   id: string;
   type: 'ceremony' | 'reception' | 'engagement';

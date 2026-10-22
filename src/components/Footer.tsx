@@ -15,14 +15,22 @@ export const Footer: React.FC<FooterProps> = ({ couple }) => {
 
   return (
     <footer className="bg-stone-900 text-stone-300 py-16 px-4 sm:px-6 relative overflow-hidden border-t border-rose-900/30">
-      {/* Subtle warm glow background */}
-      <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-900 to-stone-900" />
+      {/* Real Wedding Background Photo with dark dramatic vignette */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <img
+          src="/images/wedding/optimized/_DSC3182.jpg"
+          alt="Phan Long & Thùy Linh wedding footer"
+          className="w-full h-full object-cover object-center filter blur-[2px] opacity-20 transform scale-105"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-900/90 to-stone-900/95" />
+      </div>
+
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-40 bg-rose-500/10 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-4xl mx-auto text-center relative z-10 flex flex-col items-center">
         {/* Monogram */}
         <div className="w-16 h-16 rounded-full border-2 border-rose-400/50 flex items-center justify-center font-serif text-2xl text-rose-300 mb-6 bg-stone-800/80 shadow-lg shadow-rose-950/40">
-          PA &amp; NY
+          PL &amp; TL
         </div>
 
         <h3 className="font-serif text-3xl sm:text-4xl font-bold text-white tracking-wide">

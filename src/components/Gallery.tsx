@@ -10,12 +10,7 @@ interface GalleryProps {
 }
 
 export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
-  const [activeCategory, setActiveCategory] = useState<'all' | 'bride' | 'groom'>('all');
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
-
-  const filteredPhotos = activeCategory === 'all'
-    ? photos.filter((p) => p.category === 'couple' || p.category === 'all')
-    : photos.filter((p) => p.category === activeCategory);
 
   const handleOpenLightbox = (index: number) => {
     setLightboxIndex(index);
@@ -29,13 +24,13 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
 
   const handlePrev = useCallback(() => {
     if (lightboxIndex === null) return;
-    setLightboxIndex((prev) => (prev! > 0 ? prev! - 1 : filteredPhotos.length - 1));
-  }, [lightboxIndex, filteredPhotos.length]);
+    setLightboxIndex((prev) => (prev! > 0 ? prev! - 1 : photos.length - 1));
+  }, [lightboxIndex, photos.length]);
 
   const handleNext = useCallback(() => {
     if (lightboxIndex === null) return;
-    setLightboxIndex((prev) => (prev! < filteredPhotos.length - 1 ? prev! + 1 : 0));
-  }, [lightboxIndex, filteredPhotos.length]);
+    setLightboxIndex((prev) => (prev! < photos.length - 1 ? prev! + 1 : 0));
+  }, [lightboxIndex, photos.length]);
 
   // Keyboard navigation for Lightbox
   useEffect(() => {
@@ -51,19 +46,18 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [lightboxIndex, handleCloseLightbox, handlePrev, handleNext]);
 
-  const currentPhoto = lightboxIndex !== null ? filteredPhotos[lightboxIndex] : null;
+  const currentPhoto = lightboxIndex !== null ? photos[lightboxIndex] : null;
 
   return (
     <section id="gallery" className="relative py-24 sm:py-32 px-4 sm:px-6 overflow-hidden">
-      {/* Scenic Bright Floral Garden Background */}
+      {/* Scenic Wedding Photo Background */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <img
-          src="https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&w=2000&q=80"
-          alt="Bright floral backdrop"
-          referrerPolicy="no-referrer"
-          className="w-full h-full object-cover object-center filter blur-[2px] opacity-25 transform scale-105"
+          src="/images/wedding/optimized/_DSC3261.jpg"
+          alt="Wedding gallery backdrop"
+          className="w-full h-full object-cover object-center filter blur-[3px] opacity-15 transform scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#FFFDFB]/90 via-[#FFFDFB]/75 to-[#FFFDFB]/90" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#FFFDFB]/95 via-[#FFFDFB]/85 to-[#FFFDFB]/95" />
       </div>
 
       <div className="relative z-10 max-w-6xl mx-auto">
@@ -82,53 +76,29 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
               <div className="h-px w-12 bg-rose-300" />
             </div>
             <p className="mt-4 text-sm sm:text-base text-stone-600 max-w-lg mx-auto font-medium">
-              Nụ cười rạng rỡ của cô dâu, ánh nhìn kiên định của chú rể và những khoảnh khắc ngọt ngào bên nhau trọn đời.
+              Từng nụ cười, từng ánh mắt và những khoảnh khắc ngọt ngào nhất của Phan Long &amp; Thùy Linh trên hành trình chung đôi trọn vẹn yêu thương.
             </p>
           </div>
         </ScrollReveal>
 
-        {/* Filter Tabs - 3 clean tabs: Ảnh chụp chung, Ảnh cô dâu, Ảnh chú rể */}
-        <ScrollReveal animation="fade-up" delay={150} duration={600}>
-          <div className="flex items-center justify-center gap-1.5 sm:gap-2 p-1.5 bg-white/95 backdrop-blur-md rounded-2xl max-w-md mx-auto mb-10 shadow-md border border-rose-100">
-            {[
-              { key: 'all', label: 'Ảnh Chụp Chung' },
-              { key: 'bride', label: 'Ảnh Cô Dâu' },
-              { key: 'groom', label: 'Ảnh Chú Rể' },
-            ].map((tab) => (
-              <button
-                key={tab.key}
-                onClick={() => setActiveCategory(tab.key as any)}
-                className={`flex-1 py-2 sm:py-2.5 px-3 sm:px-4 text-xs sm:text-sm font-semibold rounded-xl transition-all whitespace-nowrap cursor-pointer ${
-                  activeCategory === tab.key
-                    ? 'bg-gradient-to-r from-rose-500 to-pink-500 text-white shadow-md shadow-rose-500/25'
-                    : 'text-stone-600 hover:text-stone-900 hover:bg-rose-50/60'
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-        </ScrollReveal>
-
-        {/* Masonry / Bento Grid Layout with bright white framing */}
+        {/* Masonry Grid Layout with bright white framing */}
         <div className="columns-1 sm:columns-2 lg:columns-3 gap-5 space-y-5">
-          {filteredPhotos.map((photo, index) => (
+          {photos.map((photo, index) => (
             <ScrollReveal
               key={photo.id}
               animation="fade-up"
-              delay={(index % 3) * 120}
-              duration={650}
+              delay={(index % 3) * 100}
+              duration={600}
               className="break-inside-avoid"
             >
               <div
                 onClick={() => handleOpenLightbox(index)}
-                className="group relative cursor-pointer overflow-hidden rounded-3xl bg-white p-2.5 sm:p-3 border border-rose-100 shadow-md hover:shadow-2xl transition-all duration-300"
+                className="group relative cursor-pointer overflow-hidden rounded-3xl bg-white p-2.5 sm:p-3 border border-rose-100 shadow-md hover:shadow-2xl hover:border-rose-300 transition-all duration-300"
               >
-                <div className="relative overflow-hidden rounded-2xl">
+                <div className="relative overflow-hidden rounded-2xl bg-stone-100">
                   <img
                     src={photo.thumbnailUrl}
                     alt={photo.title}
-                    referrerPolicy="no-referrer"
                     loading="lazy"
                     className="w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                     onError={(e) => {
@@ -141,13 +111,6 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                       }
                     }}
                   />
-                </div>
-
-                {/* Subtle category badge on hover */}
-                <div className="absolute top-5 left-5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <span className="text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full bg-white/90 text-rose-700 shadow-sm backdrop-blur-xs">
-                    {photo.category === 'bride' ? 'Cô Dâu' : photo.category === 'groom' ? 'Chú Rể' : 'Chung Đôi'}
-                  </span>
                 </div>
 
                 {/* Hover Overlay with Caption */}
@@ -177,7 +140,7 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
       {/* Fullscreen Lightbox Modal */}
       {lightboxIndex !== null && currentPhoto && (
         <div 
-          className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
+          className="fixed inset-0 z-50 bg-black/92 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
           onClick={handleCloseLightbox}
         >
           {/* Top Bar Controls */}
@@ -186,7 +149,7 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="text-xs sm:text-sm font-semibold text-white px-3.5 py-1.5 bg-white/20 rounded-xl backdrop-blur-xs tabular-nums">
-              {lightboxIndex + 1} / {filteredPhotos.length}
+              {lightboxIndex + 1} / {photos.length}
             </div>
 
             <button
@@ -230,7 +193,6 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
             <img
               src={currentPhoto.fullUrl}
               alt={currentPhoto.title}
-              referrerPolicy="no-referrer"
               className="max-h-[75vh] w-auto max-w-full object-contain rounded-2xl shadow-2xl animate-in zoom-in-95 duration-200"
             />
             {/* Caption */}

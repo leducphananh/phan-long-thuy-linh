@@ -25,15 +25,14 @@ export const Invitation: React.FC<InvitationProps> = ({ couple, events }) => {
 
   return (
     <section id="invitation" className="relative py-24 sm:py-32 px-4 sm:px-6 overflow-hidden">
-      {/* Scenic Bright Luxury Floral Hall Background Image */}
+      {/* Scenic Bright Luxury Wedding Backdrop */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <img
-          src="https://images.unsplash.com/photo-1519225438848-124b1713e5cf?auto=format&fit=crop&w=2000&q=80"
-          alt="Bright luxury wedding hall backdrop"
-          referrerPolicy="no-referrer"
-          className="w-full h-full object-cover object-center filter blur-[1px] opacity-20 transform scale-105"
+          src="/images/wedding/optimized/_DSC3447.jpg"
+          alt="Luxury wedding backdrop"
+          className="w-full h-full object-cover object-center filter blur-[2px] opacity-15 transform scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#FFFDFB]/90 via-[#FFFDFB]/75 to-[#FFFDFB]/90" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#FFFDFB]/95 via-[#FFFDFB]/85 to-[#FFFDFB]/95" />
       </div>
 
       <div className="relative z-10 max-w-5xl mx-auto">

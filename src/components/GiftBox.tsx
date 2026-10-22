@@ -27,15 +27,14 @@ export const GiftBox: React.FC<GiftBoxProps> = ({ couple }) => {
 
   return (
     <section id="gift" className="relative py-24 sm:py-32 px-4 sm:px-6 overflow-hidden">
-      {/* Scenic Bright Celebratory Floral Background Image */}
+      {/* Scenic Real Wedding Celebration Backdrop */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <img
-          src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=2000&q=80"
+          src="/images/wedding/optimized/_DSC3447.jpg"
           alt="Gift Box Backdrop"
-          referrerPolicy="no-referrer"
-          className="w-full h-full object-cover object-center filter blur-[2px] opacity-20 transform scale-105"
+          className="w-full h-full object-cover object-center filter blur-[2px] opacity-15 transform scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#FFFDFB]/90 via-[#FFFDFB]/75 to-[#FFFDFB]/90" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#FFFDFB]/95 via-[#FFFDFB]/85 to-[#FFFDFB]/95" />
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto">

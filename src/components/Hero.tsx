@@ -54,16 +54,15 @@ export const Hero: React.FC<HeroProps> = ({
 
   return (
     <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Image: Sun-drenched, radiant and joyous outdoor wedding portrait */}
+      {/* Background Image: Real wedding photo of Phan Long & Thùy Linh */}
       <div className="absolute inset-0 z-0">
         <img
-          src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=2000&q=85"
+          src="/images/wedding/optimized/_DSC3216.jpg"
           alt="Phan Long & Thùy Linh Wedding Banner"
-          referrerPolicy="no-referrer"
           className="w-full h-full object-cover object-center transform scale-105 transition-transform duration-1000 ease-out"
         />
         {/* Soft, warm, luminous ambient gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-stone-900/25 to-stone-900/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-stone-900/75 via-stone-900/35 to-stone-900/50" />
         <div className="absolute inset-0 bg-rose-500/10 mix-blend-overlay" />
       </div>
 

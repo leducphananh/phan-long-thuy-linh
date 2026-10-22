@@ -1,4 +1,4 @@
-import { WeddingCouple, StoryMilestone, WeddingEvent, GalleryPhoto } from '../types/wedding';
+import { WeddingCouple, StoryMilestone, WeddingStory, WeddingEvent, GalleryPhoto } from '../types/wedding';
 
 export const weddingCoupleData: WeddingCouple = {
   groom: {
@@ -36,58 +36,38 @@ export const weddingCoupleData: WeddingCouple = {
   lunarDate: 'Ngày 16 tháng 11 năm Bính Ngọ'
 };
 
-export const storyMilestones: StoryMilestone[] = [
-  {
-    id: 'story-1',
-    year: '2021',
-    date: '15 Tháng 10, 2021',
-    title: 'Lần Đầu Gặp Gỡ',
-    description: 'Một buổi chiều thu trong lành, ánh mắt vô tình chạm nhau và câu chuyện tình yêu bắt đầu từ một cuốn sách chúng mình cùng yêu thích.',
-    imageUrl: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=800&q=80',
-    imageAlt: 'Lần đầu gặp gỡ',
-    location: 'Hà Nội'
-  },
-  {
-    id: 'story-2',
-    year: '2022',
-    date: '14 Tháng 02, 2022',
-    title: 'Lời Tỏ Tình Ngọt Ngào',
-    description: 'Sau chuỗi ngày cùng nhau sẻ chia mọi vui buồn, chàng đã lấy hết can đảm ngỏ lời yêu nàng với một bó hoa tươi tinh khôi.',
-    imageUrl: 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=800&q=80',
-    imageAlt: 'Lời tỏ tình ngọt ngào',
-    location: 'Phố Cổ'
-  },
-  {
-    id: 'story-3',
-    year: '2023',
-    date: '20 Tháng 07, 2023',
-    title: 'Chuyến Đi Xa Đầu Tiên',
-    description: 'Chuyến vi vu khám phá cung đường sương mù Đà Lạt. Cùng nhau ngắm bình minh và nhận ra người ấy chính là mảnh ghép trọn vẹn của cuộc đời mình.',
-    imageUrl: 'https://images.unsplash.com/photo-1529636798458-92182e662485?auto=format&fit=crop&w=800&q=80',
-    imageAlt: 'Chuyến đi đáng nhớ',
-    location: 'Đà Lạt'
-  },
-  {
-    id: 'story-4',
-    year: '2025',
-    date: '24 Tháng 12, 2025',
-    title: 'She Said "YES!"',
-    description: 'Dưới ánh hoàng hôn vàng rực rỡ bên bờ biển, trong tiếng sóng vỗ và tiếng violin du dương, chiếc nhẫn đính hôn đã được trao cùng lời hẹn ước mãi mãi.',
-    imageUrl: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80',
-    imageAlt: 'Khoảnh khắc cầu hôn',
-    location: 'Bờ Biển Phú Quốc'
-  },
-  {
-    id: 'story-5',
-    year: '2026',
-    date: '24 Tháng 12, 2026',
-    title: 'Ngày Chung Đôi',
-    description: 'Hành trình 5 năm yêu thương đơm hoa kết trái. Chúng mình chính thức nắm tay nhau bước vào ngưỡng cửa hôn nhân thiêng liêng trước sự chứng kiến của hai họ và bạn bè.',
-    imageUrl: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80',
-    imageAlt: 'Ngày cưới thiêng liêng',
-    location: 'White Palace Convention Center'
-  }
-];
+export const weddingStoryData: WeddingStory = {
+  title: 'Chuyện Chúng Mình',
+  subtitle: 'Our Love Story',
+  quote: 'Gặp gỡ là duyên phận, nắm tay là định mệnh, và cùng nhau già đi là lời hứa trọn đời.',
+  paragraphs: [
+    'Mọi điều kỳ diệu đều bắt đầu từ một khoảnh khắc ngỡ như vô tình. Một buổi chiều thu trong lành dịu mát, ánh mắt vô tình chạm nhau và câu chuyện tình yêu của chúng mình bắt đầu nảy nở từ những trang sách yêu thích, từ nụ cười ấm áp và sự đồng điệu kỳ lạ trong tâm hồn.',
+    'Những ngày tháng sau đó là chuỗi ngày ngọt ngào khi cả hai cùng nhau sẻ chia mọi vui buồn trong cuộc sống. Từ những buổi hẹn hò dưới tán cây rợp bóng, những chuyến vi vu ngắm bình minh và sương mờ cao nguyên, cho đến những buổi tối bình dị lắng nghe nhau tâm sự sau một ngày dài làm việc mỏi mệt.',
+    'Tình yêu của chúng mình không ồn ào hay phô trương, mà bền bỉ, chân thành và sâu lắng qua từng năm tháng. Mỗi ngày trôi qua, chúng mình càng thấu hiểu, trân quý và nhận ra đối phương chính là mảnh ghép hoàn hảo nhất mà cuộc đời đã mang lại.',
+    'Và rồi, dưới ánh hoàng hôn vàng rực rỡ bên bờ biển sóng vỗ dập dềnh, chiếc nhẫn đính hôn đã được trao cùng lời hẹn ước thiêng liêng mãi mãi. Hôm nay, trước sự chứng kiến và chúc phúc của hai bên gia đình cùng những người bạn thân thương, chúng mình chính thức nắm chặt tay nhau bước vào ngưỡng cửa hôn nhân — mở ra một chương mới trọn vẹn yêu thương và hạnh phúc.'
+  ],
+  signature: 'Phan Long & Thùy Linh',
+  featuredImages: [
+    {
+      url: '/images/wedding/optimized/_DSC3182.jpg',
+      alt: 'Phan Long & Thùy Linh ngày chung đôi',
+      caption: 'Khoảnh khắc thiêng liêng'
+    },
+    {
+      url: '/images/wedding/optimized/_DSC2387.jpg',
+      alt: 'Khung trời hạnh phúc',
+      caption: 'Bên nhau bình yên'
+    },
+    {
+      url: '/images/wedding/optimized/_DSC2007.jpg',
+      alt: 'Nụ cười rạng rỡ của đôi uyên ương',
+      caption: 'Hạnh phúc trọn vẹn'
+    }
+  ]
+};
+
+// Kept for backward compatibility
+export const storyMilestones: StoryMilestone[] = [];
 
 export const weddingEvents: WeddingEvent[] = [
   {
@@ -133,153 +113,229 @@ export const weddingEvents: WeddingEvent[] = [
 ];
 
 export const galleryPhotos: GalleryPhoto[] = [
-  // 1. ẢNH CHỤP CHUNG (COUPLE)
   {
-    id: 'couple-1',
-    title: 'Bên Nhau Mãi Mãi',
-    subtitle: 'Nắm tay đi qua thanh xuân',
-    category: 'couple',
-    thumbnailUrl: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80',
-    fullUrl: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1600&q=90',
-    aspectRatio: 'landscape'
-  },
-  {
-    id: 'couple-2',
-    title: 'Khoảnh Khắc Ngọt Ngào',
-    subtitle: 'Ánh mắt trao nhau lời hẹn ước',
-    category: 'couple',
-    thumbnailUrl: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80',
-    fullUrl: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=1600&q=90',
+    id: 'photo-1',
+    title: 'Ánh Mắt Yêu Thương',
+    subtitle: 'Nắm tay đi qua năm tháng thanh xuân',
+    category: 'all',
+    thumbnailUrl: '/images/wedding/thumbs/_DSC1879.jpg',
+    fullUrl: '/images/wedding/optimized/_DSC1879.jpg',
     aspectRatio: 'portrait'
   },
   {
-    id: 'couple-3',
-    title: 'Hoàng Hôn Hẹn Ước',
-    subtitle: 'Chỉ cần có anh trong đời',
-    category: 'couple',
-    thumbnailUrl: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80',
-    fullUrl: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1600&q=90',
-    aspectRatio: 'landscape'
-  },
-  {
-    id: 'couple-4',
-    title: 'Bình Yên Bên Nhau',
-    subtitle: 'Mỗi ngày đều là ngày hạnh phúc',
-    category: 'couple',
-    thumbnailUrl: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=800&q=80',
-    fullUrl: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1600&q=90',
-    aspectRatio: 'landscape'
-  },
-  {
-    id: 'couple-5',
-    title: 'Hạnh Phúc Viên Mãn',
-    subtitle: 'Khi chúng ta về chung một nhà',
-    category: 'couple',
-    thumbnailUrl: 'https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=800&q=80',
-    fullUrl: 'https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=1600&q=90',
-    aspectRatio: 'square'
-  },
-  {
-    id: 'couple-6',
-    title: 'Nhẫn Cưới Định Mệnh',
-    subtitle: 'Gắn kết hai trái tim',
-    category: 'couple',
-    thumbnailUrl: 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=800&q=80',
-    fullUrl: 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=1600&q=90',
-    aspectRatio: 'portrait'
-  },
-
-  // 2. ẢNH CÔ DÂU (BRIDE)
-  {
-    id: 'bride-1',
-    title: 'Nàng Dâu Thùy Linh',
-    subtitle: 'Vẻ đẹp dịu dàng và tinh khôi',
-    category: 'bride',
-    thumbnailUrl: 'https://images.unsplash.com/photo-1594552072238-b8a33785b261?auto=format&fit=crop&w=800&q=80',
-    fullUrl: 'https://images.unsplash.com/photo-1594552072238-b8a33785b261?auto=format&fit=crop&w=1600&q=90',
-    aspectRatio: 'portrait'
-  },
-  {
-    id: 'bride-2',
+    id: 'photo-2',
     title: 'Nụ Cười Rạng Rỡ',
     subtitle: 'Ngày hạnh phúc nhất cuộc đời',
-    category: 'bride',
-    thumbnailUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80',
-    fullUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1600&q=90',
-    aspectRatio: 'square'
-  },
-  {
-    id: 'bride-3',
-    title: 'Váy Cưới Lộng Lẫy',
-    subtitle: 'Tinh khôi trong tà áo cưới',
-    category: 'bride',
-    thumbnailUrl: 'https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=800&q=80',
-    fullUrl: 'https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=1600&q=90',
-    aspectRatio: 'landscape'
-  },
-  {
-    id: 'bride-4',
-    title: 'Hoa Cầm Tay Tươi Thắm',
-    subtitle: 'Hương thơm tình yêu ngọt ngào',
-    category: 'bride',
-    thumbnailUrl: 'https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=800&q=80',
-    fullUrl: 'https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=1600&q=90',
+    category: 'all',
+    thumbnailUrl: '/images/wedding/thumbs/_DSC1929.jpg',
+    fullUrl: '/images/wedding/optimized/_DSC1929.jpg',
     aspectRatio: 'portrait'
   },
   {
-    id: 'bride-5',
+    id: 'photo-3',
+    title: 'Bình Yên Bên Nhau',
+    subtitle: 'Khoảnh khắc ngọt ngào ấm áp',
+    category: 'all',
+    thumbnailUrl: '/images/wedding/thumbs/_DSC1982.jpg',
+    fullUrl: '/images/wedding/optimized/_DSC1982.jpg',
+    aspectRatio: 'portrait'
+  },
+  {
+    id: 'photo-4',
+    title: 'Lời Hẹn Ước Trăm Năm',
+    subtitle: 'Ánh mắt trao nhau niềm tin vẹn nguyên',
+    category: 'all',
+    thumbnailUrl: '/images/wedding/thumbs/_DSC2007.jpg',
+    fullUrl: '/images/wedding/optimized/_DSC2007.jpg',
+    aspectRatio: 'portrait'
+  },
+  {
+    id: 'photo-5',
+    title: 'Nắm Chặt Tay Nhau',
+    subtitle: 'Cùng nhau đi qua bao mùa giông bão',
+    category: 'all',
+    thumbnailUrl: '/images/wedding/thumbs/_DSC2014.jpg',
+    fullUrl: '/images/wedding/optimized/_DSC2014.jpg',
+    aspectRatio: 'portrait'
+  },
+  {
+    id: 'photo-6',
+    title: 'Khoảnh Khắc Hân Hoan',
+    subtitle: 'Nụ cười tỏa nắng trong ngày vui',
+    category: 'all',
+    thumbnailUrl: '/images/wedding/thumbs/_DSC2101.jpg',
+    fullUrl: '/images/wedding/optimized/_DSC2101.jpg',
+    aspectRatio: 'portrait'
+  },
+  {
+    id: 'photo-7',
+    title: 'Dịu Dàng Sánh Đôi',
+    subtitle: 'Tình yêu đơm hoa kết trái',
+    category: 'all',
+    thumbnailUrl: '/images/wedding/thumbs/_DSC2145.jpg',
+    fullUrl: '/images/wedding/optimized/_DSC2145.jpg',
+    aspectRatio: 'portrait'
+  },
+  {
+    id: 'photo-8',
+    title: 'Khung Trời Hạnh Phúc',
+    subtitle: 'Không gian ngập tràn sắc hoa và tình yêu',
+    category: 'all',
+    thumbnailUrl: '/images/wedding/thumbs/_DSC2387.jpg',
+    fullUrl: '/images/wedding/optimized/_DSC2387.jpg',
+    aspectRatio: 'landscape'
+  },
+  {
+    id: 'photo-9',
+    title: 'Trao Nhau Nụ Cười',
+    subtitle: 'Hạnh phúc giản dị mà thiêng liêng',
+    category: 'all',
+    thumbnailUrl: '/images/wedding/thumbs/_DSC2517.jpg',
+    fullUrl: '/images/wedding/optimized/_DSC2517.jpg',
+    aspectRatio: 'portrait'
+  },
+  {
+    id: 'photo-10',
+    title: 'Tình Yêu Viên Mãn',
+    subtitle: 'Hai trái tim chung một nhịp đập',
+    category: 'all',
+    thumbnailUrl: '/images/wedding/thumbs/_DSC2695.jpg',
+    fullUrl: '/images/wedding/optimized/_DSC2695.jpg',
+    aspectRatio: 'portrait'
+  },
+  {
+    id: 'photo-11',
+    title: 'Giai Điệu Hạnh Phúc',
+    subtitle: 'Từng phút giây bên em đều quý giá',
+    category: 'all',
+    thumbnailUrl: '/images/wedding/thumbs/_DSC2797.jpg',
+    fullUrl: '/images/wedding/optimized/_DSC2797.jpg',
+    aspectRatio: 'portrait'
+  },
+  {
+    id: 'photo-12',
+    title: 'Hương Sắc Tình Nồng',
+    subtitle: 'Mỗi ngày yêu em nhiều hơn hôm qua',
+    category: 'all',
+    thumbnailUrl: '/images/wedding/thumbs/_DSC2926.jpg',
+    fullUrl: '/images/wedding/optimized/_DSC2926.jpg',
+    aspectRatio: 'portrait'
+  },
+  {
+    id: 'photo-13',
+    title: 'Vẻ Đẹp Tinh Khôi',
+    subtitle: 'Nàng dâu Thùy Linh xinh đẹp rạng ngời',
+    category: 'all',
+    thumbnailUrl: '/images/wedding/thumbs/_DSC2943.jpg',
+    fullUrl: '/images/wedding/optimized/_DSC2943.jpg',
+    aspectRatio: 'portrait'
+  },
+  {
+    id: 'photo-14',
     title: 'Nét Duyên Dáng',
-    subtitle: 'Ánh mắt chan chứa yêu thương',
-    category: 'bride',
-    thumbnailUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=800&q=80',
-    fullUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=1600&q=90',
-    aspectRatio: 'square'
-  },
-
-  // 3. ẢNH CHÚ RỂ (GROOM)
-  {
-    id: 'groom-1',
-    title: 'Chú Rể Phan Long',
-    subtitle: 'Lịch lãm trong âu phục cưới',
-    category: 'groom',
-    thumbnailUrl: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=80',
-    fullUrl: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=1600&q=90',
+    subtitle: 'Ánh mắt rạng ngời hạnh phúc',
+    category: 'all',
+    thumbnailUrl: '/images/wedding/thumbs/_DSC3000.jpg',
+    fullUrl: '/images/wedding/optimized/_DSC3000.jpg',
     aspectRatio: 'portrait'
   },
   {
-    id: 'groom-2',
-    title: 'Phong Độ & Tự Tin',
-    subtitle: 'Sẵn sàng đón nàng về dinh',
-    category: 'groom',
-    thumbnailUrl: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=800&q=80',
-    fullUrl: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=1600&q=90',
-    aspectRatio: 'square'
+    id: 'photo-15',
+    title: 'Chú Rể Lịch Lãm',
+    subtitle: 'Phan Long phong độ trong âu phục cưới',
+    category: 'all',
+    thumbnailUrl: '/images/wedding/thumbs/_DSC3109.jpg',
+    fullUrl: '/images/wedding/optimized/_DSC3109.jpg',
+    aspectRatio: 'portrait'
   },
   {
-    id: 'groom-3',
-    title: 'Ánh Nhìn Quyết Đoán',
-    subtitle: 'Điểm tựa bình yên cho em',
-    category: 'groom',
-    thumbnailUrl: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=800&q=80',
-    fullUrl: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=1600&q=90',
+    id: 'photo-16',
+    title: 'Ngày Chung Đôi',
+    subtitle: 'Khởi đầu cho một tổ ấm ngập tràn tiếng cười',
+    category: 'all',
+    thumbnailUrl: '/images/wedding/thumbs/_DSC3182.jpg',
+    fullUrl: '/images/wedding/optimized/_DSC3182.jpg',
     aspectRatio: 'landscape'
   },
   {
-    id: 'groom-4',
+    id: 'photo-17',
+    title: 'Thanh Xuân Có Nhau',
+    subtitle: 'Cùng nhau đi khắp những nẻo đường yêu dấu',
+    category: 'all',
+    thumbnailUrl: '/images/wedding/thumbs/_DSC3216.jpg',
+    fullUrl: '/images/wedding/optimized/_DSC3216.jpg',
+    aspectRatio: 'landscape'
+  },
+  {
+    id: 'photo-18',
+    title: 'Nguyện Ước Trọn Đời',
+    subtitle: 'Bên nhau đến đầu bạc răng long',
+    category: 'all',
+    thumbnailUrl: '/images/wedding/thumbs/_DSC3261.jpg',
+    fullUrl: '/images/wedding/optimized/_DSC3261.jpg',
+    aspectRatio: 'landscape'
+  },
+  {
+    id: 'photo-19',
+    title: 'Hạnh Phúc Giản Đơn',
+    subtitle: 'Chỉ cần có anh trong đời',
+    category: 'all',
+    thumbnailUrl: '/images/wedding/thumbs/_DSC3306.jpg',
+    fullUrl: '/images/wedding/optimized/_DSC3306.jpg',
+    aspectRatio: 'portrait'
+  },
+  {
+    id: 'photo-20',
+    title: 'Bên Nhau Mãi Mãi',
+    subtitle: 'Tình yêu vĩnh cửu qua bao năm tháng',
+    category: 'all',
+    thumbnailUrl: '/images/wedding/thumbs/_DSC3388.jpg',
+    fullUrl: '/images/wedding/optimized/_DSC3388.jpg',
+    aspectRatio: 'portrait'
+  },
+  {
+    id: 'photo-21',
+    title: 'Hoàng Hôn Tình Yêu',
+    subtitle: 'Ánh chiều tà bên người thương',
+    category: 'all',
+    thumbnailUrl: '/images/wedding/thumbs/_DSC3447.jpg',
+    fullUrl: '/images/wedding/optimized/_DSC3447.jpg',
+    aspectRatio: 'landscape'
+  },
+  {
+    id: 'photo-22',
     title: 'Nụ Cười Chú Rể',
-    subtitle: 'Hân hoan ngày trọng đại',
-    category: 'groom',
-    thumbnailUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=80',
-    fullUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1600&q=90',
+    subtitle: 'Hân hoan ngày rước nàng về dinh',
+    category: 'all',
+    thumbnailUrl: '/images/wedding/thumbs/_DSC3538.jpg',
+    fullUrl: '/images/wedding/optimized/_DSC3538.jpg',
     aspectRatio: 'portrait'
   },
   {
-    id: 'groom-5',
-    title: 'Hoa Cài Áo Chú Rể',
-    subtitle: 'Sự trang trọng và tinh tế',
-    category: 'groom',
-    thumbnailUrl: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80',
-    fullUrl: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1600&q=90',
-    aspectRatio: 'landscape'
+    id: 'photo-23',
+    title: 'Ngọt Ngào Từng Phút Giây',
+    subtitle: 'Sự chở che và quan tâm ấm áp',
+    category: 'all',
+    thumbnailUrl: '/images/wedding/thumbs/_DSC3551.jpg',
+    fullUrl: '/images/wedding/optimized/_DSC3551.jpg',
+    aspectRatio: 'portrait'
+  },
+  {
+    id: 'photo-24',
+    title: 'Trọn Vẹn Yêu Thương',
+    subtitle: 'Mảnh ghép hoàn hảo của đời nhau',
+    category: 'all',
+    thumbnailUrl: '/images/wedding/thumbs/_DSC3563.jpg',
+    fullUrl: '/images/wedding/optimized/_DSC3563.jpg',
+    aspectRatio: 'portrait'
+  },
+  {
+    id: 'photo-25',
+    title: 'Hành Trình Mới Bắt Đầu',
+    subtitle: 'Cùng nhau viết tiếp những trang hạnh phúc',
+    category: 'all',
+    thumbnailUrl: '/images/wedding/thumbs/_DSC3660.jpg',
+    fullUrl: '/images/wedding/optimized/_DSC3660.jpg',
+    aspectRatio: 'portrait'
   }
 ];

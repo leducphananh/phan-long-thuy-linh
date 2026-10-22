@@ -14,7 +14,7 @@ import { AudioPlayer } from '@/components/AudioPlayer';
 import { FloatingPetals } from '@/components/FloatingPetals';
 import {
   weddingCoupleData,
-  storyMilestones,
+  weddingStoryData,
   weddingEvents,
   galleryPhotos,
 } from '@/data/weddingData';
@@ -57,8 +57,8 @@ export default function WeddingPage() {
           onGuestbookClick={() => scrollToSection('guestbook')}
         />
 
-        {/* 2. Chuyện Chúng Mình (Our Story Timeline) */}
-        <Story milestones={storyMilestones} />
+        {/* 2. Chuyện Chúng Mình (Our Love Story) */}
+        <Story story={weddingStoryData} />
 
         {/* 3. Thiệp Mời & Chi Tiết Lễ Cưới (Google Maps & Add to Calendar) */}
         <Invitation

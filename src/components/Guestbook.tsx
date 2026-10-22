@@ -130,15 +130,14 @@ export const Guestbook: React.FC = () => {
 
   return (
     <section id="guestbook" className="relative py-24 sm:py-32 px-4 sm:px-6 overflow-hidden">
-      {/* Scenic Bright Joyful Wedding Celebration Backdrop */}
+      {/* Scenic Real Wedding Celebration Backdrop */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <img
-          src="https://images.unsplash.com/photo-1532712938310-34cb3982ef74?auto=format&fit=crop&w=2000&q=80"
-          alt="Bright celebratory party background"
-          referrerPolicy="no-referrer"
-          className="w-full h-full object-cover object-center filter blur-[2px] opacity-20 transform scale-105"
+          src="/images/wedding/optimized/_DSC2387.jpg"
+          alt="Celebratory wedding backdrop"
+          className="w-full h-full object-cover object-center filter blur-[2px] opacity-15 transform scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#FFFDFB]/90 via-[#FFFDFB]/75 to-[#FFFDFB]/90" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#FFFDFB]/95 via-[#FFFDFB]/85 to-[#FFFDFB]/95" />
       </div>
 
       <div className="relative z-10 max-w-5xl mx-auto">
