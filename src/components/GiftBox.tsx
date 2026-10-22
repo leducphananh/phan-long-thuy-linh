@@ -27,34 +27,36 @@ export const GiftBox: React.FC<GiftBoxProps> = ({ couple }) => {
 
   return (
     <section id="gift" className="relative py-24 sm:py-32 px-4 sm:px-6 overflow-hidden">
-      {/* Scenic Real Wedding Celebration Backdrop */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
+      {/* Scenic Real Wedding Celebration Backdrop - Vivid & festive */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         <img
-          src="/images/wedding/optimized/_DSC3447.jpg"
+          src="/images/wedding/optimized/_DSC2014.jpg"
           alt="Gift Box Backdrop"
-          className="w-full h-full object-cover object-center filter blur-[2px] opacity-15 transform scale-105"
+          className="w-full h-full object-cover object-center filter blur-[0.5px] opacity-65 transform scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#FFFDFB]/95 via-[#FFFDFB]/85 to-[#FFFDFB]/95" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#FFFDFB]/65 via-[#FFFDFB]/35 to-[#FFFDFB]/65" />
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto">
         {/* Section Header */}
         <ScrollReveal animation="fade-up" duration={700}>
           <div className="text-center mb-12 sm:mb-16">
-            <p className="font-script text-3xl sm:text-4xl text-rose-500 mb-1">
+            <p className="font-script text-3xl sm:text-4xl text-rose-600 mb-1 drop-shadow-xs">
               Wedding Gift
             </p>
-            <h2 className="font-serif text-3xl sm:text-5xl font-bold text-stone-900 tracking-tight text-balance">
+            <h2 className="font-serif text-3xl sm:text-5xl font-bold text-stone-900 tracking-tight text-balance drop-shadow-xs">
               Hộp Mừng Hạnh Phúc
             </h2>
             <div className="mt-4 flex items-center justify-center gap-3">
-              <div className="h-px w-12 bg-rose-300" />
-              <Gift className="w-4 h-4 text-rose-500" />
-              <div className="h-px w-12 bg-rose-300" />
+              <div className="h-px w-12 bg-rose-400" />
+              <Gift className="w-4 h-4 text-rose-500 animate-bounce" />
+              <div className="h-px w-12 bg-rose-400" />
             </div>
-            <p className="mt-4 text-sm sm:text-base text-stone-600 max-w-lg mx-auto font-medium">
-              Sự hiện diện và lời chúc phúc của Quý khách là món quà ý nghĩa nhất. Nếu muốn gửi tặng một món quà mừng từ xa, Quý khách có thể gửi tới hộp mừng dưới đây.
-            </p>
+            <div className="mt-4 inline-block bg-white/80 backdrop-blur-sm px-6 py-2.5 rounded-2xl border border-rose-100/80 shadow-xs max-w-xl mx-auto">
+              <p className="text-sm sm:text-base text-stone-700 leading-relaxed font-medium">
+                Sự hiện diện và lời chúc phúc của Quý khách là món quà ý nghĩa nhất. Nếu muốn gửi tặng một món quà mừng từ xa, Quý khách có thể gửi tới hộp mừng dưới đây.
+              </p>
+            </div>
           </div>
         </ScrollReveal>
 

@@ -14,35 +14,37 @@ interface StoryProps {
 export const Story: React.FC<StoryProps> = ({ story = weddingStoryData }) => {
   return (
     <section id="story" className="relative py-24 sm:py-32 px-4 sm:px-6 overflow-hidden">
-      {/* Scenic Bright Backdrop with real couple photo */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
+      {/* Scenic Wedding Photo Backdrop - Clearly visible and rich */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         <img
           src="/images/wedding/optimized/_DSC2387.jpg"
           alt="Phan Long & Thùy Linh backdrop"
-          className="w-full h-full object-cover object-center filter blur-[3px] opacity-15 transform scale-105"
+          className="w-full h-full object-cover object-center filter blur-[0.5px] opacity-65 transform scale-105"
         />
-        {/* Soft, warm, bright scrim */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#FFFDFB]/95 via-[#FFFDFB]/85 to-[#FFFDFB]/95" />
+        {/* Balanced, warm, luminous scrim protecting contrast while keeping the photo clearly recognizable */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#FFFDFB]/65 via-[#FFFDFB]/40 to-[#FFFDFB]/65" />
       </div>
 
       <div className="relative z-10 max-w-6xl mx-auto">
         {/* Section Header */}
         <ScrollReveal animation="fade-up" duration={700}>
           <div className="text-center mb-16 sm:mb-20">
-            <p className="font-script text-3xl sm:text-4xl text-rose-500 mb-1">
+            <p className="font-script text-3xl sm:text-4xl text-rose-600 mb-1 drop-shadow-xs">
               {story.subtitle || 'Our Love Story'}
             </p>
-            <h2 className="font-serif text-3xl sm:text-5xl font-bold text-stone-900 tracking-tight text-balance">
+            <h2 className="font-serif text-3xl sm:text-5xl font-bold text-stone-900 tracking-tight text-balance drop-shadow-xs">
               {story.title || 'Chuyện Chúng Mình'}
             </h2>
             <div className="mt-4 flex items-center justify-center gap-3">
-              <div className="h-px w-12 bg-rose-300" />
-              <Heart className="w-4 h-4 fill-rose-500 text-rose-500" />
-              <div className="h-px w-12 bg-rose-300" />
+              <div className="h-px w-12 bg-rose-400" />
+              <Heart className="w-4 h-4 fill-rose-500 text-rose-500 animate-pulse" />
+              <div className="h-px w-12 bg-rose-400" />
             </div>
-            <p className="mt-4 text-sm sm:text-base text-stone-600 max-w-xl mx-auto leading-relaxed font-medium">
-              Không cần những lời thề non hẹn biển xa xôi, hành trình của chúng mình là sự đồng điệu của hai tâm hồn, cùng nhau sẻ chia từng khoảnh khắc bình yên và bước vào hôn nhân bằng cả trái tim.
-            </p>
+            <div className="mt-4 inline-block bg-white/80 backdrop-blur-sm px-6 py-2.5 rounded-2xl border border-rose-100/80 shadow-xs max-w-xl mx-auto">
+              <p className="text-sm sm:text-base text-stone-700 leading-relaxed font-medium">
+                Không cần những lời thề non hẹn biển xa xôi, hành trình của chúng mình là sự đồng điệu của hai tâm hồn, cùng nhau sẻ chia từng khoảnh khắc bình yên và bước vào hôn nhân bằng cả trái tim.
+              </p>
+            </div>
           </div>
         </ScrollReveal>
 

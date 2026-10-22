@@ -12,6 +12,8 @@ import { GiftBox } from '@/components/GiftBox';
 import { Footer } from '@/components/Footer';
 import { AudioPlayer } from '@/components/AudioPlayer';
 import { FloatingPetals } from '@/components/FloatingPetals';
+import { LiveWishNotification } from '@/components/LiveWishNotification';
+import { GiftModal } from '@/components/GiftModal';
 import {
   weddingCoupleData,
   weddingStoryData,
@@ -21,6 +23,7 @@ import {
 
 export default function WeddingPage() {
   const [isPlayingMusic, setIsPlayingMusic] = useState(false);
+  const [isGiftModalOpen, setIsGiftModalOpen] = useState(false);
 
   const scrollToSection = (id: string) => {
     if (typeof window !== 'undefined') {
@@ -36,6 +39,9 @@ export default function WeddingPage() {
       {/* Falling Romantic Petals Effect */}
       <FloatingPetals />
 
+      {/* Floating Live Wish Notification in Top Right */}
+      <LiveWishNotification />
+
       {/* Floating Audio Player */}
       <AudioPlayer
         isPlaying={isPlayingMusic}
@@ -50,11 +56,12 @@ export default function WeddingPage() {
 
       {/* Main Single Page Sections */}
       <main className="flex-1">
-        {/* 1. Hero Section (Trang bìa & Đếm ngược) */}
+        {/* 1. Hero Section (Trang bìa & Đếm ngược, Mở modal Hộp Mừng Cưới) */}
         <Hero
           couple={weddingCoupleData}
           onRSVPClick={() => scrollToSection('rsvp')}
           onGuestbookClick={() => scrollToSection('guestbook')}
+          onGiftClick={() => setIsGiftModalOpen(true)}
         />
 
         {/* 2. Chuyện Chúng Mình (Our Love Story) */}
@@ -81,6 +88,13 @@ export default function WeddingPage() {
 
       {/* Footer */}
       <Footer couple={weddingCoupleData} />
+
+      {/* Gift Box Modal opened from Hero Section */}
+      <GiftModal
+        isOpen={isGiftModalOpen}
+        onClose={() => setIsGiftModalOpen(false)}
+        couple={weddingCoupleData}
+      />
     </div>
   );
 }

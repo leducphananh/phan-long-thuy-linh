@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Calendar, MapPin, Heart, ChevronDown } from 'lucide-react';
+import { Calendar, MapPin, Heart, ChevronDown, Gift } from 'lucide-react';
 import { WeddingCouple } from '../types/wedding';
 import { ScrollReveal } from './ScrollReveal';
 
@@ -9,6 +9,7 @@ interface HeroProps {
   couple: WeddingCouple;
   onRSVPClick: () => void;
   onGuestbookClick: () => void;
+  onGiftClick?: () => void;
 }
 
 interface TimeLeft {
@@ -22,7 +23,8 @@ interface TimeLeft {
 export const Hero: React.FC<HeroProps> = ({
   couple,
   onRSVPClick,
-  onGuestbookClick
+  onGuestbookClick,
+  onGiftClick,
 }) => {
   const targetDate = new Date(couple.weddingDate).getTime();
 
@@ -166,15 +168,23 @@ export const Hero: React.FC<HeroProps> = ({
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto">
             <button
               onClick={onRSVPClick}
-              className="w-full sm:w-auto px-7 py-3 text-sm font-semibold text-white bg-gradient-to-r from-rose-500 via-rose-600 to-pink-500 hover:from-rose-600 hover:to-pink-600 rounded-xl transition-all transform hover:-translate-y-0.5 shadow-lg shadow-rose-600/30 whitespace-nowrap active:scale-95 cursor-pointer"
+              className="w-full sm:w-auto px-6 py-3 text-sm font-semibold text-white bg-gradient-to-r from-rose-500 via-rose-600 to-pink-500 hover:from-rose-600 hover:to-pink-600 rounded-xl transition-all transform hover:-translate-y-0.5 shadow-lg shadow-rose-600/30 whitespace-nowrap active:scale-95 cursor-pointer"
             >
               Xác Nhận Tham Dự (RSVP)
             </button>
             <button
               onClick={onGuestbookClick}
-              className="w-full sm:w-auto px-7 py-3 text-sm font-semibold text-stone-800 bg-white/95 hover:bg-white border border-white/80 rounded-xl shadow-md transition-all whitespace-nowrap active:scale-95 cursor-pointer"
+              className="w-full sm:w-auto px-6 py-3 text-sm font-semibold text-stone-800 bg-white/95 hover:bg-white border border-white/80 rounded-xl shadow-md transition-all whitespace-nowrap active:scale-95 cursor-pointer"
             >
               Gửi Lời Chúc Hạnh Phúc
+            </button>
+            <button
+              type="button"
+              onClick={onGiftClick}
+              className="w-full sm:w-auto px-6 py-3 text-sm font-semibold text-amber-950 bg-gradient-to-r from-amber-100 via-amber-200 to-yellow-200 hover:from-amber-200 hover:to-yellow-300 border border-amber-300/80 rounded-xl shadow-md transition-all transform hover:-translate-y-0.5 whitespace-nowrap active:scale-95 cursor-pointer flex items-center justify-center gap-2"
+            >
+              <Gift className="w-4 h-4 text-amber-800 shrink-0" />
+              <span>Mừng Cưới</span>
             </button>
           </div>
         </ScrollReveal>

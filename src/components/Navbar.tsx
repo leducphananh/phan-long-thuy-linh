@@ -10,7 +10,7 @@ interface NavbarProps {
 
 export const Navbar: React.FC<NavbarProps> = ({
   isPlayingMusic,
-  onToggleMusic
+  onToggleMusic,
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -50,7 +50,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       }`}
     >
       <div className="max-w-7xl mx-auto px-3 sm:px-6 flex items-center justify-between gap-2 sm:gap-4 flex-nowrap">
-        {/* Zone 1: Wordmark - Always fits on one line, gracefully scales on mobile */}
+        {/* Zone 1: Wordmark */}
         <a
           href="#hero"
           onClick={(e) => handleLinkClick(e, '#hero')}
@@ -127,11 +127,12 @@ export const Navbar: React.FC<NavbarProps> = ({
                 key={link.href}
                 href={link.href}
                 onClick={(e) => handleLinkClick(e, link.href)}
-                className="text-stone-700 hover:text-rose-600 font-medium py-2.5 px-3 rounded-xl hover:bg-rose-50/50 transition-colors text-sm sm:text-base whitespace-nowrap"
+                className="text-stone-700 hover:text-rose-600 font-medium py-2 px-3 rounded-xl hover:bg-rose-50/50 transition-colors text-sm sm:text-base whitespace-nowrap"
               >
                 {link.label}
               </a>
             ))}
+
             <div className="pt-3 mt-2 border-t border-stone-100 flex items-center justify-between">
               <span className="text-xs text-stone-500 font-medium">Nhạc nền cưới:</span>
               <button

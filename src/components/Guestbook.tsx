@@ -96,18 +96,45 @@ export const Guestbook: React.FC = () => {
     await likeGuestbookWish(id);
   };
 
-  const formatRelativeTime = (isoString: string) => {
+  const formatRelativeTime = (isoString?: string) => {
+    if (!isoString) return 'Vừa xong';
     try {
-      const date = new Date(isoString);
+      const cleanIso = isoString.includes(' ') && !isoString.includes('T')
+        ? isoString.replace(' ', 'T')
+        : isoString;
+      const date = new Date(cleanIso);
+      if (isNaN(date.getTime())) return 'Gần đây';
+
       const now = new Date();
       const diffMs = now.getTime() - date.getTime();
-      const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-      const diffDays = Math.floor(diffHours / 24);
 
-      if (diffHours < 1) return 'Vừa xong';
-      if (diffHours < 24) return `${diffHours} giờ trước`;
-      if (diffDays === 1) return 'Hôm qua';
-      return `${diffDays} ngày trước`;
+      // If time difference is under 60 seconds (or negative due to slight client/server clock skew)
+      if (diffMs < 60 * 1000) {
+        return 'Vừa xong';
+      }
+
+      const diffMinutes = Math.floor(diffMs / (1000 * 60));
+      if (diffMinutes < 60) {
+        return `${diffMinutes} phút trước`;
+      }
+
+      const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+      if (diffHours < 24) {
+        return `${diffHours} giờ trước`;
+      }
+
+      const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+      if (diffDays === 1) {
+        return 'Hôm qua';
+      }
+      if (diffDays < 7) {
+        return `${diffDays} ngày trước`;
+      }
+
+      const day = date.getDate().toString().padStart(2, '0');
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const year = date.getFullYear();
+      return `${day}/${month}/${year}`;
     } catch {
       return 'Gần đây';
     }
@@ -130,34 +157,36 @@ export const Guestbook: React.FC = () => {
 
   return (
     <section id="guestbook" className="relative py-24 sm:py-32 px-4 sm:px-6 overflow-hidden">
-      {/* Scenic Real Wedding Celebration Backdrop */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
+      {/* Scenic Real Wedding Celebration Backdrop - Clearly visible & warm */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         <img
-          src="/images/wedding/optimized/_DSC2387.jpg"
+          src="/images/wedding/optimized/_DSC3563.jpg"
           alt="Celebratory wedding backdrop"
-          className="w-full h-full object-cover object-center filter blur-[2px] opacity-15 transform scale-105"
+          className="w-full h-full object-cover object-center filter blur-[0.5px] opacity-65 transform scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#FFFDFB]/95 via-[#FFFDFB]/85 to-[#FFFDFB]/95" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#FFFDFB]/65 via-[#FFFDFB]/35 to-[#FFFDFB]/65" />
       </div>
 
       <div className="relative z-10 max-w-5xl mx-auto">
         {/* Section Header */}
         <ScrollReveal animation="fade-up" duration={700}>
           <div className="text-center mb-12 sm:mb-16">
-            <p className="font-script text-3xl sm:text-4xl text-rose-500 mb-1">
+            <p className="font-script text-3xl sm:text-4xl text-rose-600 mb-1 drop-shadow-xs">
               Guestbook
             </p>
-            <h2 className="font-serif text-3xl sm:text-5xl font-bold text-stone-900 tracking-tight text-balance">
+            <h2 className="font-serif text-3xl sm:text-5xl font-bold text-stone-900 tracking-tight text-balance drop-shadow-xs">
               Sổ Lưu Bút &amp; Lời Chúc
             </h2>
             <div className="mt-4 flex items-center justify-center gap-3">
-              <div className="h-px w-12 bg-rose-300" />
-              <Heart className="w-4 h-4 fill-rose-500 text-rose-500" />
-              <div className="h-px w-12 bg-rose-300" />
+              <div className="h-px w-12 bg-rose-400" />
+              <Heart className="w-4 h-4 fill-rose-500 text-rose-500 animate-pulse" />
+              <div className="h-px w-12 bg-rose-400" />
             </div>
-            <p className="mt-4 text-sm sm:text-base text-stone-600 max-w-lg mx-auto font-medium">
-              Mỗi lời chúc phúc ấm áp từ bạn là một món quà vô giá đồng hành cùng đôi vợ chồng son trên chặng đường mới.
-            </p>
+            <div className="mt-4 inline-block bg-white/80 backdrop-blur-sm px-6 py-2.5 rounded-2xl border border-rose-100/80 shadow-xs max-w-xl mx-auto">
+              <p className="text-sm sm:text-base text-stone-700 leading-relaxed font-medium">
+                Mỗi lời chúc phúc ấm áp từ bạn là một món quà vô giá đồng hành cùng đôi vợ chồng son trên chặng đường mới.
+              </p>
+            </div>
           </div>
         </ScrollReveal>
 
@@ -240,9 +269,9 @@ export const Guestbook: React.FC = () => {
                 </form>
 
                 <div className="mt-4 pt-4 border-t border-rose-100 flex items-center justify-between text-xs text-stone-500 font-medium">
-                  <span className="flex items-center gap-1.5">
-                    <Database className="w-3.5 h-3.5 text-emerald-600" />
-                    {storageMode === 'supabase' ? 'Supabase Realtime Live' : 'Demo Local Storage'}
+                  <span className="flex items-center gap-1.5 text-rose-600 font-semibold">
+                    <Heart className="w-3.5 h-3.5 fill-rose-500 text-rose-500" />
+                    Cảm ơn bạn đã gửi lời chúc
                   </span>
                   <span>{wishes.length} lời chúc</span>
                 </div>
@@ -296,7 +325,10 @@ export const Guestbook: React.FC = () => {
                             <div className="flex items-center gap-1.5 text-xs text-stone-500 mt-0.5">
                               <span className="font-medium text-rose-600">{getRelationshipLabel(item.relationship)}</span>
                               <span aria-hidden="true">·</span>
-                              <span className="flex items-center gap-1">
+                              <span
+                                className="flex items-center gap-1 cursor-help"
+                                title={new Date(item.created_at).toLocaleString('vi-VN')}
+                              >
                                 <Clock className="w-3 h-3 text-stone-400" />
                                 {formatRelativeTime(item.created_at)}
                               </span>

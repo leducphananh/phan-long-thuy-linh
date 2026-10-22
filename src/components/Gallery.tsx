@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { X, ChevronLeft, ChevronRight, Maximize2, Heart } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Maximize2, Heart, ChevronDown, ChevronUp } from 'lucide-react';
 import { GalleryPhoto } from '../types/wedding';
 import { ScrollReveal } from './ScrollReveal';
 
@@ -9,8 +9,13 @@ interface GalleryProps {
   photos: GalleryPhoto[];
 }
 
+const INITIAL_DISPLAY_COUNT = 9;
+
 export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const displayPhotos = isExpanded ? photos : photos.slice(0, INITIAL_DISPLAY_COUNT);
 
   const handleOpenLightbox = (index: number) => {
     setLightboxIndex(index);
@@ -50,40 +55,42 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
 
   return (
     <section id="gallery" className="relative py-24 sm:py-32 px-4 sm:px-6 overflow-hidden">
-      {/* Scenic Wedding Photo Background */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
+      {/* Scenic Wedding Photo Background with enhanced vibrancy and clarity */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         <img
           src="/images/wedding/optimized/_DSC3261.jpg"
           alt="Wedding gallery backdrop"
-          className="w-full h-full object-cover object-center filter blur-[3px] opacity-15 transform scale-105"
+          className="w-full h-full object-cover object-center filter blur-[0.5px] opacity-55 transform scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#FFFDFB]/95 via-[#FFFDFB]/85 to-[#FFFDFB]/95" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#FFFDFB]/70 via-[#FFFDFB]/40 to-[#FFFDFB]/70" />
       </div>
 
       <div className="relative z-10 max-w-6xl mx-auto">
         {/* Section Header */}
         <ScrollReveal animation="fade-up" duration={700}>
           <div className="text-center mb-12 sm:mb-16">
-            <p className="font-script text-3xl sm:text-4xl text-rose-500 mb-1">
+            <p className="font-script text-3xl sm:text-4xl text-rose-600 mb-1 drop-shadow-xs">
               Sweet Moments
             </p>
-            <h2 className="font-serif text-3xl sm:text-5xl font-bold text-stone-900 tracking-tight text-balance">
+            <h2 className="font-serif text-3xl sm:text-5xl font-bold text-stone-900 tracking-tight text-balance drop-shadow-xs">
               Album Ảnh Cưới
             </h2>
             <div className="mt-4 flex items-center justify-center gap-3">
-              <div className="h-px w-12 bg-rose-300" />
-              <Heart className="w-4 h-4 fill-rose-500 text-rose-500" />
-              <div className="h-px w-12 bg-rose-300" />
+              <div className="h-px w-12 bg-rose-400" />
+              <Heart className="w-4 h-4 fill-rose-500 text-rose-500 animate-pulse" />
+              <div className="h-px w-12 bg-rose-400" />
             </div>
-            <p className="mt-4 text-sm sm:text-base text-stone-600 max-w-lg mx-auto font-medium">
-              Từng nụ cười, từng ánh mắt và những khoảnh khắc ngọt ngào nhất của Phan Long &amp; Thùy Linh trên hành trình chung đôi trọn vẹn yêu thương.
-            </p>
+            <div className="mt-4 inline-block bg-white/80 backdrop-blur-sm px-6 py-2.5 rounded-2xl border border-rose-100/80 shadow-xs max-w-xl mx-auto">
+              <p className="text-sm sm:text-base text-stone-700 leading-relaxed font-medium">
+                Từng nụ cười, từng ánh mắt và những khoảnh khắc ngọt ngào nhất của Phan Long &amp; Thùy Linh trên hành trình chung đôi trọn vẹn yêu thương.
+              </p>
+            </div>
           </div>
         </ScrollReveal>
 
         {/* Masonry Grid Layout with bright white framing */}
         <div className="columns-1 sm:columns-2 lg:columns-3 gap-5 space-y-5">
-          {photos.map((photo, index) => (
+          {displayPhotos.map((photo, index) => (
             <ScrollReveal
               key={photo.id}
               animation="fade-up"
@@ -135,6 +142,30 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
             </ScrollReveal>
           ))}
         </div>
+
+        {/* View More / Collapse Button */}
+        {photos.length > INITIAL_DISPLAY_COUNT && (
+          <ScrollReveal animation="fade-up" delay={150} duration={600}>
+            <div className="mt-12 text-center">
+              <button
+                onClick={() => setIsExpanded(!isExpanded)}
+                className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-2xl bg-white/95 backdrop-blur-md border border-rose-200 text-stone-800 hover:text-rose-600 hover:border-rose-400 font-semibold text-sm shadow-md hover:shadow-xl transition-all duration-300 active:scale-95 cursor-pointer group"
+              >
+                {isExpanded ? (
+                  <>
+                    <ChevronUp className="w-4 h-4 text-rose-500 group-hover:-translate-y-0.5 transition-transform" />
+                    <span>Thu Gọn Album Ảnh</span>
+                  </>
+                ) : (
+                  <>
+                    <ChevronDown className="w-4 h-4 text-rose-500 group-hover:translate-y-0.5 transition-transform" />
+                    <span>Xem Thêm Ảnh Cưới ({photos.length - INITIAL_DISPLAY_COUNT} ảnh nữa)</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </ScrollReveal>
+        )}
       </div>
 
       {/* Fullscreen Lightbox Modal */}

@@ -25,34 +25,36 @@ export const Invitation: React.FC<InvitationProps> = ({ couple, events }) => {
 
   return (
     <section id="invitation" className="relative py-24 sm:py-32 px-4 sm:px-6 overflow-hidden">
-      {/* Scenic Bright Luxury Wedding Backdrop */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
+      {/* Scenic Bright Luxury Wedding Backdrop - Vividly visible */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         <img
           src="/images/wedding/optimized/_DSC3447.jpg"
           alt="Luxury wedding backdrop"
-          className="w-full h-full object-cover object-center filter blur-[2px] opacity-15 transform scale-105"
+          className="w-full h-full object-cover object-center filter blur-[0.5px] opacity-65 transform scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#FFFDFB]/95 via-[#FFFDFB]/85 to-[#FFFDFB]/95" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#FFFDFB]/65 via-[#FFFDFB]/35 to-[#FFFDFB]/65" />
       </div>
 
       <div className="relative z-10 max-w-5xl mx-auto">
         {/* Section Header */}
         <ScrollReveal animation="fade-up" duration={700}>
           <div className="text-center mb-16">
-            <p className="font-script text-3xl sm:text-4xl text-rose-500 mb-1">
+            <p className="font-script text-3xl sm:text-4xl text-rose-600 mb-1 drop-shadow-xs">
               Wedding Invitation
             </p>
-            <h2 className="font-serif text-3xl sm:text-5xl font-bold text-stone-900 tracking-tight text-balance">
+            <h2 className="font-serif text-3xl sm:text-5xl font-bold text-stone-900 tracking-tight text-balance drop-shadow-xs">
               Thiệp Mời Báo Hỉ
             </h2>
             <div className="mt-4 flex items-center justify-center gap-3">
-              <div className="h-px w-12 bg-rose-300" />
-              <Heart className="w-4 h-4 fill-rose-500 text-rose-500" />
-              <div className="h-px w-12 bg-rose-300" />
+              <div className="h-px w-12 bg-rose-400" />
+              <Heart className="w-4 h-4 fill-rose-500 text-rose-500 animate-pulse" />
+              <div className="h-px w-12 bg-rose-400" />
             </div>
-            <p className="mt-3 font-serif italic text-stone-600 text-sm sm:text-base">
-              Kính mời Quý khách tới chung vui cùng gia đình chúng tôi
-            </p>
+            <div className="mt-3 inline-block bg-white/80 backdrop-blur-sm px-5 py-1.5 rounded-full border border-rose-100/80 shadow-xs">
+              <p className="font-serif italic text-stone-700 text-sm sm:text-base">
+                Kính mời Quý khách tới chung vui cùng gia đình chúng tôi
+              </p>
+            </div>
           </div>
         </ScrollReveal>
 
@@ -66,7 +68,14 @@ export const Invitation: React.FC<InvitationProps> = ({ couple, events }) => {
             {/* Family Introduction (Nhà Trai & Nhà Gái) */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pb-10 border-b border-rose-100 text-center">
               {/* Nhà Trai */}
-              <div className="p-5 rounded-2xl bg-rose-50/40 border border-rose-100/60 hover:shadow-xs transition-shadow">
+              <div className="p-6 rounded-2xl bg-rose-50/40 border border-rose-100/60 hover:shadow-md transition-all flex flex-col items-center">
+                <div className="w-20 h-20 sm:w-24 sm:h-24 mb-4 rounded-full overflow-hidden border-2 border-rose-300 shadow-md">
+                  <img
+                    src="/images/wedding/optimized/_DSC3109.jpg"
+                    alt={couple.groom.fullName}
+                    className="w-full h-full object-cover object-top"
+                  />
+                </div>
                 <span className="text-xs uppercase tracking-widest text-rose-600 font-bold block mb-2">
                   NHÀ TRAI
                 </span>
@@ -80,7 +89,7 @@ export const Invitation: React.FC<InvitationProps> = ({ couple, events }) => {
                   {couple.groom.address}
                 </p>
 
-                <div className="mt-5 pt-3 border-t border-rose-200/60">
+                <div className="mt-5 pt-3 border-t border-rose-200/60 w-full">
                   <span className="text-xs text-rose-500 block uppercase tracking-wider font-semibold">Chú Rể</span>
                   <p className="font-serif text-2xl sm:text-3xl font-bold text-stone-900 mt-1">
                     {couple.groom.fullName}
@@ -89,7 +98,14 @@ export const Invitation: React.FC<InvitationProps> = ({ couple, events }) => {
               </div>
 
               {/* Nhà Gái */}
-              <div className="p-5 rounded-2xl bg-rose-50/40 border border-rose-100/60 hover:shadow-xs transition-shadow">
+              <div className="p-6 rounded-2xl bg-rose-50/40 border border-rose-100/60 hover:shadow-md transition-all flex flex-col items-center">
+                <div className="w-20 h-20 sm:w-24 sm:h-24 mb-4 rounded-full overflow-hidden border-2 border-rose-300 shadow-md">
+                  <img
+                    src="/images/wedding/optimized/_DSC2943.jpg"
+                    alt={couple.bride.fullName}
+                    className="w-full h-full object-cover object-top"
+                  />
+                </div>
                 <span className="text-xs uppercase tracking-widest text-rose-600 font-bold block mb-2">
                   NHÀ GÁI
                 </span>
@@ -103,7 +119,7 @@ export const Invitation: React.FC<InvitationProps> = ({ couple, events }) => {
                   {couple.bride.address}
                 </p>
 
-                <div className="mt-5 pt-3 border-t border-rose-200/60">
+                <div className="mt-5 pt-3 border-t border-rose-200/60 w-full">
                   <span className="text-xs text-rose-500 block uppercase tracking-wider font-semibold">Cô Dâu</span>
                   <p className="font-serif text-2xl sm:text-3xl font-bold text-stone-900 mt-1">
                     {couple.bride.fullName}

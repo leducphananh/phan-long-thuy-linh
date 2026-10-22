@@ -106,40 +106,56 @@ export const RSVPForm: React.FC = () => {
 
   return (
     <section id="rsvp" className="relative py-24 sm:py-32 px-4 sm:px-6 overflow-hidden">
-      {/* Scenic Wedding Background Image */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
+      {/* Scenic Wedding Background Image - Vivid & romantic */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         <img
-          src="/images/wedding/optimized/_DSC3182.jpg"
+          src="/images/wedding/optimized/_DSC2695.jpg"
           alt="Wedding celebration background"
-          className="w-full h-full object-cover object-center filter blur-[2px] opacity-15 transform scale-105"
+          className="w-full h-full object-cover object-center filter blur-[0.5px] opacity-65 transform scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#FFFDFB]/95 via-[#FFFDFB]/85 to-[#FFFDFB]/95" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#FFFDFB]/65 via-[#FFFDFB]/35 to-[#FFFDFB]/65" />
       </div>
 
       <div className="relative z-10 max-w-3xl mx-auto">
         {/* Header */}
         <ScrollReveal animation="fade-up" duration={700}>
           <div className="text-center mb-12 sm:mb-16">
-            <p className="font-script text-3xl sm:text-4xl text-rose-500 mb-1">
+            <p className="font-script text-3xl sm:text-4xl text-rose-600 mb-1 drop-shadow-xs">
               RSVP
             </p>
-            <h2 className="font-serif text-3xl sm:text-5xl font-bold text-stone-900 tracking-tight text-balance">
+            <h2 className="font-serif text-3xl sm:text-5xl font-bold text-stone-900 tracking-tight text-balance drop-shadow-xs">
               Xác Nhận Tham Dự
             </h2>
             <div className="mt-4 flex items-center justify-center gap-3">
-              <div className="h-px w-12 bg-rose-300" />
-              <Heart className="w-4 h-4 fill-rose-500 text-rose-500" />
-              <div className="h-px w-12 bg-rose-300" />
+              <div className="h-px w-12 bg-rose-400" />
+              <Heart className="w-4 h-4 fill-rose-500 text-rose-500 animate-pulse" />
+              <div className="h-px w-12 bg-rose-400" />
             </div>
-            <p className="mt-4 text-sm sm:text-base text-stone-600 max-w-lg mx-auto font-medium">
-              Để gia đình có thể chuẩn bị đón tiếp chu đáo nhất, xin Quý khách vui lòng xác nhận sự hiện diện trước ngày <strong className="text-stone-900">15 Tháng 12, 2026</strong>.
-            </p>
+            <div className="mt-4 inline-block bg-white/80 backdrop-blur-sm px-6 py-2.5 rounded-2xl border border-rose-100/80 shadow-xs max-w-xl mx-auto">
+              <p className="text-sm sm:text-base text-stone-700 leading-relaxed font-medium">
+                Để gia đình có thể chuẩn bị đón tiếp chu đáo nhất, xin Quý khách vui lòng xác nhận sự hiện diện trước ngày <strong className="text-stone-900">15 Tháng 12, 2026</strong>.
+              </p>
+            </div>
           </div>
         </ScrollReveal>
 
         {/* Form Card */}
         <ScrollReveal animation="zoom-in" delay={150} duration={750}>
           <div className="bg-white/98 backdrop-blur-md rounded-3xl p-6 sm:p-10 shadow-xl border border-rose-100">
+            {/* Romantic Photo Banner */}
+            <div className="mb-8 rounded-2xl overflow-hidden aspect-21/9 relative shadow-sm border border-rose-100/80">
+              <img
+                src="/images/wedding/optimized/_DSC2387.jpg"
+                alt="Phan Long & Thùy Linh"
+                className="w-full h-full object-cover object-center"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-stone-950/60 via-transparent to-transparent flex items-end p-4">
+                <p className="text-white text-xs sm:text-sm font-serif italic drop-shadow-sm">
+                  &ldquo;Rất mong được đón tiếp bạn trong ngày vui trọng đại của chúng mình.&rdquo;
+                </p>
+              </div>
+            </div>
+
             {submitted ? (
               <div className="text-center py-8 animate-in fade-in duration-300">
                 <div className="w-16 h-16 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -157,13 +173,9 @@ export const RSVPForm: React.FC = () => {
 
                 {/* Storage Mode Notice */}
                 <div className="mt-4 inline-flex items-center gap-2 text-xs text-stone-600 px-3.5 py-1.5 rounded-xl bg-rose-50/60 border border-rose-200">
-                  <span>Trạng thái:</span>
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                   <span className="font-semibold text-rose-700">
-                    {storageMode === 'google_sheet'
-                      ? 'Đã tự động lưu vào Google Sheet'
-                      : storageMode === 'supabase'
-                      ? 'Đã đồng bộ lên Supabase'
-                      : 'Đã ghi nhận dữ liệu xác nhận'}
+                    Đã ghi nhận xác nhận tham dự thành công!
                   </span>
                 </div>
 

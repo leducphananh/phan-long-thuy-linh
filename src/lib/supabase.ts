@@ -7,45 +7,8 @@ const STORAGE_ANON_KEY = 'wedding_supabase_anon_key';
 const LOCAL_RSVP_KEY = 'wedding_local_rsvp_data';
 const LOCAL_GUESTBOOK_KEY = 'wedding_local_guestbook_data';
 
-// Initial sample guestbook wishes if local storage is empty
-const INITIAL_GUESTBOOK_WISHES: GuestbookEntry[] = [
-  {
-    id: 'wish-1',
-    created_at: new Date(Date.now() - 3600 * 1000 * 5).toISOString(),
-    name: 'Nguyễn Minh Tuấn & Bạn bè ĐH',
-    message: 'Chúc hai bạn trăm năm hạnh phúc, đầu bạc răng long! Chúc cho tổ ấm nhỏ luôn tràn ngập tiếng cười và yêu thương.',
-    relationship: 'friend',
-    avatar_color: 'rose',
-    likes_count: 14,
-  },
-  {
-    id: 'wish-2',
-    created_at: new Date(Date.now() - 3600 * 1000 * 12).toISOString(),
-    name: 'Chị Mai Thảo & Gia đình',
-    message: 'Mừng ngày vui của hai em! Chúc hai em luôn đồng hành, thấu hiểu và chia sẻ mọi khoảnh khắc ngọt ngào bên nhau.',
-    relationship: 'family',
-    avatar_color: 'amber',
-    likes_count: 9,
-  },
-  {
-    id: 'wish-3',
-    created_at: new Date(Date.now() - 3600 * 1000 * 24).toISOString(),
-    name: 'Đức Huy & Team Công Nghệ',
-    message: 'Chúc mừng anh Nam và chị Linh! Đám cưới đẹp như mơ, chúc hai vợ chồng sớm có quý tử thiên thần nha!',
-    relationship: 'colleague',
-    avatar_color: 'emerald',
-    likes_count: 18,
-  },
-  {
-    id: 'wish-4',
-    created_at: new Date(Date.now() - 3600 * 1000 * 48).toISOString(),
-    name: 'Bác Thanh & Cô Liên',
-    message: 'Chúc hai cháu trăm năm tình viên mãn, bạc đầu nghĩa phu thê. Hạnh phúc và viên mãn trọn đời!',
-    relationship: 'relative',
-    avatar_color: 'indigo',
-    likes_count: 7,
-  }
-];
+// Initial guestbook wishes (empty by default)
+const INITIAL_GUESTBOOK_WISHES: GuestbookEntry[] = [];
 
 export function getSupabaseConfig(): { url: string; anonKey: string; isConfigured: boolean } {
   const envUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';

@@ -68,6 +68,11 @@ export default function RootLayout({
       lang="vi"
       className={`${playfair.variable} ${cormorant.variable} ${montserrat.variable} ${alexBrush.variable} scroll-smooth`}
     >
+      <head>
+        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+        <link rel="shortcut icon" href="/icon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/icon.svg" />
+      </head>
       <body className="bg-[#FFFDFB] text-stone-800 antialiased selection:bg-rose-100 selection:text-rose-900 min-h-screen">
         {children}
       </body>
