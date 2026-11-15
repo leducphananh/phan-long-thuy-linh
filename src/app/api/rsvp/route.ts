@@ -15,6 +15,7 @@ interface RSVPRequestBody {
   attending: boolean | string;
   guestsCount?: number | string;
   side?: 'groom' | 'bride' | 'both';
+  event?: 'groom' | 'bride' | 'both';
   message?: string;
   dietaryRequirements?: string;
   website?: string;
@@ -106,15 +107,32 @@ export async function POST(req: NextRequest) {
       hour: '2-digit',
       minute: '2-digit',
       second: '2-digit',
+      hour12: false,
     });
 
-    const attendanceLabel = attending ? 'Có tham dự' : 'Không thể tham dự';
-    const sideLabel = side === 'groom' ? 'Nhà Trai' : side === 'bride' ? 'Nhà Gái' : 'Cả hai bên';
+    const userAgent = req.headers.get('user-agent') ?? '';
+    const forwardedFor = req.headers.get('x-forwarded-for') ?? '';
+    const realIp = req.headers.get('x-real-ip') ?? '';
+    const ipAddress = (forwardedFor ? forwardedFor.split(',')[0].trim() : '') || realIp || '';
+
+    // Nhãn hiển thị chuẩn xác khớp 100% với cấu trúc dự án wedding-page-clone cũ
+    const attendanceLabel = attending ? 'Có' : 'Không';
+    const guestOfLabel = side === 'bride' ? 'Nhà Gái' : side === 'groom' ? 'Nhà Trai' : 'Cả Hai';
+    const eventLabel =
+      raw.event === 'bride'
+        ? 'Nhà Gái'
+        : raw.event === 'groom'
+          ? 'Nhà Trai'
+          : side === 'bride'
+            ? 'Nhà Gái'
+            : side === 'groom'
+              ? 'Nhà Trai'
+              : 'Cả Hai';
 
     let savedToGoogleSheets = false;
     let googleSheetError: string | null = null;
 
-    // Ghi dữ liệu trực tiếp vào Google Sheets qua Service Account (v4 API)
+    // Ghi dữ liệu trực tiếp vào Google Sheets qua Service Account (v4 API) - 10 cột A -> J
     const sheetId = getEnv('GOOGLE_SHEET_ID');
     const sheetName = getEnv('GOOGLE_SHEET_NAME');
     const sheets = getSheetsClient();
@@ -123,16 +141,19 @@ export async function POST(req: NextRequest) {
       const rowData = [
         timestamp,
         name,
-        "'" + phone, // Giữ số 0 ở đầu SĐT trong Google Sheet
+        phone,
         attendanceLabel,
-        sideLabel,
-        guestsCount,
+        guestOfLabel,
+        guestsCount.toString(),
+        eventLabel,
         message,
+        userAgent,
+        ipAddress,
       ];
 
       try {
         // Thử ghi vào tab được chỉ định (nếu có cấu hình GOOGLE_SHEET_NAME)
-        const targetRange = sheetName ? `${sheetName}!A:G` : 'A:G';
+        const targetRange = sheetName ? `${sheetName}!A:J` : 'A:J';
         await sheets.spreadsheets.values.append({
           spreadsheetId: sheetId,
           range: targetRange,
@@ -147,7 +168,7 @@ export async function POST(req: NextRequest) {
         try {
           await sheets.spreadsheets.values.append({
             spreadsheetId: sheetId,
-            range: 'A:G',
+            range: 'A:J',
             valueInputOption: 'RAW',
             requestBody: {
               values: [rowData],
