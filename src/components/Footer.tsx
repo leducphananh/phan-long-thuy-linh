@@ -56,16 +56,23 @@ export const Footer: React.FC<FooterProps> = ({ couple }) => {
           <div className="absolute bottom-0 left-0 w-16 h-16 border-b-2 border-l-2 border-amber-300/40 rounded-bl-3xl m-3.5 pointer-events-none" />
           <div className="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-amber-300/40 rounded-br-3xl m-3.5 pointer-events-none" />
 
-          {/* Monogram Badge */}
-          <div className="w-20 h-20 mx-auto rounded-full border-2 border-amber-400/60 bg-gradient-to-br from-stone-900 via-rose-950/50 to-stone-900 flex items-center justify-center font-serif text-2xl font-bold text-amber-200 mb-6 shadow-xl shadow-rose-950/60 ring-4 ring-rose-500/20">
-            <span>PL &amp; TL</span>
+          {/* Decorative Top Accent */}
+          <div className="mb-4 flex flex-col items-center">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <span className="w-8 h-px bg-gradient-to-r from-transparent to-amber-300/60" />
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400/80" />
+              <span className="w-8 h-px bg-gradient-to-l from-transparent to-amber-300/60" />
+            </div>
+            <span className="font-sans text-[11px] sm:text-xs font-semibold tracking-[0.3em] uppercase text-amber-200/80">
+              With all our love
+            </span>
           </div>
 
-          <p className="font-script text-3xl sm:text-5xl text-rose-300 mb-2 drop-shadow-md">
-            Thank you for celebrating with us!
-          </p>
+          <h2 className="font-script text-5xl sm:text-7xl text-amber-100 mb-2 drop-shadow-[0_2px_15px_rgba(212,175,55,0.25)] font-normal leading-tight">
+            Thank You
+          </h2>
 
-          <h3 className="font-serif text-2xl sm:text-4xl font-bold text-white tracking-wider mb-4 drop-shadow-sm">
+          <h3 className="font-serif text-xl sm:text-3xl font-bold text-white tracking-wider mb-4 drop-shadow-sm">
             {couple.groom.fullName} <span className="text-rose-400 font-sans font-light">&amp;</span> {couple.bride.fullName}
           </h3>
 

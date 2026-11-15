@@ -147,24 +147,18 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
                 <div className="absolute inset-0 [clip-path:polygon(4%_0,96%_0,50%_92%)] border-b border-[#D4AF37]/35 pointer-events-none" />
               </motion.div>
 
-              {/* Handcrafted Royal Wax Seal Stamp (Monogram PL & TL) */}
+              {/* Handcrafted Royal Wax Seal Stamp with Calligraphy Monogram L */}
               <motion.div
                 animate={isOpen ? { scale: 0, opacity: 0 } : { scale: 1, opacity: 1 }}
                 transition={{ duration: 0.3 }}
                 className="absolute left-1/2 top-[100px] sm:top-[120px] -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none"
               >
                 {/* Organic wax perimeter */}
-                <div className="relative w-16 h-16 sm:w-18 sm:h-18 rounded-full bg-gradient-to-br from-[#8E1728] via-[#6B0D1B] to-[#45050F] shadow-[0_6px_20px_rgba(0,0,0,0.55),inset_0_2px_4px_rgba(255,255,255,0.25)] border-2 border-[#D4AF37]/75 flex flex-col items-center justify-center text-[#F6E29F] ring-4 ring-[#6B0D1B]/40">
-                  {/* Embossed inner gold ring */}
-                  <div className="absolute inset-1.5 rounded-full border border-[#D4AF37]/50 flex flex-col items-center justify-center">
-                    <span className="font-serif text-[11px] sm:text-xs font-bold tracking-[0.15em] text-[#F9E9B8] leading-none drop-shadow-xs">
-                      PL
-                    </span>
-                    <span className="text-[9px] text-[#D4AF37] my-0.5 leading-none">
-                      ✦
-                    </span>
-                    <span className="font-serif text-[10px] sm:text-[11px] font-bold tracking-[0.15em] text-[#F9E9B8] leading-none drop-shadow-xs">
-                      TL
+                <div className="relative w-16 h-16 sm:w-18 sm:h-18 rounded-full bg-gradient-to-br from-[#8E1728] via-[#6B0D1B] to-[#45050F] shadow-[0_8px_24px_rgba(0,0,0,0.6),inset_0_2px_4px_rgba(255,255,255,0.25)] border-2 border-[#D4AF37]/80 flex items-center justify-center text-[#F6E29F] ring-4 ring-[#6B0D1B]/40">
+                  {/* Embossed inner gold ring with Calligraphic Initial L */}
+                  <div className="absolute inset-1.5 rounded-full border border-[#D4AF37]/50 flex items-center justify-center">
+                    <span className="font-script text-3xl sm:text-4xl text-[#FCEEB5] leading-none select-none drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)] pr-0.5">
+                      L
                     </span>
                   </div>
                 </div>
@@ -184,18 +178,14 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
               <button
                 onClick={handleOpen}
                 disabled={isOpen}
-                className="group relative inline-flex items-center justify-center px-9 sm:px-11 py-3.5 sm:py-4 rounded-full font-serif text-sm sm:text-base font-bold tracking-[0.2em] uppercase text-[#241208] cursor-pointer active:scale-95 transition-all shadow-[0_8px_30px_rgba(212,175,55,0.45)] hover:shadow-[0_12px_40px_rgba(212,175,55,0.65)] hover:-translate-y-0.5 border border-[#FFF4D0]"
+                className="group relative inline-flex items-center justify-center px-10 sm:px-12 py-3.5 sm:py-4 rounded-full font-sans text-xs sm:text-sm font-semibold tracking-[0.2em] uppercase text-stone-900 cursor-pointer active:scale-95 transition-all shadow-[0_8px_30px_rgba(212,175,55,0.4)] hover:shadow-[0_12px_40px_rgba(212,175,55,0.6)] hover:-translate-y-0.5 border border-[#FFF8DE]"
                 style={{
-                  background: 'linear-gradient(135deg, #E6C86E 0%, #C89C32 50%, #E8CE7D 100%)',
+                  background: 'linear-gradient(135deg, #ECCB76 0%, #D8A938 50%, #EFD588 100%)',
                 }}
               >
-                <span className="relative z-10 flex items-center gap-2">
-                  <span className="text-xs">✦</span>
-                  <span>Mở Thiệp Mời</span>
-                  <span className="text-xs">✦</span>
-                </span>
+                <span className="relative z-10">Mở Thiệp Mời</span>
                 {/* Glossy highlight sweep */}
-                <div className="absolute inset-0 rounded-full bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute inset-0 rounded-full bg-white/25 opacity-0 group-hover:opacity-100 transition-opacity" />
               </button>
             </motion.div>
           </motion.div>

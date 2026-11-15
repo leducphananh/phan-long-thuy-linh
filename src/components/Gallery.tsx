@@ -181,9 +181,8 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
           <div className="mt-12 text-center">
             <button
               onClick={handleViewMore}
-              className="inline-flex items-center gap-2.5 px-9 sm:px-11 py-3.5 sm:py-4 rounded-full bg-gradient-to-r from-rose-600 via-rose-500 to-pink-500 hover:from-rose-500 hover:to-pink-600 text-white font-serif font-bold text-sm sm:text-base shadow-xl shadow-rose-600/30 hover:shadow-rose-600/50 hover:-translate-y-0.5 transition-all duration-300 active:scale-95 cursor-pointer group"
+              className="inline-flex items-center justify-center px-10 sm:px-12 py-3.5 sm:py-4 rounded-full bg-gradient-to-r from-rose-600 via-rose-500 to-pink-500 hover:from-rose-500 hover:to-pink-600 text-white font-sans font-semibold text-xs sm:text-sm tracking-[0.18em] uppercase shadow-lg shadow-rose-600/25 hover:shadow-xl hover:shadow-rose-600/40 hover:-translate-y-0.5 transition-all duration-300 active:scale-95 cursor-pointer"
             >
-              <Maximize2 className="w-4 h-4 text-rose-100 group-hover:scale-110 transition-transform" />
               <span>Xem Thêm Ảnh Cưới ({photos.length} Ảnh)</span>
             </button>
           </div>
