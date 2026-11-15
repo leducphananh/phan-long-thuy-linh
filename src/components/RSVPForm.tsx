@@ -1,10 +1,16 @@
 'use client';
 
-import React, { useState } from 'react';
 import confetti from 'canvas-confetti';
-import { CheckCircle2, Send, User, Phone, AlertCircle, Heart } from 'lucide-react';
+import {
+  AlertCircle,
+  CheckCircle2,
+  Heart,
+  Phone,
+  Send,
+  User,
+} from 'lucide-react';
+import React, { useState } from 'react';
 import { RSVPFormData } from '../types/wedding';
-import { submitRSVP } from '../lib/supabase';
 import { ScrollReveal } from './ScrollReveal';
 
 export const RSVPForm: React.FC = () => {
@@ -21,14 +27,16 @@ export const RSVPForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [storageMode, setStorageMode] = useState<'google_sheet' | 'supabase' | 'local'>('local');
+  const [storageMode, setStorageMode] = useState<
+    'google_sheet' | 'supabase' | 'local'
+  >('local');
 
   const triggerConfetti = () => {
     confetti({
       particleCount: 90,
       spread: 75,
       origin: { y: 0.6 },
-      colors: ['#f43f5e', '#ec4899', '#fb7185', '#fda4af', '#fecdd3']
+      colors: ['#f43f5e', '#ec4899', '#fb7185', '#fda4af', '#fecdd3'],
     });
   };
 
@@ -43,7 +51,9 @@ export const RSVPForm: React.FC = () => {
     }
 
     if (!formData.phone.trim() || formData.phone.trim().length < 8) {
-      setErrorMessage('Vui lòng nhập số điện thoại hợp lệ để gia đình tiện liên hệ.');
+      setErrorMessage(
+        'Vui lòng nhập số điện thoại hợp lệ để gia đình tiện liên hệ.',
+      );
       return;
     }
 
@@ -79,7 +89,9 @@ export const RSVPForm: React.FC = () => {
           // Ignore localStorage write error
         }
       } else {
-        setErrorMessage(result.message || 'Đã có lỗi xảy ra. Vui lòng thử lại.');
+        setErrorMessage(
+          result.message || 'Đã có lỗi xảy ra. Vui lòng thử lại.',
+        );
       }
     } catch {
       // Offline fallback: save to localStorage directly
@@ -97,7 +109,9 @@ export const RSVPForm: React.FC = () => {
         setStorageMode('local');
         triggerConfetti();
       } catch {
-        setErrorMessage('Đã xảy ra lỗi khi gửi xác nhận. Vui lòng thử lại sau.');
+        setErrorMessage(
+          'Đã xảy ra lỗi khi gửi xác nhận. Vui lòng thử lại sau.',
+        );
       }
     } finally {
       setLoading(false);
@@ -105,7 +119,10 @@ export const RSVPForm: React.FC = () => {
   };
 
   return (
-    <section id="rsvp" className="relative py-24 sm:py-32 px-4 sm:px-6 overflow-hidden">
+    <section
+      id="rsvp"
+      className="relative py-24 sm:py-32 px-4 sm:px-6 overflow-hidden"
+    >
       {/* Scenic Wedding Background Image - Vivid & romantic */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         <img
@@ -133,7 +150,9 @@ export const RSVPForm: React.FC = () => {
             </div>
             <div className="mt-4 inline-block bg-white/80 backdrop-blur-sm px-6 py-2.5 rounded-2xl border border-rose-100/80 shadow-xs max-w-xl mx-auto">
               <p className="text-sm sm:text-base text-stone-700 leading-relaxed font-medium">
-                Để gia đình có thể chuẩn bị đón tiếp chu đáo nhất, xin Quý khách vui lòng xác nhận sự hiện diện trước ngày <strong className="text-stone-900">15 Tháng 12, 2026</strong>.
+                Để gia đình có thể chuẩn bị đón tiếp chu đáo nhất, xin Quý khách
+                vui lòng xác nhận sự hiện diện trước ngày{' '}
+                <strong className="text-stone-900">19 Tháng 12, 2026</strong>.
               </p>
             </div>
           </div>
@@ -151,7 +170,8 @@ export const RSVPForm: React.FC = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-stone-950/60 via-transparent to-transparent flex items-end p-4">
                 <p className="text-white text-xs sm:text-sm font-serif italic drop-shadow-sm">
-                  &ldquo;Rất mong được đón tiếp bạn trong ngày vui trọng đại của chúng mình.&rdquo;
+                  &ldquo;Rất mong được đón tiếp bạn trong ngày vui trọng đại của
+                  chúng mình.&rdquo;
                 </p>
               </div>
             </div>
@@ -165,7 +185,8 @@ export const RSVPForm: React.FC = () => {
                   Cảm Ơn Bạn Rất Nhiều!
                 </h3>
                 <p className="mt-2 text-stone-600 max-w-md mx-auto text-sm sm:text-base leading-relaxed">
-                  Chúng mình đã nhận được phản hồi của bạn <strong className="text-stone-900">({formData.name})</strong>.
+                  Chúng mình đã nhận được phản hồi của bạn{' '}
+                  <strong className="text-stone-900">({formData.name})</strong>.
                   {formData.attending
                     ? ' Sự hiện diện của bạn là niềm vinh dự to lớn đối với chúng mình!'
                     : ' Thật tiếc khi bạn không thể tham dự, nhưng rất cảm ơn bạn đã gửi lời báo trước cho gia đình.'}
@@ -216,27 +237,35 @@ export const RSVPForm: React.FC = () => {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <button
                       type="button"
-                      onClick={() => setFormData({ ...formData, attending: true })}
+                      onClick={() =>
+                        setFormData({ ...formData, attending: true })
+                      }
                       className={`py-3.5 px-4 rounded-2xl border text-sm font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer ${
                         formData.attending
                           ? 'border-rose-500 bg-rose-50 text-rose-900 shadow-xs ring-2 ring-rose-400'
                           : 'border-stone-200 bg-white text-stone-600 hover:bg-stone-50'
                       }`}
                     >
-                      <CheckCircle2 className={`w-4 h-4 ${formData.attending ? 'text-rose-600' : 'text-stone-400'}`} />
+                      <CheckCircle2
+                        className={`w-4 h-4 ${formData.attending ? 'text-rose-600' : 'text-stone-400'}`}
+                      />
                       Có, tôi chắc chắn sẽ tham dự
                     </button>
 
                     <button
                       type="button"
-                      onClick={() => setFormData({ ...formData, attending: false })}
+                      onClick={() =>
+                        setFormData({ ...formData, attending: false })
+                      }
                       className={`py-3.5 px-4 rounded-2xl border text-sm font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer ${
                         !formData.attending
                           ? 'border-rose-500 bg-rose-50 text-rose-900 shadow-xs ring-2 ring-rose-400'
                           : 'border-stone-200 bg-white text-stone-600 hover:bg-stone-50'
                       }`}
                     >
-                      <AlertCircle className={`w-4 h-4 ${!formData.attending ? 'text-rose-600' : 'text-stone-400'}`} />
+                      <AlertCircle
+                        className={`w-4 h-4 ${!formData.attending ? 'text-rose-600' : 'text-stone-400'}`}
+                      />
                       Rất tiếc, tôi không thể tham dự
                     </button>
                   </div>
@@ -245,7 +274,10 @@ export const RSVPForm: React.FC = () => {
                 {/* Name & Phone Fields */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
-                    <label htmlFor="rsvp-name" className="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
+                    <label
+                      htmlFor="rsvp-name"
+                      className="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2"
+                    >
                       Họ và Tên *
                     </label>
                     <div className="relative">
@@ -256,14 +288,19 @@ export const RSVPForm: React.FC = () => {
                         required
                         placeholder="VD: Nguyễn Văn An"
                         value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({ ...formData, name: e.target.value })
+                        }
                         className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-stone-200 bg-stone-50/50 text-stone-900 text-sm focus:outline-hidden focus:ring-2 focus:ring-rose-500 focus:bg-white transition-all"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label htmlFor="rsvp-phone" className="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
+                    <label
+                      htmlFor="rsvp-phone"
+                      className="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2"
+                    >
                       Số Điện Thoại *
                     </label>
                     <div className="relative">
@@ -274,7 +311,9 @@ export const RSVPForm: React.FC = () => {
                         required
                         placeholder="VD: 0912 345 678"
                         value={formData.phone}
-                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({ ...formData, phone: e.target.value })
+                        }
                         className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-stone-200 bg-stone-50/50 text-stone-900 text-sm focus:outline-hidden focus:ring-2 focus:ring-rose-500 focus:bg-white transition-all"
                       />
                     </div>
@@ -298,7 +337,12 @@ export const RSVPForm: React.FC = () => {
                           <button
                             key={item.key}
                             type="button"
-                            onClick={() => setFormData({ ...formData, side: item.key as any })}
+                            onClick={() =>
+                              setFormData({
+                                ...formData,
+                                side: item.key as any,
+                              })
+                            }
                             className={`py-2 px-1.5 sm:px-3 text-[11px] sm:text-xs md:text-sm font-semibold rounded-xl border transition-all text-center leading-tight cursor-pointer ${
                               formData.side === item.key
                                 ? 'border-rose-500 bg-rose-50 text-rose-900 ring-2 ring-rose-400'
@@ -320,7 +364,15 @@ export const RSVPForm: React.FC = () => {
                         <div className="flex items-center border border-stone-200 rounded-xl overflow-hidden bg-stone-50/70">
                           <button
                             type="button"
-                            onClick={() => setFormData({ ...formData, guestsCount: Math.max(1, formData.guestsCount - 1) })}
+                            onClick={() =>
+                              setFormData({
+                                ...formData,
+                                guestsCount: Math.max(
+                                  1,
+                                  formData.guestsCount - 1,
+                                ),
+                              })
+                            }
                             className="px-3.5 py-2 text-stone-600 hover:bg-stone-200 font-bold transition-colors cursor-pointer"
                           >
                             -
@@ -330,7 +382,15 @@ export const RSVPForm: React.FC = () => {
                           </span>
                           <button
                             type="button"
-                            onClick={() => setFormData({ ...formData, guestsCount: Math.min(6, formData.guestsCount + 1) })}
+                            onClick={() =>
+                              setFormData({
+                                ...formData,
+                                guestsCount: Math.min(
+                                  6,
+                                  formData.guestsCount + 1,
+                                ),
+                              })
+                            }
                             className="px-3.5 py-2 text-stone-600 hover:bg-stone-200 font-bold transition-colors cursor-pointer"
                           >
                             +
@@ -346,7 +406,10 @@ export const RSVPForm: React.FC = () => {
 
                 {/* Message to Couple */}
                 <div>
-                  <label htmlFor="rsvp-message" className="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
+                  <label
+                    htmlFor="rsvp-message"
+                    className="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2"
+                  >
                     Lời Nhắn Gửi
                   </label>
                   <div className="relative">
@@ -355,7 +418,9 @@ export const RSVPForm: React.FC = () => {
                       rows={3}
                       placeholder="Gửi lời chúc mừng hoặc nhắn gửi yêu thương tới Phan Long & Thùy Linh..."
                       value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, message: e.target.value })
+                      }
                       className="w-full p-3 rounded-xl border border-stone-200 bg-stone-50/50 text-stone-900 text-sm focus:outline-hidden focus:ring-2 focus:ring-rose-500 focus:bg-white transition-all resize-none"
                     />
                   </div>

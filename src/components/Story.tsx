@@ -1,9 +1,9 @@
 'use client';
 
+import { Heart, Quote, Sparkles } from 'lucide-react';
 import React from 'react';
-import { Heart, Sparkles, Quote } from 'lucide-react';
-import { WeddingStory } from '../types/wedding';
 import { weddingStoryData } from '../data/weddingData';
+import { WeddingStory } from '../types/wedding';
 import { ScrollReveal } from './ScrollReveal';
 
 interface StoryProps {
@@ -13,7 +13,10 @@ interface StoryProps {
 
 export const Story: React.FC<StoryProps> = ({ story = weddingStoryData }) => {
   return (
-    <section id="story" className="relative py-24 sm:py-32 px-4 sm:px-6 overflow-hidden">
+    <section
+      id="story"
+      className="relative py-24 sm:py-32 px-4 sm:px-6 overflow-hidden"
+    >
       {/* Scenic Wedding Photo Backdrop - Clearly visible and rich */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         <img
@@ -42,7 +45,9 @@ export const Story: React.FC<StoryProps> = ({ story = weddingStoryData }) => {
             </div>
             <div className="mt-4 inline-block bg-white/80 backdrop-blur-sm px-6 py-2.5 rounded-2xl border border-rose-100/80 shadow-xs max-w-xl mx-auto">
               <p className="text-sm sm:text-base text-stone-700 leading-relaxed font-medium">
-                Không cần những lời thề non hẹn biển xa xôi, hành trình của chúng mình là sự đồng điệu của hai tâm hồn, cùng nhau sẻ chia từng khoảnh khắc bình yên và bước vào hôn nhân bằng cả trái tim.
+                Không cần những lời thề non hẹn biển xa xôi, hành trình của
+                chúng mình là sự đồng điệu của hai tâm hồn, cùng nhau sẻ chia
+                từng khoảnh khắc bình yên và bước vào hôn nhân bằng cả trái tim.
               </p>
             </div>
           </div>
@@ -62,14 +67,21 @@ export const Story: React.FC<StoryProps> = ({ story = weddingStoryData }) => {
                 <div className="relative mx-auto max-w-sm sm:max-w-md lg:max-w-none">
                   <div className="relative overflow-hidden rounded-3xl bg-stone-100 shadow-2xl border-4 border-white aspect-4/5 group">
                     <img
-                      src={story.featuredImages?.[0]?.url || '/images/wedding/optimized/_DSC3182.jpg'}
-                      alt={story.featuredImages?.[0]?.alt || 'Phan Long & Thùy Linh'}
+                      src={
+                        story.featuredImages?.[0]?.url ||
+                        '/images/wedding/optimized/_DSC3182.jpg'
+                      }
+                      alt={
+                        story.featuredImages?.[0]?.alt ||
+                        'Phan Long & Thùy Linh'
+                      }
                       loading="lazy"
                       className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5 text-white">
                       <p className="text-xs font-serif italic">
-                        {story.featuredImages?.[0]?.caption || 'Khoảnh khắc trao lời thề nguyện'}
+                        {story.featuredImages?.[0]?.caption ||
+                          'Khoảnh khắc trao lời thề nguyện'}
                       </p>
                     </div>
                   </div>
@@ -78,8 +90,14 @@ export const Story: React.FC<StoryProps> = ({ story = weddingStoryData }) => {
                   <div className="absolute -bottom-6 -right-3 sm:-bottom-8 sm:-right-6 w-36 sm:w-48 overflow-hidden rounded-2xl bg-white p-2 shadow-xl border border-rose-100 hidden xs:block">
                     <div className="overflow-hidden rounded-xl aspect-4/3">
                       <img
-                        src={story.featuredImages?.[1]?.url || '/images/wedding/optimized/_DSC2387.jpg'}
-                        alt={story.featuredImages?.[1]?.alt || 'Khoảnh khắc ngọt ngào'}
+                        src={
+                          story.featuredImages?.[1]?.url ||
+                          '/images/wedding/optimized/_DSC2387.jpg'
+                        }
+                        alt={
+                          story.featuredImages?.[1]?.alt ||
+                          'Khoảnh khắc ngọt ngào'
+                        }
                         loading="lazy"
                         className="w-full h-full object-cover"
                       />
@@ -112,7 +130,14 @@ export const Story: React.FC<StoryProps> = ({ story = weddingStoryData }) => {
                 {/* Narrative Paragraphs */}
                 <div className="space-y-4 text-stone-700 text-sm sm:text-base leading-relaxed font-sans">
                   {story.paragraphs.map((paragraph, idx) => (
-                    <p key={idx} className={idx === 0 ? 'first-letter:text-3xl first-letter:font-serif first-letter:font-bold first-letter:text-rose-600 first-letter:mr-1 first-letter:float-left' : ''}>
+                    <p
+                      key={idx}
+                      className={
+                        idx === 0
+                          ? 'first-letter:text-3xl first-letter:font-serif first-letter:font-bold first-letter:text-rose-600 first-letter:mr-1 first-letter:float-left'
+                          : ''
+                      }
+                    >
                       {paragraph}
                     </p>
                   ))}
@@ -132,7 +157,7 @@ export const Story: React.FC<StoryProps> = ({ story = weddingStoryData }) => {
                       {story.signature}
                     </p>
                     <p className="text-[11px] text-stone-500 uppercase tracking-wider mt-0.5">
-                      24.12.2026 · Hà Nội &amp; Sài Gòn
+                      24.12.2026 · Hà Nội
                     </p>
                   </div>
                 </div>
