@@ -289,7 +289,7 @@ export const RSVPForm: React.FC = () => {
                       <label className="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
                         Bạn là khách của ai?
                       </label>
-                      <div className="grid grid-cols-3 gap-2">
+                      <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
                         {[
                           { key: 'groom', label: 'Nhà Trai (Phan Long)' },
                           { key: 'bride', label: 'Nhà Gái (Thùy Linh)' },
@@ -299,7 +299,7 @@ export const RSVPForm: React.FC = () => {
                             key={item.key}
                             type="button"
                             onClick={() => setFormData({ ...formData, side: item.key as any })}
-                            className={`py-2 px-3 text-xs sm:text-sm font-semibold rounded-xl border transition-all cursor-pointer ${
+                            className={`py-2 px-1.5 sm:px-3 text-[11px] sm:text-xs md:text-sm font-semibold rounded-xl border transition-all text-center leading-tight cursor-pointer ${
                               formData.side === item.key
                                 ? 'border-rose-500 bg-rose-50 text-rose-900 ring-2 ring-rose-400'
                                 : 'border-stone-200 text-stone-600 hover:bg-stone-50'

@@ -35,7 +35,7 @@ export default function WeddingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FFFDFB] text-stone-800 flex flex-col font-sans selection:bg-rose-200 selection:text-rose-900">
+    <div className="min-h-screen bg-[#FFFDFB] text-stone-800 flex flex-col font-sans selection:bg-rose-200 selection:text-rose-900 overflow-x-hidden w-full">
       {/* Falling Romantic Petals Effect */}
       <FloatingPetals />
 

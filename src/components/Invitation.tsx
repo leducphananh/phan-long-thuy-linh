@@ -60,18 +60,18 @@ export const Invitation: React.FC<InvitationProps> = ({ couple, events }) => {
 
         {/* Traditional Invitation Card Frame */}
         <ScrollReveal animation="zoom-in" delay={150} duration={750}>
-          <div className="bg-white/98 backdrop-blur-md rounded-3xl p-6 sm:p-10 lg:p-12 shadow-xl border border-rose-100/90 mb-12 relative overflow-hidden">
+          <div className="bg-white/98 backdrop-blur-md rounded-3xl p-4 sm:p-8 lg:p-12 shadow-xl border border-rose-100/90 mb-12 relative overflow-hidden">
             {/* Subtle vintage gold corner ornamentation */}
-            <div className="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-rose-300/60 rounded-tl-3xl m-3 pointer-events-none" />
-            <div className="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-rose-300/60 rounded-br-3xl m-3 pointer-events-none" />
+            <div className="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-rose-300/60 rounded-tl-3xl m-2 sm:m-3 pointer-events-none" />
+            <div className="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-rose-300/60 rounded-br-3xl m-2 sm:m-3 pointer-events-none" />
 
             {/* Family Introduction (Nhà Trai & Nhà Gái) */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pb-10 border-b border-rose-100 text-center">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 pb-10 border-b border-rose-100 text-center">
               {/* Nhà Trai */}
-              <div className="p-6 rounded-2xl bg-rose-50/40 border border-rose-100/60 hover:shadow-md transition-all flex flex-col items-center">
+              <div className="p-5 sm:p-6 rounded-2xl bg-rose-50/40 border border-rose-100/60 hover:shadow-md transition-all flex flex-col items-center">
                 <div className="w-20 h-20 sm:w-24 sm:h-24 mb-4 rounded-full overflow-hidden border-2 border-rose-300 shadow-md">
                   <img
-                    src="/images/wedding/optimized/_DSC3109.jpg"
+                    src="/images/_DSC2517.jpg"
                     alt={couple.groom.fullName}
                     className="w-full h-full object-cover object-top"
                   />
@@ -98,10 +98,10 @@ export const Invitation: React.FC<InvitationProps> = ({ couple, events }) => {
               </div>
 
               {/* Nhà Gái */}
-              <div className="p-6 rounded-2xl bg-rose-50/40 border border-rose-100/60 hover:shadow-md transition-all flex flex-col items-center">
+              <div className="p-5 sm:p-6 rounded-2xl bg-rose-50/40 border border-rose-100/60 hover:shadow-md transition-all flex flex-col items-center">
                 <div className="w-20 h-20 sm:w-24 sm:h-24 mb-4 rounded-full overflow-hidden border-2 border-rose-300 shadow-md">
                   <img
-                    src="/images/wedding/optimized/_DSC2943.jpg"
+                    src="/images/_DSC3538.jpg"
                     alt={couple.bride.fullName}
                     className="w-full h-full object-cover object-top"
                   />
@@ -129,27 +129,29 @@ export const Invitation: React.FC<InvitationProps> = ({ couple, events }) => {
             </div>
 
             {/* Invitation Letter Prose */}
-            <div className="py-8 text-center max-w-2xl mx-auto">
+            <div className="py-8 text-center max-w-2xl mx-auto px-2">
               <p className="font-cormorant text-lg sm:text-xl text-stone-700 italic leading-relaxed">
                 &ldquo;Sự hiện diện của Quý khách là niềm vinh hạnh và lời chúc phúc quý giá nhất dành cho đôi uyên ương và gia đình chúng tôi trong ngày vui trọng đại.&rdquo;
               </p>
             </div>
 
-            {/* Event Selector Segmented Control */}
-            <div className="flex items-center justify-center gap-2 p-1.5 bg-rose-50/60 border border-rose-100 rounded-2xl max-w-md mx-auto mb-8">
-              {events.map((event) => (
-                <button
-                  key={event.id}
-                  onClick={() => setActiveEventTab(event.id)}
-                  className={`flex-1 py-2 px-3 text-xs sm:text-sm font-semibold rounded-xl transition-all whitespace-nowrap cursor-pointer ${
-                    activeEventTab === event.id
-                      ? 'bg-rose-600 text-white shadow-xs'
-                      : 'text-stone-600 hover:text-stone-900 hover:bg-white/60'
-                  }`}
-                >
-                  {event.title}
-                </button>
-              ))}
+            {/* Event Selector Segmented Control - Responsive & No Overflow */}
+            <div className="w-full max-w-md mx-auto mb-8 p-1.5 bg-rose-50/70 border border-rose-100/90 rounded-2xl shadow-xs">
+              <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
+                {events.map((event) => (
+                  <button
+                    key={event.id}
+                    onClick={() => setActiveEventTab(event.id)}
+                    className={`w-full py-2.5 px-2 sm:px-3 text-xs sm:text-sm font-semibold rounded-xl transition-all text-center leading-snug cursor-pointer flex items-center justify-center ${
+                      activeEventTab === event.id
+                        ? 'bg-rose-600 text-white shadow-sm'
+                        : 'text-stone-600 hover:text-stone-900 hover:bg-white/70'
+                    }`}
+                  >
+                    <span>{event.title}</span>
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Active Event Details */}

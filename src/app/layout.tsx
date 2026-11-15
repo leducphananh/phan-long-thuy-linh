@@ -29,6 +29,7 @@ const alexBrush = Alex_Brush({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://phan-long-thuy-linh.vercel.app')),
   title: 'Thiệp Cưới Online — Phan Long & Thùy Linh | 24.12.2026',
   description: 'Trân trọng kính mời quý khách đến chung vui ngày hạnh phúc của Phan Long & Thùy Linh vào ngày 24 tháng 12 năm 2026.',
   icons: {
@@ -37,18 +38,24 @@ export const metadata: Metadata = {
     apple: '/icon.svg',
   },
   openGraph: {
-    title: 'Thiệp Cưới Online — Phan Long & Thùy Linh',
+    title: 'Thiệp Cưới Online — Phan Long & Thùy Linh | 24.12.2026',
     description: 'Trân trọng kính mời quý khách đến chung vui ngày hạnh phúc của Phan Long & Thùy Linh vào ngày 24 tháng 12 năm 2026.',
     type: 'website',
     locale: 'vi_VN',
     images: [
       {
-        url: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=1200',
-        width: 1200,
-        height: 630,
-        alt: 'Phan Long & Thùy Linh Wedding Invitation',
+        url: '/images/_DSC3551.jpg',
+        width: 1280,
+        height: 1920,
+        alt: 'Thiệp Cưới Online Phan Long & Thùy Linh',
       },
     ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Thiệp Cưới Online — Phan Long & Thùy Linh | 24.12.2026',
+    description: 'Trân trọng kính mời quý khách đến chung vui ngày hạnh phúc của Phan Long & Thùy Linh vào ngày 24 tháng 12 năm 2026.',
+    images: ['/images/_DSC3551.jpg'],
   },
 };
 

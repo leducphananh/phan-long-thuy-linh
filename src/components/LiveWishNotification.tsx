@@ -131,10 +131,10 @@ export const LiveWishNotification: React.FC = () => {
   return (
     <aside 
       aria-label="Thông báo lời chúc mới"
-      className={`fixed top-20 right-4 sm:right-6 z-40 max-w-[340px] sm:max-w-sm w-full transition-all duration-500 transform ${
+      className={`fixed top-20 right-3 sm:right-6 left-3 sm:left-auto z-40 sm:max-w-sm transition-all duration-500 transform ${
         isVisible
-          ? 'translate-x-0 opacity-100 scale-100 pointer-events-auto'
-          : 'translate-x-12 opacity-0 scale-95 pointer-events-none'
+          ? 'translate-y-0 opacity-100 scale-100 pointer-events-auto'
+          : '-translate-y-4 opacity-0 scale-95 pointer-events-none'
       }`}
     >
       <div
