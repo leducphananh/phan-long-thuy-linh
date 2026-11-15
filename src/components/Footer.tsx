@@ -88,7 +88,7 @@ export const Footer: React.FC<FooterProps> = ({ couple }) => {
             <span className="text-stone-400">•</span>
             <span className="flex items-center gap-1.5 font-medium">
               <MapPin className="w-4 h-4 text-rose-400 shrink-0" />
-              Trống Đồng Palace, Hà Nội
+              Sơn Đồng &amp; Kim Hoàng, Hà Nội
             </span>
           </div>
 

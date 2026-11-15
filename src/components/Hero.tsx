@@ -108,7 +108,7 @@ export const Hero: React.FC<HeroProps> = ({
           <span aria-hidden="true" className="text-stone-300">·</span>
           <span className="flex items-center gap-1.5">
             <MapPin className="w-4 h-4 text-rose-300" />
-            TP. Hồ Chí Minh
+            Sơn Đồng, Hà Nội
           </span>
         </div>
 

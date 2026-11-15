@@ -12,7 +12,7 @@ interface InvitationProps {
 }
 
 export const Invitation: React.FC<InvitationProps> = ({ couple, events }) => {
-  const [activeEventTab, setActiveEventTab] = useState<string>(events[1]?.id || events[0]?.id);
+  const [activeEventTab, setActiveEventTab] = useState<string>(events[0]?.id || '');
   const [downloadSuccessId, setDownloadSuccessId] = useState<string | null>(null);
 
   const selectedEvent = events.find((e) => e.id === activeEventTab) || events[0];
@@ -135,9 +135,9 @@ export const Invitation: React.FC<InvitationProps> = ({ couple, events }) => {
               </p>
             </div>
 
-            {/* Event Selector Segmented Control - Responsive & No Overflow */}
-            <div className="w-full max-w-md mx-auto mb-8 p-1.5 bg-rose-50/70 border border-rose-100/90 rounded-2xl shadow-xs">
-              <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
+            {/* Event Selector Segmented Control - 2 tabs: Tiệc Nhà Trai & Tiệc Nhà Gái */}
+            <div className="w-full max-w-lg mx-auto mb-8 p-1.5 bg-rose-50/70 border border-rose-100/90 rounded-2xl shadow-xs">
+              <div className="grid grid-cols-2 gap-2">
                 {events.map((event) => (
                   <button
                     key={event.id}

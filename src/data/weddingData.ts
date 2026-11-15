@@ -5,34 +5,34 @@ export const weddingCoupleData: WeddingCouple = {
     name: 'Phan Long',
     fullName: 'Lê Đức Phan Long',
     title: 'Chú Rể',
-    fatherName: 'Lê Đức Minh',
-    motherName: 'Trần Thị Mai',
-    address: 'Quận Ba Đình, TP. Hà Nội',
-    phone: '0912 345 678',
+    fatherName: 'Lê Danh Tuyên',
+    motherName: 'Nguyễn Thị Oanh',
+    address: 'Số 283 đường 422b, xã Sơn Đồng, Hà Nội',
+    phone: '0377489636',
     bankInfo: {
-      bankName: 'Vietcombank - Chi nhánh Thăng Long',
-      accountNumber: '1029384756',
+      bankName: 'Techcombank',
+      accountNumber: '19038251687011',
       accountName: 'LE DUC PHAN LONG',
-      qrCodeUrl: 'https://img.vietqr.io/image/VCB-1029384756-compact2.png?amount=0&addInfo=Mung%20cuoi%20Phan%20Long%20Thuy%20Linh&accountName=LE%20DUC%20PHAN%20LONG'
+      qrCodeUrl: 'https://img.vietqr.io/image/TCB-19038251687011-compact2.png?amount=0&addInfo=Mung%20cuoi%20Phan%20Long%20Thuy%20Linh&accountName=LE%20DUC%20PHAN%20LONG'
     }
   },
   bride: {
-    name: 'Thùy Linh',
-    fullName: 'Nguyễn Thị Thùy Linh',
+    name: 'Thuỳ Linh',
+    fullName: 'Nguyễn Thị Thuỳ Linh',
     title: 'Cô Dâu',
-    fatherName: 'Nguyễn Văn Hùng',
-    motherName: 'Hoàng Thị Lan',
-    address: 'Quận 1, TP. Hồ Chí Minh',
-    phone: '0987 654 321',
+    fatherName: 'Nguyễn Sỹ Luật',
+    motherName: 'Nguyễn Thị Nhu',
+    address: 'Nhà số 11, ngách 71/11 đường Kim Hoàng, Vân Canh, Sơn Đồng, Hà Nội',
+    phone: '0333314201',
     bankInfo: {
-      bankName: 'Techcombank - Chi nhánh Bến Thành',
-      accountNumber: '19038472910015',
+      bankName: 'VietinBank',
+      accountNumber: '0962897025',
       accountName: 'NGUYEN THI THUY LINH',
-      qrCodeUrl: 'https://img.vietqr.io/image/TCB-19038472910015-compact2.png?amount=0&addInfo=Mung%20cuoi%20Phan%20Long%20Thuy%20Linh&accountName=NGUYEN%20THI%20THUY%20LINH'
+      qrCodeUrl: 'https://img.vietqr.io/image/CTG-0962897025-compact2.png?amount=0&addInfo=Mung%20cuoi%20Phan%20Long%20Thuy%20Linh&accountName=NGUYEN%20THI%20THUY%20LINH'
     }
   },
-  // Wedding date: 24th December 2026, 18:00
-  weddingDate: '2026-12-24T18:00:00+07:00',
+  // Wedding date: 24th December 2026
+  weddingDate: '2026-12-24T11:00:00+07:00',
   lunarDate: 'Ngày 16 tháng 11 năm Bính Ngọ'
 };
 
@@ -46,11 +46,11 @@ export const weddingStoryData: WeddingStory = {
     'Tình yêu của chúng mình không ồn ào hay phô trương, mà bền bỉ, chân thành và sâu lắng qua từng năm tháng. Mỗi ngày trôi qua, chúng mình càng thấu hiểu, trân quý và nhận ra đối phương chính là mảnh ghép hoàn hảo nhất mà cuộc đời đã mang lại.',
     'Và rồi, dưới ánh hoàng hôn vàng rực rỡ bên bờ biển sóng vỗ dập dềnh, chiếc nhẫn đính hôn đã được trao cùng lời hẹn ước thiêng liêng mãi mãi. Hôm nay, trước sự chứng kiến và chúc phúc của hai bên gia đình cùng những người bạn thân thương, chúng mình chính thức nắm chặt tay nhau bước vào ngưỡng cửa hôn nhân — mở ra một chương mới trọn vẹn yêu thương và hạnh phúc.'
   ],
-  signature: 'Phan Long & Thùy Linh',
+  signature: 'Phan Long & Thuỳ Linh',
   featuredImages: [
     {
       url: '/images/wedding/optimized/_DSC3182.jpg',
-      alt: 'Phan Long & Thùy Linh ngày chung đôi',
+      alt: 'Phan Long & Thuỳ Linh ngày chung đôi',
       caption: 'Khoảnh khắc thiêng liêng'
     },
     {
@@ -71,43 +71,43 @@ export const storyMilestones: StoryMilestone[] = [];
 
 export const weddingEvents: WeddingEvent[] = [
   {
-    id: 'event-ceremony',
-    type: 'ceremony',
-    title: 'LỄ ĂN HỎI & ĐÍNH HÔN',
-    subtitle: 'Nghi thức trao duyên & trao tráp truyền thống hai họ',
+    id: 'event-groom-party',
+    type: 'reception',
+    title: 'TIỆC NHÀ TRAI',
+    subtitle: 'Đón tiếp khách quý & tiệc rượu mừng hạnh phúc',
     date: 'Thứ Tư, 23 Tháng 12, 2026',
-    time: '09:00 Sáng',
+    time: '17h00 ngày 23/12/2026',
     lunarTime: 'Nhằm ngày 15 tháng 11 năm Bính Ngọ (Rằm tháng 11)',
-    venueName: 'Tư Gia Nhà Gái',
-    address: 'Quận 1, TP. Hồ Chí Minh',
-    mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3723.863855881389!2d105.83852037596958!3d21.03813278745591!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135aba8c430e335%3A0x6a256a084c7e638!2zUGhhbiDEkMOsbmggUGjDuW5nLCBRdcOhbiBUaMOhbmgsIEJhIMSQw6xuaCwgSMOgIE7hu5lp!5e0!3m2!1svi!2s!4v1700000000000',
-    mapDirectUrl: 'https://maps.google.com/?q=Quan+1+TP+Ho+Chi+Minh',
+    venueName: 'Nhà Trai',
+    address: 'Số 283 đường 422b, xã Sơn Đồng, Hà Nội',
+    mapEmbedUrl: 'https://maps.google.com/maps?q=283+%C4%91%C6%B0%E1%BB%9Dng+422b,+x%C3%A3+S%C6%A1n+%C4%90%E1%BB%93ng,+H%C3%A0+N%E1%BB%99i&t=&z=15&ie=UTF8&iwloc=&output=embed',
+    mapDirectUrl: 'https://maps.app.goo.gl/XjHZcF3isM4oQwmK8?g_st=ac',
     calendarEvent: {
-      title: 'Lễ Ăn Hỏi & Đính Hôn - Phan Long & Thùy Linh',
-      details: 'Kính mời quý khách tới tham dự Lễ Ăn Hỏi & Đính Hôn trang trọng của Phan Long & Thùy Linh.',
-      location: 'Tư Gia Nhà Gái, Quận 1, TP. Hồ Chí Minh',
-      startTime: '20261223T020000Z',
-      endTime: '20261223T043000Z'
+      title: 'Tiệc Nhà Trai - Phan Long & Thuỳ Linh',
+      details: 'Trân trọng kính mời quý khách tới chung vui tiệc cưới cùng Phan Long & Thuỳ Linh tại Nhà Trai.',
+      location: 'Số 283 đường 422b, xã Sơn Đồng, Hà Nội',
+      startTime: '20261223T100000Z',
+      endTime: '20261223T140000Z'
     }
   },
   {
-    id: 'event-reception',
+    id: 'event-bride-party',
     type: 'reception',
-    title: 'TIỆC CƯỚI MỪNG HẠNH PHÚC',
-    subtitle: 'Đón tiếp khách quý & tiệc rượu chúc phúc',
-    date: 'Thứ Năm, 24 Tháng 12, 2026',
-    time: '18:00 Tối (Đón khách: 17:30)',
-    lunarTime: 'Nhằm ngày 16 tháng 11 năm Bính Ngọ',
-    venueName: 'Trung Tâm Hội Nghị Tiệc Cưới White Palace',
-    address: 'Sảnh Grand Ballroom, 194 Hoàng Văn Thụ, Phường 9, Phú Nhuận, TP. Hồ Chí Minh',
-    mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.186638841443!2d106.67382027582522!3d10.796985058814769!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317528d7d9f67a21%3A0x6b2e1bf35b2e3292!2sWhite%20Palace%20Hoang%20Van%20Thu!5e0!3m2!1svi!2s!4v1700000000001',
-    mapDirectUrl: 'https://maps.google.com/?q=White+Palace+Hoang+Van+Thu+Phu+Nhuan',
+    title: 'TIỆC NHÀ GÁI',
+    subtitle: 'Đón tiếp khách quý & tiệc rượu mừng hạnh phúc',
+    date: 'Thứ Tư, 23 Tháng 12, 2026',
+    time: '17h00 ngày 23/12/2026',
+    lunarTime: 'Nhằm ngày 15 tháng 11 năm Bính Ngọ (Rằm tháng 11)',
+    venueName: 'Nhà Gái',
+    address: 'Nhà văn hoá thôn Kim Hoàng',
+    mapEmbedUrl: 'https://maps.google.com/maps?q=Nh%C3%A0+v%C4%83n+ho%C3%A1+th%C3%B4n+Kim+Ho%C3%A0ng&t=&z=15&ie=UTF8&iwloc=&output=embed',
+    mapDirectUrl: 'https://maps.app.goo.gl/YKVVZ6qHZGEb2cxe6?g_st=ic',
     calendarEvent: {
-      title: 'Tiệc Cưới Mừng Hạnh Phúc - Phan Long & Thùy Linh',
-      details: 'Trân trọng kính mời quý khách tới chung vui tiệc cưới cùng Phan Long & Thùy Linh tại White Palace.',
-      location: 'Sảnh Grand Ballroom, White Palace, 194 Hoàng Văn Thụ, Phú Nhuận, TP.HCM',
-      startTime: '20261224T110000Z',
-      endTime: '20261224T143000Z'
+      title: 'Tiệc Nhà Gái - Phan Long & Thuỳ Linh',
+      details: 'Trân trọng kính mời quý khách tới chung vui tiệc cưới cùng Phan Long & Thuỳ Linh tại Nhà văn hoá thôn Kim Hoàng.',
+      location: 'Nhà văn hoá thôn Kim Hoàng',
+      startTime: '20261223T100000Z',
+      endTime: '20261223T140000Z'
     }
   }
 ];

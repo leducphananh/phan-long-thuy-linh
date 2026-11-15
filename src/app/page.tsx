@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Navbar } from '@/components/Navbar';
 import { Hero } from '@/components/Hero';
 import { Story } from '@/components/Story';
@@ -10,10 +10,11 @@ import { RSVPForm } from '@/components/RSVPForm';
 import { Guestbook } from '@/components/Guestbook';
 import { GiftBox } from '@/components/GiftBox';
 import { Footer } from '@/components/Footer';
-import { AudioPlayer } from '@/components/AudioPlayer';
+import { AudioPlayer, type AudioPlayerHandle } from '@/components/AudioPlayer';
 import { FloatingPetals } from '@/components/FloatingPetals';
 import { LiveWishNotification } from '@/components/LiveWishNotification';
 import { GiftModal } from '@/components/GiftModal';
+import { SplashScreen } from '@/components/SplashScreen';
 import {
   weddingCoupleData,
   weddingStoryData,
@@ -22,8 +23,23 @@ import {
 } from '@/data/weddingData';
 
 export default function WeddingPage() {
+  const audioPlayerRef = useRef<AudioPlayerHandle>(null);
+  const [showSplash, setShowSplash] = useState(true);
   const [isPlayingMusic, setIsPlayingMusic] = useState(false);
   const [isGiftModalOpen, setIsGiftModalOpen] = useState(false);
+
+  const handleEnter = async () => {
+    setShowSplash(false);
+    try {
+      await audioPlayerRef.current?.play();
+    } catch (err) {
+      console.warn('Autoplay failed on splash enter:', err);
+    }
+  };
+
+  const toggleMusic = () => {
+    audioPlayerRef.current?.toggle();
+  };
 
   const scrollToSection = (id: string) => {
     if (typeof window !== 'undefined') {
@@ -35,7 +51,18 @@ export default function WeddingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FFFDFB] text-stone-800 flex flex-col font-sans selection:bg-rose-200 selection:text-rose-900 overflow-x-hidden w-full">
+    <>
+      {/* 3D Envelope Splash Screen with Wax Seal Stamp */}
+      {showSplash && (
+        <SplashScreen
+          onEnter={handleEnter}
+          coupleName="Phan Long & Thuỳ Linh"
+          weddingDate="24 · 12 · 2026"
+          lunarDate="16 Tháng 11 Năm Bính Ngọ"
+        />
+      )}
+
+      <div className="min-h-screen bg-[#FFFDFB] text-stone-800 flex flex-col font-sans selection:bg-rose-200 selection:text-rose-900 overflow-x-hidden w-full">
       {/* Falling Romantic Petals Effect */}
       <FloatingPetals />
 
@@ -44,14 +71,15 @@ export default function WeddingPage() {
 
       {/* Floating Audio Player */}
       <AudioPlayer
+        ref={audioPlayerRef}
         isPlaying={isPlayingMusic}
-        onToggle={() => setIsPlayingMusic(!isPlayingMusic)}
+        onPlayStateChange={setIsPlayingMusic}
       />
 
       {/* Top Navigation Bar */}
       <Navbar
         isPlayingMusic={isPlayingMusic}
-        onToggleMusic={() => setIsPlayingMusic(!isPlayingMusic)}
+        onToggleMusic={toggleMusic}
       />
 
       {/* Main Single Page Sections */}
@@ -96,5 +124,6 @@ export default function WeddingPage() {
         couple={weddingCoupleData}
       />
     </div>
+  </>
   );
 }
