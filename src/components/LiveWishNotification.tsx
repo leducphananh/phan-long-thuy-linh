@@ -10,7 +10,7 @@ const FALLBACK_TOASTS: GuestbookEntry[] = [
   {
     id: 'sample-1',
     created_at: new Date().toISOString(),
-    name: 'Bạn bè & Đồng nghiệp',
+    name: 'Nguyễn Minh Tuấn & Nhóm ĐH',
     message: 'Chúc mừng hạnh phúc Phan Long & Thùy Linh! Chúc hai bạn trăm năm viên mãn!',
     relationship: 'friend',
     avatar_color: 'rose',
@@ -19,8 +19,8 @@ const FALLBACK_TOASTS: GuestbookEntry[] = [
   {
     id: 'sample-2',
     created_at: new Date().toISOString(),
-    name: 'Gia đình & Người thân',
-    message: 'Chúc hai con mãi mãi yêu thương, thấu hiểu và cùng nhau xây đắp tổ ấm trọn vẹn.',
+    name: 'Chị Mai Thảo & Gia đình',
+    message: 'Chúc hai em mãi mãi yêu thương, thấu hiểu và cùng nhau xây đắp tổ ấm trọn vẹn.',
     relationship: 'family',
     avatar_color: 'amber',
     likes_count: 8
@@ -85,10 +85,10 @@ export const LiveWishNotification: React.FC = () => {
     setCurrentWish(wish);
     setIsVisible(true);
 
-    // Auto hide after 5 seconds
+    // Auto hide after 6 seconds
     hideTimeoutRef.current = setTimeout(() => {
       setIsVisible(false);
-    }, 5000);
+    }, 6000);
   };
 
   // Periodically pick and show a wish every 30 seconds (gentle & non-intrusive)
@@ -139,79 +139,53 @@ export const LiveWishNotification: React.FC = () => {
   return (
     <aside 
       aria-label="Thông báo lời chúc mới"
-      className={`fixed bottom-20 sm:bottom-6 left-3 sm:left-6 right-3 sm:right-auto z-40 sm:max-w-sm transition-all duration-500 transform ${
+      className={`fixed bottom-20 sm:bottom-6 left-3 sm:left-6 right-3 sm:right-auto z-40 max-w-[360px] sm:max-w-sm w-auto mx-auto sm:mx-0 transition-all duration-500 transform ${
         isVisible
           ? 'translate-y-0 opacity-100 scale-100 pointer-events-auto'
-          : 'translate-y-4 opacity-0 scale-95 pointer-events-none'
+          : 'translate-y-6 opacity-0 scale-95 pointer-events-none'
       }`}
     >
-      {/* 1. Mobile Compact Pill View (Ultra-low profile, height ~40px, never blocks text/faces) */}
+      {/* Readable & Elegant Toast Card at Bottom - Clear sender name & clear wish text */}
       <div
         onClick={handleScrollToGuestbook}
-        className="sm:hidden group cursor-pointer flex items-center gap-2.5 px-3 py-2 bg-white/95 backdrop-blur-md rounded-full border border-rose-200/90 shadow-lg shadow-rose-950/10 active:scale-95 transition-all"
-      >
-        <div className="w-6 h-6 shrink-0 rounded-full bg-gradient-to-br from-rose-500 to-pink-500 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">
-          <Heart className="w-3 h-3 fill-white text-white" />
-        </div>
-
-        <div className="flex-1 min-w-0 flex items-center gap-1.5 text-xs">
-          <span className="font-bold text-stone-900 truncate max-w-[85px] shrink-0">
-            {currentWish.name}:
-          </span>
-          <span className="text-stone-600 truncate italic">
-            &ldquo;{currentWish.message}&rdquo;
-          </span>
-        </div>
-
-        <button
-          onClick={handleDismiss}
-          className="p-1 rounded-full text-stone-400 hover:text-stone-700 hover:bg-stone-100 transition-colors shrink-0"
-          title="Đóng thông báo"
-          aria-label="Đóng thông báo"
-        >
-          <X className="w-3.5 h-3.5" />
-        </button>
-      </div>
-
-      {/* 2. Desktop Card View (Rich, elegant glassmorphic card docked at bottom-left) */}
-      <div
-        onClick={handleScrollToGuestbook}
-        className="hidden sm:block group relative cursor-pointer bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-rose-200/90 shadow-xl shadow-rose-950/10 hover:shadow-2xl hover:border-rose-300 transition-all"
+        className="group relative cursor-pointer bg-white/98 backdrop-blur-md p-3.5 sm:p-4 rounded-2xl border border-rose-200/90 shadow-2xl shadow-rose-950/15 hover:border-rose-300 transition-all"
       >
         {/* Subtle top indicator bar */}
         <div className="absolute top-0 left-6 right-6 h-0.5 bg-gradient-to-r from-rose-300 via-rose-500 to-pink-400 rounded-full" />
 
-        {/* Header row */}
+        {/* Header row: Status tag + Close button */}
         <div className="flex items-center justify-between gap-2 mb-2">
           <div className="flex items-center gap-1.5 text-[11px] font-semibold text-rose-600">
-            <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping inline-block" />
-            <MessageCircleHeart className="w-3.5 h-3.5 text-rose-500" />
-            <span className="uppercase tracking-wider">Lời chúc vừa gửi</span>
+            <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping inline-block shrink-0" />
+            <MessageCircleHeart className="w-3.5 h-3.5 text-rose-500 shrink-0" />
+            <span className="uppercase tracking-wider">Lời chúc mới</span>
           </div>
 
           <button
             onClick={handleDismiss}
-            className="p-1 rounded-full text-stone-400 hover:text-stone-700 hover:bg-stone-100 transition-colors"
+            className="p-1 rounded-full text-stone-400 hover:text-stone-700 hover:bg-stone-100 transition-colors shrink-0"
             title="Đóng thông báo"
             aria-label="Đóng thông báo"
           >
-            <X className="w-3.5 h-3.5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
-        {/* Body content */}
-        <div className="flex items-start gap-3">
+        {/* Main content: Avatar + Sender Name + Message */}
+        <div className="flex items-start gap-2.5 sm:gap-3">
           {/* Avatar icon */}
           <div className="w-9 h-9 shrink-0 rounded-full bg-gradient-to-br from-rose-100 to-pink-100 text-rose-700 flex items-center justify-center font-bold text-xs font-serif border border-rose-200 shadow-xs">
             {currentWish.name ? currentWish.name.charAt(0).toUpperCase() : <Heart className="w-4 h-4 fill-rose-500 text-rose-500" />}
           </div>
 
+          {/* Details */}
           <div className="flex-1 min-w-0">
-            <div className="flex items-center justify-between gap-1">
-              <h5 className="font-bold text-stone-900 text-xs sm:text-sm truncate">
+            {/* Sender Name + Relationship Badge */}
+            <div className="flex items-center justify-between gap-1.5 flex-wrap">
+              <h5 className="font-bold text-stone-900 text-xs sm:text-sm leading-tight">
                 {currentWish.name}
               </h5>
-              <span className="text-[10px] text-rose-500 bg-rose-50 px-2 py-0.5 rounded-full font-medium shrink-0">
+              <span className="text-[10px] text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full font-semibold border border-rose-100 shrink-0">
                 {currentWish.relationship === 'family'
                   ? 'Gia đình'
                   : currentWish.relationship === 'colleague'
@@ -222,17 +196,18 @@ export const LiveWishNotification: React.FC = () => {
               </span>
             </div>
 
-            <p className="mt-1 text-xs text-stone-600 line-clamp-2 leading-relaxed italic font-sans">
+            {/* Clear, readable message (2-3 lines with nice line-height) */}
+            <p className="mt-1 text-xs text-stone-700 line-clamp-3 leading-relaxed italic font-sans">
               &ldquo;{currentWish.message}&rdquo;
             </p>
           </div>
         </div>
 
         {/* Footer hint */}
-        <div className="mt-2.5 pt-2 border-t border-rose-100/70 flex items-center justify-between text-[10px] text-stone-400">
-          <span className="flex items-center gap-1 text-rose-500 group-hover:underline font-medium">
-            <Sparkles className="w-3 h-3" />
-            Nhấn để xem Sổ lưu bút
+        <div className="mt-2.5 pt-2 border-t border-rose-100 flex items-center justify-between text-[10px] text-stone-400">
+          <span className="flex items-center gap-1 text-rose-600 group-hover:underline font-medium">
+            <Sparkles className="w-3 h-3 text-rose-500" />
+            Chạm để mở Sổ lưu bút
           </span>
           <span className="flex items-center gap-1 font-semibold text-rose-600">
             <Heart className="w-2.5 h-2.5 fill-rose-500 text-rose-500" />
