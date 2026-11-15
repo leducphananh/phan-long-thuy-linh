@@ -33,6 +33,7 @@ export const LiveWishNotification: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const lastIndexRef = useRef<number>(-1);
+  const userDismissedRef = useRef<boolean>(false);
 
   // Load existing wishes & subscribe to Realtime
   useEffect(() => {
@@ -60,6 +61,8 @@ export const LiveWishNotification: React.FC = () => {
       (newEntry) => {
         if (!isMounted) return;
         setWishes((prev) => [newEntry, ...prev.filter((w) => w.id !== newEntry.id)]);
+        // Real-time wish always shows even if user previously dismissed periodic toasts
+        userDismissedRef.current = false;
         triggerPopup(newEntry);
       },
       (updatedEntry) => {
@@ -82,30 +85,30 @@ export const LiveWishNotification: React.FC = () => {
     setCurrentWish(wish);
     setIsVisible(true);
 
-    // Auto hide after 6 seconds
+    // Auto hide after 5 seconds
     hideTimeoutRef.current = setTimeout(() => {
       setIsVisible(false);
-    }, 6000);
+    }, 5000);
   };
 
-  // Periodically pick and show a wish every 15 seconds
+  // Periodically pick and show a wish every 30 seconds (gentle & non-intrusive)
   useEffect(() => {
     if (wishes.length === 0) return;
 
-    // Show first toast after 4 seconds of entering page
+    // Show first toast after 8 seconds of entering page
     const initialTimer = setTimeout(() => {
-      if (wishes.length > 0) {
+      if (wishes.length > 0 && !userDismissedRef.current) {
         lastIndexRef.current = 0;
         triggerPopup(wishes[0]);
       }
-    }, 4000);
+    }, 8000);
 
     const interval = setInterval(() => {
-      if (wishes.length === 0) return;
+      if (wishes.length === 0 || userDismissedRef.current) return;
       const nextIndex = (lastIndexRef.current + 1) % wishes.length;
       lastIndexRef.current = nextIndex;
       triggerPopup(wishes[nextIndex]);
-    }, 15000);
+    }, 30000);
 
     return () => {
       clearTimeout(initialTimer);
@@ -116,6 +119,11 @@ export const LiveWishNotification: React.FC = () => {
   const handleDismiss = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsVisible(false);
+    // Mark as dismissed so periodic toasts pause and don't bother the user
+    userDismissedRef.current = true;
+    setTimeout(() => {
+      userDismissedRef.current = false;
+    }, 180000); // 3 minutes pause
   };
 
   const handleScrollToGuestbook = () => {
@@ -131,15 +139,44 @@ export const LiveWishNotification: React.FC = () => {
   return (
     <aside 
       aria-label="Thông báo lời chúc mới"
-      className={`fixed top-20 right-3 sm:right-6 left-3 sm:left-auto z-40 sm:max-w-sm transition-all duration-500 transform ${
+      className={`fixed bottom-20 sm:bottom-6 left-3 sm:left-6 right-3 sm:right-auto z-40 sm:max-w-sm transition-all duration-500 transform ${
         isVisible
           ? 'translate-y-0 opacity-100 scale-100 pointer-events-auto'
-          : '-translate-y-4 opacity-0 scale-95 pointer-events-none'
+          : 'translate-y-4 opacity-0 scale-95 pointer-events-none'
       }`}
     >
+      {/* 1. Mobile Compact Pill View (Ultra-low profile, height ~40px, never blocks text/faces) */}
       <div
         onClick={handleScrollToGuestbook}
-        className="group relative cursor-pointer bg-white/95 backdrop-blur-md p-3.5 sm:p-4 rounded-2xl border border-rose-200/90 shadow-xl shadow-rose-950/10 hover:shadow-2xl hover:border-rose-300 transition-all"
+        className="sm:hidden group cursor-pointer flex items-center gap-2.5 px-3 py-2 bg-white/95 backdrop-blur-md rounded-full border border-rose-200/90 shadow-lg shadow-rose-950/10 active:scale-95 transition-all"
+      >
+        <div className="w-6 h-6 shrink-0 rounded-full bg-gradient-to-br from-rose-500 to-pink-500 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">
+          <Heart className="w-3 h-3 fill-white text-white" />
+        </div>
+
+        <div className="flex-1 min-w-0 flex items-center gap-1.5 text-xs">
+          <span className="font-bold text-stone-900 truncate max-w-[85px] shrink-0">
+            {currentWish.name}:
+          </span>
+          <span className="text-stone-600 truncate italic">
+            &ldquo;{currentWish.message}&rdquo;
+          </span>
+        </div>
+
+        <button
+          onClick={handleDismiss}
+          className="p-1 rounded-full text-stone-400 hover:text-stone-700 hover:bg-stone-100 transition-colors shrink-0"
+          title="Đóng thông báo"
+          aria-label="Đóng thông báo"
+        >
+          <X className="w-3.5 h-3.5" />
+        </button>
+      </div>
+
+      {/* 2. Desktop Card View (Rich, elegant glassmorphic card docked at bottom-left) */}
+      <div
+        onClick={handleScrollToGuestbook}
+        className="hidden sm:block group relative cursor-pointer bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-rose-200/90 shadow-xl shadow-rose-950/10 hover:shadow-2xl hover:border-rose-300 transition-all"
       >
         {/* Subtle top indicator bar */}
         <div className="absolute top-0 left-6 right-6 h-0.5 bg-gradient-to-r from-rose-300 via-rose-500 to-pink-400 rounded-full" />
