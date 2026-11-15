@@ -28,8 +28,10 @@ const alexBrush = Alex_Brush({
   display: 'swap',
 });
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://phan-long-thuy-linh.vercel.app';
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://phan-long-thuy-linh.vercel.app')),
+  metadataBase: new URL(SITE_URL),
   title: 'Thiệp Cưới Online — Phan Long & Thùy Linh | 24.12.2026',
   description: 'Trân trọng kính mời quý khách đến chung vui ngày hạnh phúc của Phan Long & Thùy Linh vào ngày 24 tháng 12 năm 2026.',
   icons: {
@@ -40,13 +42,17 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Thiệp Cưới Online — Phan Long & Thùy Linh | 24.12.2026',
     description: 'Trân trọng kính mời quý khách đến chung vui ngày hạnh phúc của Phan Long & Thùy Linh vào ngày 24 tháng 12 năm 2026.',
+    url: SITE_URL,
+    siteName: 'Thiệp Cưới Online — Phan Long & Thùy Linh',
     type: 'website',
     locale: 'vi_VN',
     images: [
       {
-        url: '/images/_DSC3551.jpg',
+        url: `${SITE_URL}/images/_DSC3551.jpg`,
+        secureUrl: `${SITE_URL}/images/_DSC3551.jpg`,
         width: 1280,
         height: 1920,
+        type: 'image/jpeg',
         alt: 'Thiệp Cưới Online Phan Long & Thùy Linh',
       },
     ],
@@ -55,7 +61,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Thiệp Cưới Online — Phan Long & Thùy Linh | 24.12.2026',
     description: 'Trân trọng kính mời quý khách đến chung vui ngày hạnh phúc của Phan Long & Thùy Linh vào ngày 24 tháng 12 năm 2026.',
-    images: ['/images/_DSC3551.jpg'],
+    images: [`${SITE_URL}/images/_DSC3551.jpg`],
   },
 };
 
