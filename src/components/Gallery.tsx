@@ -13,6 +13,7 @@ const PREVIEW_COUNT = 9;
 
 export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [activePhotos, setActivePhotos] = useState<GalleryPhoto[]>(photos);
 
   // Touch swipe state for mobile lightbox
   const [touchStart, setTouchStart] = useState<number | null>(null);
@@ -21,8 +22,19 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
   // Hiển thị 9 ảnh đầu tiên trên lưới (3 hàng x 3 cột cân đối)
   const previewPhotos = photos.slice(0, PREVIEW_COUNT);
 
+  // Mở lightbox từ ảnh cụ thể trên lưới (thứ tự gốc)
   const handleOpenLightbox = (index: number) => {
+    setActivePhotos(photos);
     setLightboxIndex(index);
+    document.body.style.overflow = 'hidden';
+  };
+
+  // Mở xem thêm: Đưa các ảnh mới (chưa hiển thị trên lưới) lên đầu, 9 ảnh đã xem ở lưới đưa xuống cuối
+  const handleViewMore = () => {
+    const unseenPhotos = photos.slice(PREVIEW_COUNT);
+    const seenPhotos = photos.slice(0, PREVIEW_COUNT);
+    setActivePhotos([...unseenPhotos, ...seenPhotos]);
+    setLightboxIndex(0);
     document.body.style.overflow = 'hidden';
   };
 
@@ -33,13 +45,13 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
 
   const handlePrev = useCallback(() => {
     if (lightboxIndex === null) return;
-    setLightboxIndex((prev) => (prev! > 0 ? prev! - 1 : photos.length - 1));
-  }, [lightboxIndex, photos.length]);
+    setLightboxIndex((prev) => (prev! > 0 ? prev! - 1 : activePhotos.length - 1));
+  }, [lightboxIndex, activePhotos.length]);
 
   const handleNext = useCallback(() => {
     if (lightboxIndex === null) return;
-    setLightboxIndex((prev) => (prev! < photos.length - 1 ? prev! + 1 : 0));
-  }, [lightboxIndex, photos.length]);
+    setLightboxIndex((prev) => (prev! < activePhotos.length - 1 ? prev! + 1 : 0));
+  }, [lightboxIndex, activePhotos.length]);
 
   // Touch swipe gesture handlers (vuốt trái/phải trên điện thoại)
   const minSwipeDistance = 45;
@@ -77,7 +89,7 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [lightboxIndex, handleCloseLightbox, handlePrev, handleNext]);
 
-  const currentPhoto = lightboxIndex !== null ? photos[lightboxIndex] : null;
+  const currentPhoto = lightboxIndex !== null ? activePhotos[lightboxIndex] : null;
 
   return (
     <section id="gallery" className="relative py-24 sm:py-32 px-4 sm:px-6 overflow-hidden">
@@ -164,11 +176,11 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
           ))}
         </div>
 
-        {/* Nút Xem Thêm mở ngay Lightbox Preview giống wedding-page-clone */}
+        {/* Nút Xem Thêm mở ngay Lightbox Preview với thứ tự ưu tiên ảnh mới */}
         <ScrollReveal animation="fade-up" delay={150} duration={600}>
           <div className="mt-12 text-center">
             <button
-              onClick={() => handleOpenLightbox(0)}
+              onClick={handleViewMore}
               className="inline-flex items-center gap-2.5 px-9 sm:px-11 py-3.5 sm:py-4 rounded-full bg-gradient-to-r from-rose-600 via-rose-500 to-pink-500 hover:from-rose-500 hover:to-pink-600 text-white font-serif font-bold text-sm sm:text-base shadow-xl shadow-rose-600/30 hover:shadow-rose-600/50 hover:-translate-y-0.5 transition-all duration-300 active:scale-95 cursor-pointer group"
             >
               <Maximize2 className="w-4 h-4 text-rose-100 group-hover:scale-110 transition-transform" />
@@ -193,7 +205,7 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="text-xs sm:text-sm font-semibold text-white px-4 py-1.5 bg-white/15 rounded-full backdrop-blur-md border border-white/20 tabular-nums shadow-lg">
-              {lightboxIndex + 1} / {photos.length}
+              {lightboxIndex + 1} / {activePhotos.length}
             </div>
 
             <button
