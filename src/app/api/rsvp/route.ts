@@ -27,11 +27,17 @@ const getEnv = (key: string): string | null => {
 
 const getSheetsClient = () => {
   const clientEmail = getEnv('GOOGLE_SERVICE_ACCOUNT_EMAIL');
-  const privateKey = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n');
+  let privateKey = getEnv('GOOGLE_PRIVATE_KEY');
 
   if (!clientEmail || !privateKey) {
     return null;
   }
+
+  // Handle both literal \n and actual newlines, and strip accidental surrounding quotes
+  if (privateKey.startsWith('"') && privateKey.endsWith('"')) {
+    privateKey = privateKey.slice(1, -1);
+  }
+  privateKey = privateKey.replace(/\\n/g, '\n');
 
   const auth = new google.auth.JWT({
     email: clientEmail,
@@ -46,7 +52,7 @@ export async function POST(req: NextRequest) {
   try {
     const raw = (await req.json()) as Partial<RSVPRequestBody>;
 
-    // Honeypot check
+    // 1. Honeypot check (chống spam bot)
     if (raw.website && raw.website.trim()) {
       return NextResponse.json(
         { success: false, message: 'Yêu cầu không hợp lệ.' },
@@ -58,7 +64,7 @@ export async function POST(req: NextRequest) {
     const phone = typeof raw.phone === 'string' ? normalizeSpaces(raw.phone) : '';
     const message = typeof raw.message === 'string' ? normalizeSpaces(raw.message) : '';
 
-    // Validate name
+    // 2. Validate họ tên
     if (!name || name.length < 2 || name.length > 50 || hasSuspiciousRepetition(name)) {
       return NextResponse.json(
         { success: false, message: 'Vui lòng nhập họ và tên hợp lệ (từ 2 đến 50 ký tự).' },
@@ -66,7 +72,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Validate phone
+    // 3. Validate số điện thoại Việt Nam
     if (!phone || !isValidVietnamPhone(phone)) {
       return NextResponse.json(
         { success: false, message: 'Vui lòng nhập số điện thoại Việt Nam hợp lệ (10 chữ số).' },
@@ -74,7 +80,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Validate message spam
+    // 4. Validate nội dung tin nhắn
     if (
       message.length > 280 ||
       hasSuspiciousRepetition(message) ||
@@ -106,62 +112,58 @@ export async function POST(req: NextRequest) {
     const sideLabel = side === 'groom' ? 'Nhà Trai' : side === 'bride' ? 'Nhà Gái' : 'Cả hai bên';
 
     let savedToGoogleSheets = false;
+    let googleSheetError: string | null = null;
 
-    // 1. Ghi dữ liệu qua Google Sheets Service Account (v4 API) giống wedding-page-clone
+    // Ghi dữ liệu trực tiếp vào Google Sheets qua Service Account (v4 API)
     const sheetId = getEnv('GOOGLE_SHEET_ID');
-    const sheetName = getEnv('GOOGLE_SHEET_NAME') ?? 'RSVP';
+    const sheetName = getEnv('GOOGLE_SHEET_NAME');
     const sheets = getSheetsClient();
 
     if (sheetId && sheets) {
+      const rowData = [
+        timestamp,
+        name,
+        "'" + phone, // Giữ số 0 ở đầu SĐT trong Google Sheet
+        attendanceLabel,
+        sideLabel,
+        guestsCount,
+        message,
+      ];
+
       try {
+        // Thử ghi vào tab được chỉ định (nếu có cấu hình GOOGLE_SHEET_NAME)
+        const targetRange = sheetName ? `${sheetName}!A:G` : 'A:G';
         await sheets.spreadsheets.values.append({
           spreadsheetId: sheetId,
-          range: `${sheetName}!A:G`,
+          range: targetRange,
           valueInputOption: 'RAW',
           requestBody: {
-            values: [
-              [
-                timestamp,
-                name,
-                "'" + phone, // Prefix ' để bảo toàn số 0 ở đầu
-                attendanceLabel,
-                sideLabel,
-                guestsCount,
-                message,
-              ],
-            ],
+            values: [rowData],
           },
         });
         savedToGoogleSheets = true;
-      } catch (sheetsErr: any) {
-        console.warn('Lỗi ghi Google Sheets Service Account:', sheetsErr?.message || sheetsErr);
+      } catch (primaryErr: any) {
+        // Nếu tên tab không khớp, tự động ghi vào tab đầu tiên của trang tính
+        try {
+          await sheets.spreadsheets.values.append({
+            spreadsheetId: sheetId,
+            range: 'A:G',
+            valueInputOption: 'RAW',
+            requestBody: {
+              values: [rowData],
+            },
+          });
+          savedToGoogleSheets = true;
+        } catch (fallbackErr: any) {
+          googleSheetError = fallbackErr?.message || primaryErr?.message;
+          console.error('Google Sheets Service Account error:', googleSheetError);
+        }
       }
+    } else {
+      googleSheetError = 'Chưa cấu hình Google Sheets Service Account (thiếu GOOGLE_SERVICE_ACCOUNT_EMAIL, GOOGLE_PRIVATE_KEY hoặc GOOGLE_SHEET_ID).';
     }
 
-    // 2. Fallback: Nếu có GOOGLE_SHEET_WEBHOOK_URL
-    const webhookUrl = getEnv('GOOGLE_SHEET_WEBHOOK_URL');
-    if (!savedToGoogleSheets && webhookUrl && webhookUrl.startsWith('https://')) {
-      try {
-        await fetch(webhookUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            timestamp,
-            name,
-            phone,
-            attending,
-            guestsCount,
-            side,
-            message,
-          }),
-        });
-        savedToGoogleSheets = true;
-      } catch (webhookErr) {
-        console.warn('Lỗi gửi Webhook Google Sheet:', webhookErr);
-      }
-    }
-
-    // 3. Sao lưu vào Supabase (nếu có cấu hình)
+    // Luôn lưu một bản dự phòng vào Supabase (nếu có cấu hình) để không mất thông tin khách mời
     try {
       const supabase = getSupabaseClient();
       if (supabase) {
@@ -178,23 +180,27 @@ export async function POST(req: NextRequest) {
         ]);
       }
     } catch {
-      // Supabase table là tùy chọn dự phòng
+      // Supabase là lớp an toàn dự phòng
     }
 
+    if (savedToGoogleSheets) {
+      return NextResponse.json({
+        success: true,
+        message: 'Xác nhận tham dự đã được lưu vào Google Sheet thành công!',
+        mode: 'google_sheet',
+        data: { name, phone, attending, guestsCount, side, message, timestamp },
+      });
+    }
+
+    // Nếu không thể ghi vào Google Sheets do lỗi tài khoản
     return NextResponse.json({
       success: true,
-      message: 'Xác nhận tham dự của bạn đã được ghi nhận thành công!',
-      mode: savedToGoogleSheets ? 'google_sheet' : 'supabase',
-      data: {
-        name,
-        phone,
-        attending,
-        guestsCount,
-        side,
-        message,
-        timestamp,
-      },
+      message: 'Đã ghi nhận xác nhận tham dự thành công (lưu dự phòng hệ thống do lỗi xác thực Google Sheets)!',
+      mode: 'backup',
+      warning: googleSheetError,
+      data: { name, phone, attending, guestsCount, side, message, timestamp },
     });
+
   } catch (err: any) {
     console.error('RSVP API route error:', err);
     return NextResponse.json(
