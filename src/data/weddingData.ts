@@ -11,9 +11,9 @@ export const weddingCoupleData: WeddingCouple = {
     phone: '0377489636',
     bankInfo: {
       bankName: 'Techcombank',
-      accountNumber: '19038251687011',
+      accountNumber: '3774896366',
       accountName: 'LE DUC PHAN LONG',
-      qrCodeUrl: 'https://img.vietqr.io/image/TCB-19038251687011-compact2.png?amount=0&addInfo=Mung%20cuoi%20Phan%20Long%20Thuy%20Linh&accountName=LE%20DUC%20PHAN%20LONG'
+      qrCodeUrl: '/images/qr-groom-square.jpg'
     }
   },
   bride: {
@@ -25,10 +25,10 @@ export const weddingCoupleData: WeddingCouple = {
     address: 'Nhà số 11, ngách 71/11 đường Kim Hoàng, Vân Canh, Sơn Đồng, Hà Nội',
     phone: '0333314201',
     bankInfo: {
-      bankName: 'VietinBank',
-      accountNumber: '0962897025',
+      bankName: 'BIDV (CN Sở Giao dịch 1)',
+      accountNumber: '1207008276',
       accountName: 'NGUYEN THI THUY LINH',
-      qrCodeUrl: 'https://img.vietqr.io/image/CTG-0962897025-compact2.png?amount=0&addInfo=Mung%20cuoi%20Phan%20Long%20Thuy%20Linh&accountName=NGUYEN%20THI%20THUY%20LINH'
+      qrCodeUrl: '/images/qr-bride.jpg'
     }
   },
   // Wedding date: 24th December 2026
