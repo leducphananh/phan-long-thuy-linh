@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { Heart } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 interface SplashScreenProps {
@@ -20,12 +21,30 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
 
-  // Khóa cuộn trang khi đang hiển thị màn hình mở thiệp
+  // Khóa triệt để cuộn trang (cả chuột, trackpad và cảm ứng) khi đang hiển thị màn hình mở thiệp
   useEffect(() => {
-    const originalOverflow = document.body.style.overflow;
+    const originalBodyOverflow = document.body.style.overflow;
+    const originalHtmlOverflow = document.documentElement.style.overflow;
+
     document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+
+    // Đưa về đầu trang
+    window.scrollTo(0, 0);
+
+    // Chặn hoàn toàn sự kiện cuộn bánh xe chuột và vuốt cảm ứng trên nền
+    const preventScroll = (e: Event) => {
+      e.preventDefault();
+    };
+
+    window.addEventListener('wheel', preventScroll, { passive: false });
+    window.addEventListener('touchmove', preventScroll, { passive: false });
+
     return () => {
-      document.body.style.overflow = originalOverflow;
+      document.body.style.overflow = originalBodyOverflow;
+      document.documentElement.style.overflow = originalHtmlOverflow;
+      window.removeEventListener('wheel', preventScroll);
+      window.removeEventListener('touchmove', preventScroll);
     };
   }, []);
 
@@ -62,7 +81,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0, scale: 1.03 }}
           transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
-          className="fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden px-4 select-none"
+          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden px-4 select-none touch-none"
           style={{
             background: 'radial-gradient(ellipse at 50% 35%, #42111E 0%, #250912 55%, #120308 100%)',
           }}
@@ -147,7 +166,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
                 <div className="absolute inset-0 [clip-path:polygon(4%_0,96%_0,50%_92%)] border-b border-[#D4AF37]/35 pointer-events-none" />
               </motion.div>
 
-              {/* Handcrafted Royal Wax Seal Stamp with Calligraphy Monogram L */}
+              {/* Handcrafted Royal Wax Seal Stamp with Golden Heart */}
               <motion.div
                 animate={isOpen ? { scale: 0, opacity: 0 } : { scale: 1, opacity: 1 }}
                 transition={{ duration: 0.3 }}
@@ -155,11 +174,9 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
               >
                 {/* Organic wax perimeter */}
                 <div className="relative w-16 h-16 sm:w-18 sm:h-18 rounded-full bg-gradient-to-br from-[#8E1728] via-[#6B0D1B] to-[#45050F] shadow-[0_8px_24px_rgba(0,0,0,0.6),inset_0_2px_4px_rgba(255,255,255,0.25)] border-2 border-[#D4AF37]/80 flex items-center justify-center text-[#F6E29F] ring-4 ring-[#6B0D1B]/40">
-                  {/* Embossed inner gold ring with Calligraphic Initial L */}
+                  {/* Embossed inner gold ring with Romantic Gold Heart */}
                   <div className="absolute inset-1.5 rounded-full border border-[#D4AF37]/50 flex items-center justify-center">
-                    <span className="font-script text-3xl sm:text-4xl text-[#FCEEB5] leading-none select-none drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)] pr-0.5">
-                      L
-                    </span>
+                    <Heart className="w-6 h-6 sm:w-7 sm:h-7 fill-[#FCEEB5] text-[#D4AF37] drop-shadow-[0_2px_4px_rgba(0,0,0,0.55)]" />
                   </div>
                 </div>
               </motion.div>

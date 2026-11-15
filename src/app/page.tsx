@@ -30,6 +30,9 @@ export default function WeddingPage() {
 
   const handleEnter = async () => {
     setShowSplash(false);
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
     try {
       await audioPlayerRef.current?.play();
     } catch (err) {
