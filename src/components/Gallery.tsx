@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { X, ChevronLeft, ChevronRight, Maximize2, Heart } from 'lucide-react';
 import { GalleryPhoto } from '../types/wedding';
 import { ScrollReveal } from './ScrollReveal';
@@ -15,9 +15,12 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [activePhotos, setActivePhotos] = useState<GalleryPhoto[]>(photos);
 
-  // Touch swipe state for mobile lightbox
-  const [touchStart, setTouchStart] = useState<number | null>(null);
-  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  // High-performance touch swipe gesture tracking using useRef
+  const touchStartXRef = useRef<number>(0);
+  const touchStartYRef = useRef<number>(0);
+  const touchEndXRef = useRef<number>(0);
+  const touchEndYRef = useRef<number>(0);
+  const isSwipingRef = useRef<boolean>(false);
 
   // Hiển thị 9 ảnh đầu tiên trên lưới (3 hàng x 3 cột cân đối)
   const previewPhotos = photos.slice(0, PREVIEW_COUNT);
@@ -53,27 +56,45 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
     setLightboxIndex((prev) => (prev! < activePhotos.length - 1 ? prev! + 1 : 0));
   }, [lightboxIndex, activePhotos.length]);
 
-  // Touch swipe gesture handlers (vuốt trái/phải trên điện thoại)
-  const minSwipeDistance = 45;
+  // Touch swipe gesture handlers (vuốt trái/phải trên điện thoại với độ nhạy cao, không độ trễ)
+  const onTouchStart = useCallback((e: React.TouchEvent) => {
+    if (e.touches.length !== 1) return;
+    const touch = e.touches[0];
+    touchStartXRef.current = touch.clientX;
+    touchStartYRef.current = touch.clientY;
+    touchEndXRef.current = touch.clientX;
+    touchEndYRef.current = touch.clientY;
+    isSwipingRef.current = true;
+  }, []);
 
-  const onTouchStart = (e: React.TouchEvent) => {
-    setTouchEnd(null);
-    setTouchStart(e.targetTouches[0].clientX);
-  };
+  const onTouchMove = useCallback((e: React.TouchEvent) => {
+    if (!isSwipingRef.current || e.touches.length !== 1) return;
+    const touch = e.touches[0];
+    touchEndXRef.current = touch.clientX;
+    touchEndYRef.current = touch.clientY;
+  }, []);
 
-  const onTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX);
-  };
+  const onTouchEnd = useCallback(() => {
+    if (!isSwipingRef.current) return;
+    isSwipingRef.current = false;
 
-  const onTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
-    const distance = touchStart - touchEnd;
-    if (distance > minSwipeDistance) {
-      handleNext();
-    } else if (distance < -minSwipeDistance) {
-      handlePrev();
+    const deltaX = touchStartXRef.current - touchEndXRef.current;
+    const deltaY = touchStartYRef.current - touchEndYRef.current;
+    const minSwipeDistance = 35; // Sensitive for thumb flick gestures
+
+    // Chỉ chuyển ảnh khi thao tác vuốt ngang chiếm ưu thế rõ ràng so với cuộn dọc
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > minSwipeDistance) {
+      if (deltaX > 0) {
+        handleNext();
+      } else {
+        handlePrev();
+      }
     }
-  };
+  }, [handleNext, handlePrev]);
+
+  const onTouchCancel = useCallback(() => {
+    isSwipingRef.current = false;
+  }, []);
 
   // Keyboard navigation for Lightbox
   useEffect(() => {
@@ -193,10 +214,12 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
       {lightboxIndex !== null && currentPhoto && (
         <div
           className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex flex-col items-center justify-between p-3 sm:p-6 select-none animate-in fade-in duration-200"
+          style={{ touchAction: 'pan-y' }}
           onClick={handleCloseLightbox}
           onTouchStart={onTouchStart}
           onTouchMove={onTouchMove}
           onTouchEnd={onTouchEnd}
+          onTouchCancel={onTouchCancel}
         >
           {/* Top Bar Controls */}
           <div
@@ -238,7 +261,10 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
               key={currentPhoto.id}
               src={currentPhoto.fullUrl}
               alt="Ảnh cưới Phan Long & Thuỳ Linh"
-              className="max-h-[82vh] sm:max-h-[86vh] w-auto max-w-[92vw] sm:max-w-[85vw] object-contain rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] border border-white/10 animate-in zoom-in-95 duration-200"
+              draggable={false}
+              onDragStart={(e) => e.preventDefault()}
+              className="max-h-[80vh] sm:max-h-[85vh] w-auto max-w-[92vw] sm:max-w-[85vw] object-contain rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] border border-white/10 animate-in zoom-in-95 duration-200 pointer-events-auto select-none"
+              style={{ touchAction: 'none', userSelect: 'none' }}
             />
 
             {/* Navigation Next Button */}
@@ -254,8 +280,15 @@ export const Gallery: React.FC<GalleryProps> = ({ photos }) => {
             </button>
           </div>
 
-          {/* Bottom spacing */}
-          <div className="h-4 shrink-0" />
+          {/* Bottom Controls / Swipe Hint */}
+          <div
+            className="w-full max-w-5xl flex items-center justify-center text-white/70 z-20 shrink-0 pb-1 px-2"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <p className="text-[11px] sm:text-xs text-stone-300/80 font-sans tracking-wide flex items-center gap-1.5">
+              <span>Vuốt sang trái / phải để chuyển ảnh</span>
+            </p>
+          </div>
         </div>
       )}
     </section>

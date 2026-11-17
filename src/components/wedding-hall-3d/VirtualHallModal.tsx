@@ -213,6 +213,52 @@ export const VirtualHallModal: React.FC<VirtualHallModalProps> = ({
     });
   }, [currentPhotoIndex, activePhoto]);
 
+  // High-performance touch swipe gesture handlers for 3D Photo Lightbox
+  const photoTouchStartXRef = useRef<number>(0);
+  const photoTouchStartYRef = useRef<number>(0);
+  const photoTouchEndXRef = useRef<number>(0);
+  const photoTouchEndYRef = useRef<number>(0);
+  const isPhotoSwipingRef = useRef<boolean>(false);
+
+  const onPhotoTouchStart = useCallback((e: React.TouchEvent) => {
+    if (e.touches.length !== 1) return;
+    const touch = e.touches[0];
+    photoTouchStartXRef.current = touch.clientX;
+    photoTouchStartYRef.current = touch.clientY;
+    photoTouchEndXRef.current = touch.clientX;
+    photoTouchEndYRef.current = touch.clientY;
+    isPhotoSwipingRef.current = true;
+  }, []);
+
+  const onPhotoTouchMove = useCallback((e: React.TouchEvent) => {
+    if (!isPhotoSwipingRef.current || e.touches.length !== 1) return;
+    const touch = e.touches[0];
+    photoTouchEndXRef.current = touch.clientX;
+    photoTouchEndYRef.current = touch.clientY;
+  }, []);
+
+  const onPhotoTouchEnd = useCallback(() => {
+    if (!isPhotoSwipingRef.current) return;
+    isPhotoSwipingRef.current = false;
+
+    const diffX = photoTouchStartXRef.current - photoTouchEndXRef.current;
+    const diffY = photoTouchStartYRef.current - photoTouchEndYRef.current;
+    const minSwipeDistance = 35; // Sensitive and natural for mobile thumb swipe
+
+    // Ensure horizontal gesture is dominant over vertical scroll
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > minSwipeDistance) {
+      if (diffX > 0) {
+        handleNextPhoto();
+      } else {
+        handlePrevPhoto();
+      }
+    }
+  }, [handleNextPhoto, handlePrevPhoto]);
+
+  const onPhotoTouchCancel = useCallback(() => {
+    isPhotoSwipingRef.current = false;
+  }, []);
+
   // Gift Copy Actions
   const currentGiftPerson =
     activeGiftTab === 'groom' ? weddingCoupleData.groom : weddingCoupleData.bride;
@@ -515,10 +561,15 @@ export const VirtualHallModal: React.FC<VirtualHallModalProps> = ({
           role="dialog"
           aria-modal="true"
           aria-label={activePhoto.title || 'Xem ảnh cưới'}
-          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-stone-950/90 backdrop-blur-md animate-fade-in"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-stone-950/90 backdrop-blur-md animate-fade-in select-none"
+          style={{ touchAction: 'pan-y' }}
           onClick={(e) => {
             if (e.target === e.currentTarget) setActivePhoto(null);
           }}
+          onTouchStart={onPhotoTouchStart}
+          onTouchMove={onPhotoTouchMove}
+          onTouchEnd={onPhotoTouchEnd}
+          onTouchCancel={onPhotoTouchCancel}
         >
           {/* Lightbox Inner Container */}
           <div className="relative max-w-4xl w-full max-h-[92vh] flex flex-col items-center justify-center">
@@ -541,7 +592,7 @@ export const VirtualHallModal: React.FC<VirtualHallModalProps> = ({
                   type="button"
                   onClick={handlePrevPhoto}
                   className="absolute left-2 sm:left-4 z-20 p-2 sm:p-3 rounded-full bg-stone-900/80 hover:bg-amber-500/30 border border-amber-500/40 text-stone-200 hover:text-amber-200 backdrop-blur-sm transition-all shadow-lg cursor-pointer active:scale-95"
-                  title="Ảnh trước (Mũi tên trái)"
+                  title="Ảnh trước (Mũi tên trái hoặc vuốt phải)"
                   aria-label="Ảnh trước"
                 >
                   <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
@@ -553,7 +604,10 @@ export const VirtualHallModal: React.FC<VirtualHallModalProps> = ({
                 <img
                   src={activePhoto.fullUrl || activePhoto.imageUrl}
                   alt={activePhoto.title || 'Ảnh cưới Phan Long & Thùy Linh'}
+                  draggable={false}
+                  onDragStart={(e) => e.preventDefault()}
                   className="max-h-[70vh] w-auto max-w-full object-contain rounded-xl select-none"
+                  style={{ touchAction: 'none', userSelect: 'none' }}
                   loading="eager"
                 />
               </div>
@@ -564,10 +618,10 @@ export const VirtualHallModal: React.FC<VirtualHallModalProps> = ({
                   type="button"
                   onClick={handleNextPhoto}
                   className="absolute right-2 sm:right-4 z-20 p-2 sm:p-3 rounded-full bg-stone-900/80 hover:bg-amber-500/30 border border-amber-500/40 text-stone-200 hover:text-amber-200 backdrop-blur-sm transition-all shadow-lg cursor-pointer active:scale-95"
-                  title="Ảnh kế tiếp (Mũi tên phải)"
+                  title="Ảnh kế tiếp (Mũi tên phải hoặc vuốt trái)"
                   aria-label="Ảnh kế tiếp"
                 >
-                  <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+                  <ChevronRight className="w-6 h-6 sm:w-8 sm:h-8" />
                 </button>
               )}
             </div>
@@ -586,8 +640,10 @@ export const VirtualHallModal: React.FC<VirtualHallModalProps> = ({
                 </p>
               )}
               {currentPhotoIndex >= 0 && (
-                <div className="mt-1.5 text-[11px] text-stone-400 font-medium">
-                  Ảnh {currentPhotoIndex + 1} / {galleryPhotos.length}
+                <div className="mt-1.5 text-[11px] text-stone-400 font-medium flex items-center justify-center gap-2">
+                  <span>Ảnh {currentPhotoIndex + 1} / {galleryPhotos.length}</span>
+                  <span>·</span>
+                  <span className="text-amber-400/90 font-sans">Vuốt để chuyển ảnh</span>
                 </div>
               )}
             </div>
