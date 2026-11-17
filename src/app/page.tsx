@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
+import dynamic from 'next/dynamic';
 import { Navbar } from '@/components/Navbar';
 import { Hero } from '@/components/Hero';
 import { Story } from '@/components/Story';
@@ -22,11 +23,17 @@ import {
   galleryPhotos,
 } from '@/data/weddingData';
 
+const VirtualHallModal = dynamic(
+  () => import('@/components/wedding-hall-3d/VirtualHallModal').then((m) => m.VirtualHallModal),
+  { ssr: false }
+);
+
 export default function WeddingPage() {
   const audioPlayerRef = useRef<AudioPlayerHandle>(null);
   const [showSplash, setShowSplash] = useState(true);
   const [isPlayingMusic, setIsPlayingMusic] = useState(false);
   const [isGiftModalOpen, setIsGiftModalOpen] = useState(false);
+  const [isHallModalOpen, setIsHallModalOpen] = useState(false);
 
   const handleEnter = async () => {
     setShowSplash(false);
@@ -83,6 +90,7 @@ export default function WeddingPage() {
       <Navbar
         isPlayingMusic={isPlayingMusic}
         onToggleMusic={toggleMusic}
+        onOpenVirtualHall={() => setIsHallModalOpen(true)}
       />
 
       {/* Main Single Page Sections */}
@@ -93,6 +101,7 @@ export default function WeddingPage() {
           onRSVPClick={() => scrollToSection('rsvp')}
           onGuestbookClick={() => scrollToSection('guestbook')}
           onGiftClick={() => setIsGiftModalOpen(true)}
+          onVirtualHallClick={() => setIsHallModalOpen(true)}
         />
 
         {/* 2. Chuyện Chúng Mình (Our Love Story) */}
@@ -125,6 +134,16 @@ export default function WeddingPage() {
         isOpen={isGiftModalOpen}
         onClose={() => setIsGiftModalOpen(false)}
         couple={weddingCoupleData}
+      />
+
+      {/* 3D Virtual Wedding Hall Modal */}
+      <VirtualHallModal
+        isOpen={isHallModalOpen}
+        onClose={() => setIsHallModalOpen(false)}
+        isPlayingMusic={isPlayingMusic}
+        onToggleMusic={toggleMusic}
+        onOpenGiftModal={() => setIsGiftModalOpen(true)}
+        onOpenGuestbook={() => scrollToSection('guestbook')}
       />
     </div>
   </>

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Calendar, MapPin, Heart, ChevronDown, Gift } from 'lucide-react';
+import { Calendar, MapPin, Heart, ChevronDown, Gift, Sparkles } from 'lucide-react';
 import { WeddingCouple } from '../types/wedding';
 import { ScrollReveal } from './ScrollReveal';
 
@@ -10,6 +10,7 @@ interface HeroProps {
   onRSVPClick: () => void;
   onGuestbookClick: () => void;
   onGiftClick?: () => void;
+  onVirtualHallClick?: () => void;
 }
 
 interface TimeLeft {
@@ -25,6 +26,7 @@ export const Hero: React.FC<HeroProps> = ({
   onRSVPClick,
   onGuestbookClick,
   onGiftClick,
+  onVirtualHallClick,
 }) => {
   const targetDate = new Date(couple.weddingDate).getTime();
 
@@ -165,7 +167,17 @@ export const Hero: React.FC<HeroProps> = ({
 
         {/* Action Buttons */}
         <ScrollReveal animation="fade-up" delay={350} duration={700}>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto">
+          <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 w-full sm:w-auto">
+            {onVirtualHallClick && (
+              <button
+                type="button"
+                onClick={onVirtualHallClick}
+                className="w-full sm:w-auto bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-500 hover:from-amber-500 hover:to-yellow-600 text-stone-950 font-bold px-6 py-3 rounded-xl shadow-lg shadow-amber-500/25 transition-all transform hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap text-sm"
+              >
+                <Sparkles className="w-4 h-4 text-stone-950 animate-pulse shrink-0" />
+                <span>Khám phá Rạp cưới 3D</span>
+              </button>
+            )}
             <button
               onClick={onRSVPClick}
               className="w-full sm:w-auto px-6 py-3 text-sm font-semibold text-white bg-gradient-to-r from-rose-500 via-rose-600 to-pink-500 hover:from-rose-600 hover:to-pink-600 rounded-xl transition-all transform hover:-translate-y-0.5 shadow-lg shadow-rose-600/30 whitespace-nowrap active:scale-95 cursor-pointer"

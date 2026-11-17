@@ -1,16 +1,18 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Heart, Menu, X, Music, Volume2, VolumeX } from 'lucide-react';
+import { Heart, Menu, X, Music, Volume2, VolumeX, Sparkles } from 'lucide-react';
 
 interface NavbarProps {
   isPlayingMusic: boolean;
   onToggleMusic: () => void;
+  onOpenVirtualHall?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   isPlayingMusic,
   onToggleMusic,
+  onOpenVirtualHall,
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -79,8 +81,26 @@ export const Navbar: React.FC<NavbarProps> = ({
           ))}
         </nav>
 
-        {/* Zone 3: Primary Actions (Music toggle + RSVP CTA + Mobile Menu Button) */}
+        {/* Zone 3: Primary Actions (Virtual Hall 3D + Music toggle + RSVP CTA + Mobile Menu Button) */}
         <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+          {/* Virtual Hall 3D Button */}
+          {onOpenVirtualHall && (
+            <button
+              type="button"
+              onClick={onOpenVirtualHall}
+              className={`p-1.5 sm:px-3 sm:py-1.5 rounded-xl text-xs sm:text-sm font-bold transition-all shadow-xs cursor-pointer active:scale-95 flex items-center gap-1.5 ${
+                isScrolled
+                  ? 'bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-500 hover:from-amber-500 hover:to-yellow-600 text-stone-950 shadow-amber-500/20'
+                  : 'bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-500 hover:brightness-105 text-stone-950 shadow-amber-500/30'
+              }`}
+              title="Khám phá Rạp cưới 3D thực tế ảo"
+              aria-label="Khám phá Rạp cưới 3D"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-stone-950 animate-pulse shrink-0" />
+              <span className="hidden sm:inline">Rạp 3D</span>
+            </button>
+          )}
+
           {/* Music Quick Toggle */}
           <button
             onClick={onToggleMusic}
@@ -122,6 +142,25 @@ export const Navbar: React.FC<NavbarProps> = ({
       {mobileMenuOpen && (
         <div className="lg:hidden bg-white/98 backdrop-blur-lg border-b border-stone-200 px-4 pt-3 pb-5 shadow-xl animate-in slide-in-from-top duration-200">
           <div className="flex flex-col gap-1">
+            {onOpenVirtualHall && (
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenVirtualHall();
+                }}
+                className="flex items-center justify-between w-full py-2.5 px-3 mb-2 rounded-xl bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-500 text-stone-950 font-bold text-sm shadow-sm active:scale-95 transition-transform cursor-pointer"
+              >
+                <span className="flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-stone-950 animate-pulse shrink-0" />
+                  <span>Khám phá Rạp cưới 3D</span>
+                </span>
+                <span className="text-[10px] uppercase tracking-wider bg-stone-950/15 px-2 py-0.5 rounded-full font-extrabold">
+                  360°
+                </span>
+              </button>
+            )}
+
             {navLinks.map((link) => (
               <a
                 key={link.href}
