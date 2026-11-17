@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { HALL_WAYPOINTS, Waypoint, PhotoFrameData } from '../../types/virtual-hall';
 import { createHallFloorAndCarpet, disposeHallFloorAndCarpet } from './HallFloorAndCarpet';
 import { setupHallLighting, HallLightingResult } from './HallLighting';
@@ -23,8 +22,10 @@ interface CameraTransitionState {
   active: boolean;
   startPos: THREE.Vector3;
   endPos: THREE.Vector3;
-  startTarget: THREE.Vector3;
-  endTarget: THREE.Vector3;
+  startYaw: number;
+  endYaw: number;
+  startPitch: number;
+  endPitch: number;
   startTime: number;
   duration: number;
 }
@@ -120,19 +121,27 @@ export const HallScene: React.FC<HallSceneProps> = ({
     renderer.domElement.style.cursor = 'grab';
     container.appendChild(renderer.domElement);
 
-    // 5. 360° Orbit Look-Around Controls
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.05;
-    // Limits vertical tilt angle: prevent camera flipping or going below floor
-    controls.minPolarAngle = Math.PI / 3; // ~60°
-    controls.maxPolarAngle = Math.PI / 1.85; // ~97.3°
-    controls.enableZoom = true;
-    controls.minDistance = 1.0;
-    controls.maxDistance = 25.0;
-    controls.enablePan = false; // Lock translation to preserve tour orientation
-    controls.target.set(...initialWaypoint.targetPosition);
-    controls.update();
+    // 5. 360° First-Person Panorama Look-Around State
+    // Calculate initial orientation towards initial waypoint's look target
+    const initCamPos = new THREE.Vector3(...initialWaypoint.cameraPosition);
+    const initTargetPos = new THREE.Vector3(...initialWaypoint.targetPosition);
+    const initDir = new THREE.Vector3().subVectors(initTargetPos, initCamPos).normalize();
+
+    const initialYaw = Math.atan2(initDir.x, -initDir.z);
+    const initialPitch = Math.asin(Math.max(-0.99, Math.min(0.99, initDir.y)));
+
+    let currentYaw = initialYaw;
+    let currentPitch = initialPitch;
+    let targetYaw = initialYaw;
+    let targetPitch = initialPitch;
+
+    // Pitch limits: -55° looking down at floor to +55° looking up at chandeliers
+    const maxPitch = Math.PI / 3.25;
+
+    // Smooth FOV zoom (between 38° telephoto and 75° wide-angle)
+    let targetFov = 60;
+    const minFov = 38;
+    const maxFov = 75;
 
     // 6. Mount Sub-modules
     // A. Floor and Luxury Velvet Carpet
@@ -176,8 +185,10 @@ export const HallScene: React.FC<HallSceneProps> = ({
       active: false,
       startPos: new THREE.Vector3(),
       endPos: new THREE.Vector3(),
-      startTarget: new THREE.Vector3(),
-      endTarget: new THREE.Vector3(),
+      startYaw: initialYaw,
+      endYaw: initialYaw,
+      startPitch: initialPitch,
+      endPitch: initialPitch,
       startTime: 0,
       duration: 1200,
     };
@@ -190,65 +201,96 @@ export const HallScene: React.FC<HallSceneProps> = ({
 
       transition.startPos.copy(camera.position);
       transition.endPos.set(...targetWp.cameraPosition);
-      transition.startTarget.copy(controls.target);
-      transition.endTarget.set(...targetWp.targetPosition);
+
+      const targetDir = new THREE.Vector3(...targetWp.targetPosition)
+        .sub(new THREE.Vector3(...targetWp.cameraPosition))
+        .normalize();
+
+      let targetEndYaw = Math.atan2(targetDir.x, -targetDir.z);
+      const targetEndPitch = Math.asin(Math.max(-0.99, Math.min(0.99, targetDir.y)));
+
+      // Shortest circular angle distance
+      while (targetEndYaw - currentYaw > Math.PI) targetEndYaw -= Math.PI * 2;
+      while (targetEndYaw - currentYaw < -Math.PI) targetEndYaw += Math.PI * 2;
+
+      transition.startYaw = currentYaw;
+      transition.endYaw = targetEndYaw;
+      transition.startPitch = currentPitch;
+      transition.endPitch = targetEndPitch;
       transition.startTime = performance.now();
       transition.duration = 1200; // 1.2s smooth glide
       transition.active = true;
-
-      // Temporarily disable manual orbit dragging during camera glide
-      controls.enabled = false;
     };
 
     triggerTransitionRef.current = startCameraTransition;
 
-    // 8. Raycaster & Interaction Handling (Drag vs Click Discrimination)
+    // 8. 360° Drag & Click Interaction Handling
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
 
     let pointerStartX = 0;
     let pointerStartY = 0;
+    let previousPointerX = 0;
+    let previousPointerY = 0;
     let pointerStartTime = 0;
     let isPointerDown = false;
 
     const onPointerDown = (e: PointerEvent): void => {
+      if (transition.active) return;
       pointerStartX = e.clientX;
       pointerStartY = e.clientY;
+      previousPointerX = e.clientX;
+      previousPointerY = e.clientY;
       pointerStartTime = performance.now();
       isPointerDown = true;
       renderer.domElement.style.cursor = 'grabbing';
     };
 
     const onPointerMove = (e: PointerEvent): void => {
-      const rect = renderer.domElement.getBoundingClientRect();
-      pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+      if (isPointerDown && !transition.active) {
+        const deltaX = e.clientX - previousPointerX;
+        const deltaY = e.clientY - previousPointerY;
+        previousPointerX = e.clientX;
+        previousPointerY = e.clientY;
 
-      raycaster.setFromCamera(pointer, camera);
-
-      // Photo frame hover highlight
-      const hoveredPhoto = gallery.handlePointerMove(raycaster);
-
-      // Check waypoint hover
-      const wpIntersects = raycaster.intersectObjects(waypointsNav.interactiveObjects, false);
-
-      if (hoveredPhoto || wpIntersects.length > 0) {
-        renderer.domElement.style.cursor = 'pointer';
+        // Smooth rotation based on current FOV (turn slower when zoomed in)
+        const sensitivity = 0.0035 * (camera.fov / 60);
+        targetYaw -= deltaX * sensitivity;
+        targetPitch += deltaY * sensitivity;
+        targetPitch = Math.max(-maxPitch, Math.min(maxPitch, targetPitch));
       } else {
-        renderer.domElement.style.cursor = isPointerDown ? 'grabbing' : 'grab';
+        const rect = renderer.domElement.getBoundingClientRect();
+        pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+        raycaster.setFromCamera(pointer, camera);
+
+        // Photo frame hover highlight
+        const hoveredPhoto = gallery.handlePointerMove(raycaster);
+
+        // Check waypoint hover
+        const wpIntersects = raycaster.intersectObjects(waypointsNav.interactiveObjects, false);
+
+        if (hoveredPhoto || wpIntersects.length > 0) {
+          renderer.domElement.style.cursor = 'pointer';
+        } else {
+          renderer.domElement.style.cursor = isPointerDown ? 'grabbing' : 'grab';
+        }
       }
     };
 
     const onPointerUp = (e: PointerEvent): void => {
+      if (!isPointerDown) return;
       isPointerDown = false;
+      renderer.domElement.style.cursor = 'grab';
 
       const dx = e.clientX - pointerStartX;
       const dy = e.clientY - pointerStartY;
       const distance = Math.hypot(dx, dy);
       const elapsed = performance.now() - pointerStartTime;
 
-      // Threshold: if dragged less than 7px within 600ms, it is a deliberate click/tap
-      if (distance < 7 && elapsed < 600) {
+      // Threshold: if dragged less than 8px within 400ms, it is a deliberate tap/click
+      if (distance < 8 && elapsed < 400 && !transition.active) {
         const rect = renderer.domElement.getBoundingClientRect();
         pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
         pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
@@ -273,13 +315,50 @@ export const HallScene: React.FC<HallSceneProps> = ({
           return;
         }
       }
-
-      renderer.domElement.style.cursor = 'grab';
     };
 
     const onPointerCancel = (): void => {
       isPointerDown = false;
       renderer.domElement.style.cursor = 'grab';
+    };
+
+    // Zoom Handling (Wheel & Touch Pinch)
+    const onWheel = (e: WheelEvent): void => {
+      e.preventDefault();
+      const zoomSpeed = 0.035;
+      targetFov = Math.max(minFov, Math.min(maxFov, targetFov + e.deltaY * zoomSpeed));
+    };
+
+    let isPinching = false;
+    let initialPinchDist = 0;
+    let initialPinchFov = 60;
+
+    const onTouchStart = (e: TouchEvent): void => {
+      if (e.touches.length === 2) {
+        isPinching = true;
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        initialPinchDist = Math.hypot(dx, dy);
+        initialPinchFov = targetFov;
+      }
+    };
+
+    const onTouchMove = (e: TouchEvent): void => {
+      if (isPinching && e.touches.length === 2) {
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        const currentDist = Math.hypot(dx, dy);
+        if (initialPinchDist > 0 && currentDist > 0) {
+          const scale = initialPinchDist / currentDist;
+          targetFov = Math.max(minFov, Math.min(maxFov, initialPinchFov * scale));
+        }
+      }
+    };
+
+    const onTouchEnd = (e: TouchEvent): void => {
+      if (e.touches.length < 2) {
+        isPinching = false;
+      }
     };
 
     const onContextMenu = (e: MouseEvent): void => {
@@ -291,6 +370,10 @@ export const HallScene: React.FC<HallSceneProps> = ({
     domElement.addEventListener('pointermove', onPointerMove);
     domElement.addEventListener('pointerup', onPointerUp);
     domElement.addEventListener('pointercancel', onPointerCancel);
+    domElement.addEventListener('wheel', onWheel, { passive: false });
+    domElement.addEventListener('touchstart', onTouchStart, { passive: true });
+    domElement.addEventListener('touchmove', onTouchMove, { passive: true });
+    domElement.addEventListener('touchend', onTouchEnd, { passive: true });
     domElement.addEventListener('contextmenu', onContextMenu);
 
     // 9. Responsive Resize Handler
@@ -325,23 +408,59 @@ export const HallScene: React.FC<HallSceneProps> = ({
       const elapsed = clock.getElapsedTime();
       const now = performance.now();
 
-      // Camera smooth interpolation
+      // 1. Camera Flight Transition
       if (transition.active) {
         const progress = Math.min((now - transition.startTime) / transition.duration, 1.0);
         const t = easeInOutCubic(progress);
 
         camera.position.lerpVectors(transition.startPos, transition.endPos, t);
-        controls.target.lerpVectors(transition.startTarget, transition.endTarget, t);
+        currentYaw = THREE.MathUtils.lerp(transition.startYaw, transition.endYaw, t);
+        targetYaw = currentYaw;
+        currentPitch = THREE.MathUtils.lerp(transition.startPitch, transition.endPitch, t);
+        targetPitch = currentPitch;
 
         if (progress >= 1.0) {
           camera.position.copy(transition.endPos);
-          controls.target.copy(transition.endTarget);
+          currentYaw = transition.endYaw;
+          targetYaw = transition.endYaw;
+          currentPitch = transition.endPitch;
+          targetPitch = transition.endPitch;
           transition.active = false;
-          controls.enabled = true; // Re-enable user orbit interaction
         }
+      } else {
+        // 2. Smooth Damping for Look-Around
+        currentYaw += (targetYaw - currentYaw) * 0.12;
+        currentPitch += (targetPitch - currentPitch) * 0.12;
       }
 
-      controls.update();
+      // Smooth FOV zoom
+      if (Math.abs(camera.fov - targetFov) > 0.05) {
+        camera.fov += (targetFov - camera.fov) * 0.12;
+        camera.updateProjectionMatrix();
+      }
+
+      // Constrain Pitch Angle
+      currentPitch = Math.max(-maxPitch, Math.min(maxPitch, currentPitch));
+
+      // Calculate Look Vector from Camera Position (360° panorama look)
+      const cosPitch = Math.cos(currentPitch);
+      const lookX = Math.sin(currentYaw) * cosPitch;
+      const lookY = Math.sin(currentPitch);
+      const lookZ = -Math.cos(currentYaw) * cosPitch;
+
+      camera.lookAt(
+        camera.position.x + lookX,
+        camera.position.y + lookY,
+        camera.position.z + lookZ
+      );
+
+      // Strict Interior Safety Bounds: never breach walls under any circumstances
+      // Hall width: 14m (X: -7 to +7) -> Clamp inside [-5.5, 5.5] (1.5m clearance)
+      // Hall length: 32m (Z: -16 to +16) -> Clamp inside [-13.5, 13.5] (2.5m clearance)
+      // Height: Clamp Y inside [1.4, 2.2]
+      camera.position.x = Math.max(-5.5, Math.min(5.5, camera.position.x));
+      camera.position.z = Math.max(-13.5, Math.min(13.5, camera.position.z));
+      camera.position.y = Math.max(1.4, Math.min(2.2, camera.position.y));
 
       // Sub-module dynamic updates
       lighting.update?.(elapsed);
@@ -378,6 +497,10 @@ export const HallScene: React.FC<HallSceneProps> = ({
       domElement.removeEventListener('pointermove', onPointerMove);
       domElement.removeEventListener('pointerup', onPointerUp);
       domElement.removeEventListener('pointercancel', onPointerCancel);
+      domElement.removeEventListener('wheel', onWheel);
+      domElement.removeEventListener('touchstart', onTouchStart);
+      domElement.removeEventListener('touchmove', onTouchMove);
+      domElement.removeEventListener('touchend', onTouchEnd);
       domElement.removeEventListener('contextmenu', onContextMenu);
 
       window.removeEventListener('resize', handleResize);
@@ -393,8 +516,7 @@ export const HallScene: React.FC<HallSceneProps> = ({
       petals.dispose();
       waypointsNav.dispose();
 
-      // Dispose controls & renderer
-      controls.dispose();
+      // Dispose renderer
       renderer.dispose();
 
       if (domElement.parentNode === container) {
