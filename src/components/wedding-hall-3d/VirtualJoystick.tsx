@@ -16,8 +16,8 @@ export interface JoystickMoveEvent {
 export interface VirtualJoystickProps {
   onMove: (event: JoystickMoveEvent) => void;
   onStop: () => void;
-  size?: number; // Base diameter in px, default 92
-  knobSize?: number; // Knob diameter in px, default 40
+  size?: number; // Base diameter in px, default 80
+  knobSize?: number; // Knob diameter in px, default 36
   className?: string;
 }
 
@@ -27,8 +27,8 @@ export interface VirtualJoystickProps {
 export const VirtualJoystick: React.FC<VirtualJoystickProps> = ({
   onMove,
   onStop,
-  size = 92,
-  knobSize = 40,
+  size = 80,
+  knobSize = 36,
   className = '',
 }) => {
   const baseRef = useRef<HTMLDivElement | null>(null);

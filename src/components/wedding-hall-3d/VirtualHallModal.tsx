@@ -400,25 +400,26 @@ export const VirtualHallModal: React.FC<VirtualHallModalProps> = ({
       {/* =========================================================================
           1. TOP HEADER BAR (HUD)
       ========================================================================= */}
-      <header className="relative z-20 flex items-center justify-between px-3 sm:px-6 py-3 bg-gradient-to-b from-stone-950/95 via-stone-950/80 to-transparent backdrop-blur-md border-b border-amber-500/20">
+      <header className="relative z-20 flex items-center justify-between px-3 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-b from-stone-950/95 via-stone-950/85 to-transparent backdrop-blur-md border-b border-amber-500/20">
         {/* Left: Romantic Title & Date */}
-        <div className="flex items-center gap-2.5 sm:gap-3.5 min-w-0">
+        <div className="flex items-center gap-2 sm:gap-3.5 min-w-0 pr-2">
           <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-br from-amber-400/20 to-rose-500/30 border border-amber-400/40 flex items-center justify-center shadow-[0_0_15px_rgba(212,175,55,0.3)] shrink-0">
             <Sparkles className="w-4 h-4 text-amber-300 animate-pulse" />
           </div>
           <div className="min-w-0">
-            <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="font-serif text-sm sm:text-base md:text-lg font-bold bg-gradient-to-r from-amber-200 via-rose-200 to-amber-100 bg-clip-text text-transparent truncate tracking-wide">
-                Rạp Cưới Online · Phan Long &amp; Thùy Linh
+            <div className="flex items-center gap-1.5 min-w-0">
+              <h1 className="font-serif text-xs sm:text-base md:text-lg font-bold bg-gradient-to-r from-amber-200 via-rose-200 to-amber-100 bg-clip-text text-transparent truncate tracking-wide">
+                <span className="sm:hidden">Phan Long &amp; Thùy Linh</span>
+                <span className="hidden sm:inline">Rạp Cưới Online · Phan Long &amp; Thùy Linh</span>
               </h1>
-              <span className="hidden md:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-amber-500/15 text-amber-300 border border-amber-500/30">
+              <span className="hidden md:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-amber-500/15 text-amber-300 border border-amber-500/30 shrink-0">
                 Không gian 3D 360°
               </span>
             </div>
-            <p className="text-[11px] sm:text-xs text-stone-400 font-sans flex items-center gap-1.5">
-              <span>Hôn Lễ: 24.12.2026</span>
-              <span className="text-amber-500/60">·</span>
-              <span className="text-rose-300/80">Khám phá không gian thực tế ảo</span>
+            <p className="text-[10px] sm:text-xs text-stone-400 font-sans flex items-center gap-1 truncate">
+              <span className="text-amber-300/90 font-medium whitespace-nowrap">Hôn Lễ: 24.12.2026</span>
+              <span className="hidden xs:inline text-amber-500/60">·</span>
+              <span className="hidden xs:inline text-rose-300/80 truncate">Khám phá rạp cưới 3D</span>
             </p>
           </div>
         </div>
@@ -505,16 +506,17 @@ export const VirtualHallModal: React.FC<VirtualHallModalProps> = ({
 
         {/* 360° & Walk Interaction Hint Badge */}
         {showGuideBadge && !isLoadingScene && (
-          <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 pointer-events-auto">
-            <div className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full bg-stone-950/90 backdrop-blur-md border border-amber-500/40 text-amber-200 text-xs sm:text-sm shadow-[0_4px_25px_rgba(0,0,0,0.6)] animate-fade-in">
-              <RotateCw className="w-3.5 h-3.5 text-amber-400 shrink-0 animate-spin" style={{ animationDuration: '4s' }} />
-              <span className="font-medium whitespace-nowrap">
-                Gạt Joystick trái để đi lại · Vuốt phải xoay 360° · Chạm sàn hoặc tranh để khám phá
+          <div className="absolute top-3 sm:top-4 left-1/2 -translate-x-1/2 z-20 pointer-events-auto w-[94%] max-w-fit px-2">
+            <div className="flex items-center justify-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-stone-950/90 backdrop-blur-md border border-amber-500/40 text-amber-200 text-[11px] sm:text-xs shadow-[0_4px_25px_rgba(0,0,0,0.6)] animate-fade-in mx-auto">
+              <RotateCw className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-400 shrink-0 animate-spin" style={{ animationDuration: '4s' }} />
+              <span className="font-medium text-center">
+                <span className="sm:hidden">🕹️ Gạt cần trái để đi · Vuốt phải xoay 360°</span>
+                <span className="hidden sm:inline">🕹️ Gạt Joystick trái để đi lại · Vuốt phải xoay 360° · Chạm sàn hoặc tranh để khám phá</span>
               </span>
               <button
                 type="button"
                 onClick={() => setShowGuideBadge(false)}
-                className="p-1 text-stone-400 hover:text-white rounded-full transition-colors cursor-pointer ml-1"
+                className="p-1 text-stone-400 hover:text-white rounded-full transition-colors cursor-pointer ml-0.5 shrink-0"
                 aria-label="Đóng gợi ý"
               >
                 <X className="w-3 h-3" />
@@ -523,9 +525,9 @@ export const VirtualHallModal: React.FC<VirtualHallModalProps> = ({
           </div>
         )}
 
-        {/* Luxury Champagne Gold Virtual Joystick (Bottom Left) */}
+        {/* Luxury Champagne Gold Virtual Joystick (Bottom Left - Safely Above Dock) */}
         {!isLoadingScene && (
-          <div className="absolute bottom-20 left-3.5 sm:bottom-24 sm:left-6 z-20 pointer-events-auto flex flex-col items-center">
+          <div className="absolute bottom-28 left-3 sm:bottom-24 sm:left-6 z-20 pointer-events-auto flex flex-col items-center">
             <VirtualJoystick
               onMove={(e) => {
                 hallSceneRef.current?.setMoveVector(e.x, e.y);
@@ -533,8 +535,8 @@ export const VirtualHallModal: React.FC<VirtualHallModalProps> = ({
               onStop={() => {
                 hallSceneRef.current?.setMoveVector(0, 0);
               }}
-              size={92}
-              knobSize={40}
+              size={78}
+              knobSize={34}
             />
             <span className="mt-1 text-[9px] font-semibold text-amber-300/80 tracking-widest uppercase drop-shadow pointer-events-none select-none">
               Di chuyển
@@ -546,10 +548,10 @@ export const VirtualHallModal: React.FC<VirtualHallModalProps> = ({
       {/* =========================================================================
           3. BOTTOM DOCK (Waypoints Navigation & Quick Actions)
       ========================================================================= */}
-      <footer className="relative z-20 pointer-events-none pb-4 sm:pb-6 px-3 flex justify-center">
-        <div className="pointer-events-auto w-full max-w-fit bg-stone-950/85 backdrop-blur-xl border border-amber-500/30 rounded-2xl sm:rounded-3xl p-1.5 sm:p-2 shadow-[0_10px_35px_rgba(0,0,0,0.6)] flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
-          {/* Waypoints List */}
-          <div className="flex items-center gap-1 sm:gap-1.5">
+      <footer className="relative z-20 pointer-events-none pb-3 sm:pb-5 px-2 sm:px-4 flex justify-center">
+        <div className="pointer-events-auto max-w-[96vw] sm:max-w-fit bg-stone-950/90 backdrop-blur-xl border border-amber-500/30 rounded-2xl sm:rounded-3xl p-1.5 shadow-[0_10px_35px_rgba(0,0,0,0.6)] flex flex-col sm:flex-row items-center gap-1.5">
+          {/* Waypoints List: horizontally scrollable on mobile */}
+          <div className="flex items-center gap-1 sm:gap-1.5 overflow-x-auto max-w-[94vw] sm:max-w-none no-scrollbar px-1 py-0.5 touch-pan-x">
             {HALL_WAYPOINTS.map((wp: Waypoint) => {
               const isActive = currentWaypointId === wp.id;
               return (
@@ -557,34 +559,34 @@ export const VirtualHallModal: React.FC<VirtualHallModalProps> = ({
                   key={wp.id}
                   type="button"
                   onClick={() => setCurrentWaypointId(wp.id)}
-                  className={`group relative flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer ${
+                  className={`group relative flex items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded-xl sm:rounded-2xl text-[11px] sm:text-xs font-medium transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap ${
                     isActive
-                      ? 'bg-gradient-to-r from-amber-500/25 to-rose-500/20 text-amber-200 border border-amber-400/70 shadow-[0_0_15px_rgba(245,158,11,0.35)] scale-102'
+                      ? 'bg-gradient-to-r from-amber-500/25 to-rose-500/20 text-amber-200 border border-amber-400/70 shadow-[0_0_12px_rgba(245,158,11,0.35)]'
                       : 'text-stone-300 hover:text-white hover:bg-stone-900/80 border border-transparent'
                   }`}
                   title={wp.name}
                 >
                   <span
-                    className={`transition-colors ${
+                    className={`transition-colors shrink-0 ${
                       isActive ? 'text-amber-300' : 'text-stone-400 group-hover:text-amber-200'
                     }`}
                   >
                     {getWaypointIcon(wp.id)}
                   </span>
-                  <span className="whitespace-nowrap">{wp.shortName}</span>
+                  <span>{wp.shortName}</span>
                   {isActive && (
-                    <span className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-4 h-0.5 rounded-full bg-amber-400 shadow-[0_0_6px_#f59e0b]" />
+                    <span className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-3.5 h-0.5 rounded-full bg-amber-400 shadow-[0_0_6px_#f59e0b]" />
                   )}
                 </button>
               );
             })}
           </div>
 
-          {/* Vertical Divider */}
-          <div className="hidden sm:block w-[1px] h-6 bg-stone-700/60 mx-0.5" />
+          {/* Vertical Divider (Desktop only) */}
+          <div className="hidden sm:block w-[1px] h-6 bg-stone-700/60 mx-0.5 shrink-0" />
 
           {/* Quick Action Buttons */}
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center justify-center gap-1.5 w-full sm:w-auto shrink-0">
             {/* Quick Wish Button */}
             <button
               type="button"
@@ -592,10 +594,10 @@ export const VirtualHallModal: React.FC<VirtualHallModalProps> = ({
                 setShowWishPopup(true);
                 setShowGiftPopup(false);
               }}
-              className="flex items-center gap-1.5 px-3 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-medium bg-rose-950/70 hover:bg-rose-900/90 text-rose-200 border border-rose-500/40 transition-all shadow-sm cursor-pointer active:scale-95"
+              className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl sm:rounded-2xl text-[11px] sm:text-xs font-medium bg-rose-950/70 hover:bg-rose-900/90 text-rose-200 border border-rose-500/40 transition-all shadow-sm cursor-pointer active:scale-95 whitespace-nowrap"
             >
               <Heart className="w-3.5 h-3.5 text-rose-400 fill-rose-400/40 shrink-0" />
-              <span className="whitespace-nowrap">Gửi lời chúc</span>
+              <span>Gửi lời chúc</span>
             </button>
 
             {/* Quick Gift Button */}
@@ -605,10 +607,10 @@ export const VirtualHallModal: React.FC<VirtualHallModalProps> = ({
                 setShowGiftPopup(true);
                 setShowWishPopup(false);
               }}
-              className="flex items-center gap-1.5 px-3 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-medium bg-amber-950/70 hover:bg-amber-900/90 text-amber-200 border border-amber-500/40 transition-all shadow-sm cursor-pointer active:scale-95"
+              className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl sm:rounded-2xl text-[11px] sm:text-xs font-medium bg-amber-950/70 hover:bg-amber-900/90 text-amber-200 border border-amber-500/40 transition-all shadow-sm cursor-pointer active:scale-95 whitespace-nowrap"
             >
               <Gift className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-              <span className="whitespace-nowrap">Mừng cưới</span>
+              <span>Mừng cưới</span>
             </button>
           </div>
         </div>
