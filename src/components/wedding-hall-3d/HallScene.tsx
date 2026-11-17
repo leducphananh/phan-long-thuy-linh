@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
 import * as THREE from 'three';
 import { HALL_WAYPOINTS, Waypoint, PhotoFrameData } from '../../types/virtual-hall';
 import { createHallFloorAndCarpet, disposeHallFloorAndCarpet } from './HallFloorAndCarpet';
@@ -16,6 +16,14 @@ export interface HallSceneProps {
   onPhotoClick: (photo: PhotoFrameData) => void;
   className?: string;
   onLoaded?: () => void;
+}
+
+export interface HallSceneHandle {
+  stepForward: (distance?: number) => void;
+  stepBackward: (distance?: number) => void;
+  stepLeft: (distance?: number) => void;
+  stepRight: (distance?: number) => void;
+  walkTo: (x: number, z: number) => void;
 }
 
 interface CameraTransitionState {
@@ -46,36 +54,55 @@ function easeInOutCubic(t: number): number {
  * - Pointer/Touch raycasting with drag-threshold discrimination
  * - Full memory management and resource cleanup
  */
-export const HallScene: React.FC<HallSceneProps> = ({
-  activeWaypointId,
-  onWaypointChange,
-  onPhotoClick,
-  className = '',
-  onLoaded,
-}) => {
-  const containerRef = useRef<HTMLDivElement | null>(null);
+export const HallScene = forwardRef<HallSceneHandle, HallSceneProps>(
+  (
+    {
+      activeWaypointId,
+      onWaypointChange,
+      onPhotoClick,
+      className = '',
+      onLoaded,
+    },
+    ref
+  ) => {
+    const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // Keep callback refs fresh without triggering full scene re-instantiation
-  const onWaypointChangeRef = useRef(onWaypointChange);
-  onWaypointChangeRef.current = onWaypointChange;
+    // Imperative walk handlers
+    const stepForwardRef = useRef<((distance?: number) => void) | null>(null);
+    const stepBackwardRef = useRef<((distance?: number) => void) | null>(null);
+    const stepLeftRef = useRef<((distance?: number) => void) | null>(null);
+    const stepRightRef = useRef<((distance?: number) => void) | null>(null);
+    const walkToRef = useRef<((x: number, z: number) => void) | null>(null);
 
-  const onPhotoClickRef = useRef(onPhotoClick);
-  onPhotoClickRef.current = onPhotoClick;
+    useImperativeHandle(ref, () => ({
+      stepForward: (dist) => stepForwardRef.current?.(dist),
+      stepBackward: (dist) => stepBackwardRef.current?.(dist),
+      stepLeft: (dist) => stepLeftRef.current?.(dist),
+      stepRight: (dist) => stepRightRef.current?.(dist),
+      walkTo: (x, z) => walkToRef.current?.(x, z),
+    }));
 
-  const onLoadedRef = useRef(onLoaded);
-  onLoadedRef.current = onLoaded;
+    // Keep callback refs fresh without triggering full scene re-instantiation
+    const onWaypointChangeRef = useRef(onWaypointChange);
+    onWaypointChangeRef.current = onWaypointChange;
 
-  // External function ref to trigger camera transition from prop changes
-  const triggerTransitionRef = useRef<((targetId: string) => void) | null>(null);
-  const currentWaypointIdRef = useRef(activeWaypointId);
+    const onPhotoClickRef = useRef(onPhotoClick);
+    onPhotoClickRef.current = onPhotoClick;
 
-  // Listen to prop changes in activeWaypointId
-  useEffect(() => {
-    if (currentWaypointIdRef.current !== activeWaypointId) {
-      currentWaypointIdRef.current = activeWaypointId;
-      triggerTransitionRef.current?.(activeWaypointId);
-    }
-  }, [activeWaypointId]);
+    const onLoadedRef = useRef(onLoaded);
+    onLoadedRef.current = onLoaded;
+
+    // External function ref to trigger camera transition from prop changes
+    const triggerTransitionRef = useRef<((targetId: string) => void) | null>(null);
+    const currentWaypointIdRef = useRef(activeWaypointId);
+
+    // Listen to prop changes in activeWaypointId
+    useEffect(() => {
+      if (currentWaypointIdRef.current !== activeWaypointId) {
+        currentWaypointIdRef.current = activeWaypointId;
+        triggerTransitionRef.current?.(activeWaypointId);
+      }
+    }, [activeWaypointId]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -224,6 +251,72 @@ export const HallScene: React.FC<HallSceneProps> = ({
 
     triggerTransitionRef.current = startCameraTransition;
 
+    // Smooth Walk to specific coordinate (Tap-to-Walk & Stepping)
+    const walkToPoint = (targetX: number, targetZ: number, duration = 750): void => {
+      // Clamp within hall walking area
+      const clampedX = Math.max(-4.2, Math.min(4.2, targetX));
+      const clampedZ = Math.max(-13.0, Math.min(13.0, targetZ));
+
+      transition.startPos.copy(camera.position);
+      transition.endPos.set(clampedX, 1.7, clampedZ);
+      transition.startYaw = currentYaw;
+      transition.endYaw = currentYaw;
+      transition.startPitch = currentPitch;
+      transition.endPitch = currentPitch;
+      transition.startTime = performance.now();
+      transition.duration = duration;
+      transition.active = true;
+    };
+
+    walkToRef.current = (x, z) => walkToPoint(x, z, 750);
+
+    stepForwardRef.current = (dist = 2.8) => {
+      const targetX = camera.position.x + Math.sin(currentYaw) * dist;
+      const targetZ = camera.position.z - Math.cos(currentYaw) * dist;
+      walkToPoint(targetX, targetZ, 600);
+    };
+
+    stepBackwardRef.current = (dist = 2.8) => {
+      const targetX = camera.position.x - Math.sin(currentYaw) * dist;
+      const targetZ = camera.position.z + Math.cos(currentYaw) * dist;
+      walkToPoint(targetX, targetZ, 600);
+    };
+
+    stepLeftRef.current = (dist = 2.2) => {
+      const targetX = camera.position.x - Math.cos(currentYaw) * dist;
+      const targetZ = camera.position.z - Math.sin(currentYaw) * dist;
+      walkToPoint(targetX, targetZ, 600);
+    };
+
+    stepRightRef.current = (dist = 2.2) => {
+      const targetX = camera.position.x + Math.cos(currentYaw) * dist;
+      const targetZ = camera.position.z + Math.sin(currentYaw) * dist;
+      walkToPoint(targetX, targetZ, 600);
+    };
+
+    // Tap-to-Walk Golden Beacon Ripple Effect
+    interface TapRipple {
+      mesh: THREE.Mesh;
+      createdAt: number;
+    }
+    const activeRipples: TapRipple[] = [];
+    const rippleGeo = new THREE.RingGeometry(0.12, 0.45, 32);
+
+    const spawnTapRipple = (rx: number, rz: number): void => {
+      const mat = new THREE.MeshBasicMaterial({
+        color: 0xf59e0b,
+        transparent: true,
+        opacity: 0.85,
+        side: THREE.DoubleSide,
+        depthWrite: false,
+      });
+      const mesh = new THREE.Mesh(rippleGeo, mat);
+      mesh.rotation.x = -Math.PI / 2;
+      mesh.position.set(rx, 0.035, rz);
+      scene.add(mesh);
+      activeRipples.push({ mesh, createdAt: performance.now() });
+    };
+
     // 8. 360° Drag & Click Interaction Handling
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
@@ -308,10 +401,37 @@ export const HallScene: React.FC<HallSceneProps> = ({
           return;
         }
 
-        // 2. Check Photo frames
+        // 2. Check Photo frames (glide in front of photo and open lightbox)
         const hitPhoto = gallery.handleClick(raycaster);
         if (hitPhoto) {
+          const standX = hitPhoto.position[0] < 0 ? -3.8 : 3.8;
+          const standZ = hitPhoto.position[2];
+          walkToPoint(standX, standZ, 600);
+
+          // Face the photo directly
+          const dx = hitPhoto.position[0] - standX;
+          const dz = hitPhoto.position[2] - standZ;
+          targetYaw = Math.atan2(dx, -dz);
+          targetPitch = 0.05;
+
           onPhotoClickRef.current(hitPhoto);
+          return;
+        }
+
+        // 3. Tap-to-Walk on Floor / Carpet
+        const intersects = raycaster.intersectObjects(floorGroup.children, true);
+        const floorHit = intersects.find((hit) => {
+          return (
+            hit.object.name === 'MarbleFloor' ||
+            hit.object.name === 'RedVelvetCarpet' ||
+            hit.object.name.startsWith('CarpetGold') ||
+            (hit.point.y >= -0.2 && hit.point.y <= 0.3)
+          );
+        });
+        if (floorHit) {
+          const pt = floorHit.point;
+          spawnTapRipple(pt.x, pt.z);
+          walkToPoint(pt.x, pt.z, 750);
           return;
         }
       }
@@ -467,6 +587,21 @@ export const HallScene: React.FC<HallSceneProps> = ({
       petals.update(delta);
       waypointsNav.update(elapsed);
 
+      // Tap-to-Walk ripple effect updates
+      for (let i = activeRipples.length - 1; i >= 0; i--) {
+        const r = activeRipples[i];
+        const age = (now - r.createdAt) / 1000;
+        if (age > 1.0) {
+          scene.remove(r.mesh);
+          (r.mesh.material as THREE.Material).dispose();
+          activeRipples.splice(i, 1);
+        } else {
+          const scale = 1.0 + age * 2.8;
+          r.mesh.scale.set(scale, scale, 1);
+          (r.mesh.material as THREE.MeshBasicMaterial).opacity = 0.85 * (1.0 - age);
+        }
+      }
+
       renderer.render(scene, camera);
 
       if (!hasNotifiedLoaded) {
@@ -508,6 +643,14 @@ export const HallScene: React.FC<HallSceneProps> = ({
         resizeObserver.disconnect();
       }
 
+      // Dispose tap ripples
+      activeRipples.forEach((r) => {
+        scene.remove(r.mesh);
+        (r.mesh.material as THREE.Material).dispose();
+      });
+      activeRipples.length = 0;
+      rippleGeo.dispose();
+
       // Dispose sub-modules
       disposeHallFloorAndCarpet(floorGroup);
       lighting.cleanup();
@@ -532,4 +675,9 @@ export const HallScene: React.FC<HallSceneProps> = ({
       style={{ touchAction: 'none' }}
     />
   );
-};
+}
+);
+
+HallScene.displayName = 'HallScene';
+
+export default HallScene;

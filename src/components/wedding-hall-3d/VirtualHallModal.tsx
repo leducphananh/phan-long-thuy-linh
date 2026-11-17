@@ -14,6 +14,9 @@ import {
   Check,
   ChevronLeft,
   ChevronRight,
+  ChevronUp,
+  ChevronDown,
+  Footprints,
   RotateCw,
   DoorOpen,
   Image as ImageIcon,
@@ -26,7 +29,7 @@ import confetti from 'canvas-confetti';
 import { HALL_WAYPOINTS, Waypoint, PhotoFrameData } from '../../types/virtual-hall';
 import { weddingCoupleData, galleryPhotos } from '../../data/weddingData';
 import { submitGuestbookWish } from '../../lib/supabase';
-import { HallScene } from './HallScene';
+import { HallScene, HallSceneHandle } from './HallScene';
 
 export interface VirtualHallModalProps {
   isOpen: boolean;
@@ -95,6 +98,7 @@ export const VirtualHallModal: React.FC<VirtualHallModalProps> = ({
   const [wishError, setWishError] = useState<string>('');
 
   const modalRef = useRef<HTMLDivElement | null>(null);
+  const hallSceneRef = useRef<HallSceneHandle | null>(null);
 
   // Auto-dismiss initial 360° navigation guide badge after 6 seconds
   useEffect(() => {
@@ -105,7 +109,7 @@ export const VirtualHallModal: React.FC<VirtualHallModalProps> = ({
     return () => clearTimeout(timer);
   }, [isOpen]);
 
-  // Lock body scroll and handle keyboard events (Escape, ArrowLeft, ArrowRight)
+  // Lock body scroll and handle keyboard events (Escape, Arrow keys, WASD)
   useEffect(() => {
     if (!isOpen) return;
 
@@ -130,6 +134,17 @@ export const VirtualHallModal: React.FC<VirtualHallModalProps> = ({
           handleNextPhoto();
         } else if (e.key === 'ArrowLeft') {
           handlePrevPhoto();
+        }
+      } else if (!showGiftPopup && !showWishPopup && !showHelpModal) {
+        // Walk Controls: WASD and Arrow Keys
+        if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
+          hallSceneRef.current?.stepForward();
+        } else if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') {
+          hallSceneRef.current?.stepBackward();
+        } else if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+          hallSceneRef.current?.stepLeft();
+        } else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+          hallSceneRef.current?.stepRight();
         }
       }
     };
@@ -336,8 +351,10 @@ export const VirtualHallModal: React.FC<VirtualHallModalProps> = ({
         return <DoorOpen className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />;
       case 'wp-gallery-left':
         return <ImageIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />;
-      case 'wp-gallery-right':
+      case 'wp-gallery-mid':
         return <Images className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />;
+      case 'wp-gallery-stage':
+        return <ImageIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />;
       case 'wp-stage':
         return <Crown className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />;
       default:
@@ -436,6 +453,7 @@ export const VirtualHallModal: React.FC<VirtualHallModalProps> = ({
       <main className="relative flex-1 w-full h-full overflow-hidden">
         {/* 3D WebGL Canvas */}
         <HallScene
+          ref={hallSceneRef}
           activeWaypointId={currentWaypointId}
           onWaypointChange={setCurrentWaypointId}
           onPhotoClick={(photo) => setActivePhoto(photo)}
@@ -461,13 +479,13 @@ export const VirtualHallModal: React.FC<VirtualHallModalProps> = ({
           </div>
         )}
 
-        {/* 360° Interaction Hint Badge (Auto-dismiss or dismiss on click) */}
+        {/* 360° & Walk Interaction Hint Badge */}
         {showGuideBadge && !isLoadingScene && (
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 pointer-events-auto">
-            <div className="flex items-center gap-2.5 px-3.5 sm:px-4 py-2 rounded-full bg-stone-950/85 backdrop-blur-md border border-amber-500/35 text-amber-200 text-xs sm:text-sm shadow-[0_4px_20px_rgba(0,0,0,0.5)] animate-fade-in">
+            <div className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full bg-stone-950/90 backdrop-blur-md border border-amber-500/40 text-amber-200 text-xs sm:text-sm shadow-[0_4px_25px_rgba(0,0,0,0.6)] animate-fade-in">
               <RotateCw className="w-3.5 h-3.5 text-amber-400 shrink-0 animate-spin" style={{ animationDuration: '4s' }} />
               <span className="font-medium whitespace-nowrap">
-                Vuốt để xoay 360° · Chạm điểm neo hoặc tranh để khám phá
+                Chạm sàn để bước tới · Vuốt xoay 360° · Dùng nút đi lại · Chạm tranh để ngắm
               </span>
               <button
                 type="button"
@@ -478,6 +496,53 @@ export const VirtualHallModal: React.FC<VirtualHallModalProps> = ({
                 <X className="w-3 h-3" />
               </button>
             </div>
+          </div>
+        )}
+
+        {/* Floating Walk Controls (D-Pad) */}
+        {!isLoadingScene && (
+          <div className="absolute bottom-20 right-3 sm:bottom-24 sm:right-6 z-20 pointer-events-auto flex flex-col items-center select-none bg-stone-950/80 backdrop-blur-md p-1.5 rounded-2xl border border-amber-500/35 shadow-[0_8px_30px_rgba(0,0,0,0.6)]">
+            <button
+              type="button"
+              onClick={() => hallSceneRef.current?.stepForward()}
+              className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-stone-900/90 hover:bg-amber-950/80 active:bg-amber-600/70 border border-amber-500/40 text-amber-200 flex flex-col items-center justify-center shadow transition-all active:scale-95 cursor-pointer"
+              title="Bước tới (Phím W / ↑)"
+              aria-label="Bước tới"
+            >
+              <ChevronUp className="w-5 h-5 text-amber-300" />
+            </button>
+            <div className="flex items-center gap-1 my-1">
+              <button
+                type="button"
+                onClick={() => hallSceneRef.current?.stepLeft()}
+                className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-stone-900/90 hover:bg-amber-950/80 active:bg-amber-600/70 border border-amber-500/40 text-amber-200 flex flex-col items-center justify-center shadow transition-all active:scale-95 cursor-pointer"
+                title="Sang trái (Phím A / ←)"
+                aria-label="Sang trái"
+              >
+                <ChevronLeft className="w-5 h-5 text-amber-300" />
+              </button>
+              <div className="w-5 h-5 flex items-center justify-center text-amber-400/60" title="Di chuyển">
+                <Footprints className="w-3.5 h-3.5" />
+              </div>
+              <button
+                type="button"
+                onClick={() => hallSceneRef.current?.stepRight()}
+                className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-stone-900/90 hover:bg-amber-950/80 active:bg-amber-600/70 border border-amber-500/40 text-amber-200 flex flex-col items-center justify-center shadow transition-all active:scale-95 cursor-pointer"
+                title="Sang phải (Phím D / →)"
+                aria-label="Sang phải"
+              >
+                <ChevronRight className="w-5 h-5 text-amber-300" />
+              </button>
+            </div>
+            <button
+              type="button"
+              onClick={() => hallSceneRef.current?.stepBackward()}
+              className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-stone-900/90 hover:bg-amber-950/80 active:bg-amber-600/70 border border-amber-500/40 text-amber-200 flex flex-col items-center justify-center shadow transition-all active:scale-95 cursor-pointer"
+              title="Lùi lại (Phím S / ↓)"
+              aria-label="Lùi lại"
+            >
+              <ChevronDown className="w-5 h-5 text-amber-300" />
+            </button>
           </div>
         )}
       </main>
@@ -1042,6 +1107,16 @@ export const VirtualHallModal: React.FC<VirtualHallModalProps> = ({
 
             <div className="mt-4 space-y-3.5 text-xs sm:text-sm text-stone-300 font-sans">
               <div className="flex items-start gap-3 p-2.5 rounded-2xl bg-stone-950/60 border border-stone-800">
+                <span className="text-lg shrink-0">🚶</span>
+                <div>
+                  <strong className="text-amber-200 block mb-0.5">Đi lại &amp; Bước chân tự do</strong>
+                  <span>
+                    Chạm trực tiếp vào thảm đỏ hoặc sàn cẩm thạch để bước tới vị trí đó với hiệu ứng sóng ánh sáng vàng. Bạn cũng có thể dùng nút điều hướng ở góc phải màn hình hoặc phím W, A, S, D / Mũi tên.
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3 p-2.5 rounded-2xl bg-stone-950/60 border border-stone-800">
                 <span className="text-lg shrink-0">🔄</span>
                 <div>
                   <strong className="text-amber-200 block mb-0.5">Xoay nhìn 360°</strong>
@@ -1054,9 +1129,9 @@ export const VirtualHallModal: React.FC<VirtualHallModalProps> = ({
               <div className="flex items-start gap-3 p-2.5 rounded-2xl bg-stone-950/60 border border-stone-800">
                 <span className="text-lg shrink-0">📍</span>
                 <div>
-                  <strong className="text-amber-200 block mb-0.5">Điểm ngắm (Waypoints)</strong>
+                  <strong className="text-amber-200 block mb-0.5">Điểm ngắm chính (5 Waypoints)</strong>
                   <span>
-                    Chạm vào 4 nút ở thanh phía dưới hoặc nhấp vào các cột sáng vàng dưới sàn để camera lướt mượt mà đến Cổng hoa, Triển lãm ảnh hay Sân khấu.
+                    Chạm vào 5 nút ở thanh phía dưới để camera lướt nhanh đến Cổng hoa, 3 khu vực ảnh cưới dọc hai bên tường, hoặc Sân khấu hôn lễ.
                   </span>
                 </div>
               </div>
@@ -1066,7 +1141,7 @@ export const VirtualHallModal: React.FC<VirtualHallModalProps> = ({
                 <div>
                   <strong className="text-amber-200 block mb-0.5">Triển lãm ảnh cưới</strong>
                   <span>
-                    Chạm trực tiếp vào bất kỳ khung tranh cưới nào trên tường để phóng to xem ảnh độ nét cao và lướt qua album.
+                    Chạm vào bất kỳ khung tranh nào trên tường để camera tự động bước đến ngắm tranh cận cảnh và mở ảnh độ nét cao. Vuốt trái/phải để xem lần lượt album.
                   </span>
                 </div>
               </div>
@@ -1084,9 +1159,9 @@ export const VirtualHallModal: React.FC<VirtualHallModalProps> = ({
               <div className="flex items-start gap-3 p-2.5 rounded-2xl bg-stone-950/60 border border-stone-800">
                 <span className="text-lg shrink-0">⌨️</span>
                 <div>
-                  <strong className="text-amber-200 block mb-0.5">Phím tắt nhanh</strong>
+                  <strong className="text-amber-200 block mb-0.5">Phím tắt bàn phím</strong>
                   <span>
-                    Nhấn phím <kbd className="px-1.5 py-0.5 rounded bg-stone-800 text-amber-200 font-mono text-[11px]">Esc</kbd> để đóng ảnh hoặc thoát rạp cưới. Dùng phím mũi tên <kbd className="px-1.5 py-0.5 rounded bg-stone-800 text-amber-200 font-mono text-[11px]">←</kbd> <kbd className="px-1.5 py-0.5 rounded bg-stone-800 text-amber-200 font-mono text-[11px]">→</kbd> để chuyển ảnh.
+                    Dùng phím <kbd className="px-1.5 py-0.5 rounded bg-stone-800 text-amber-200 font-mono text-[11px]">W</kbd> <kbd className="px-1.5 py-0.5 rounded bg-stone-800 text-amber-200 font-mono text-[11px]">A</kbd> <kbd className="px-1.5 py-0.5 rounded bg-stone-800 text-amber-200 font-mono text-[11px]">S</kbd> <kbd className="px-1.5 py-0.5 rounded bg-stone-800 text-amber-200 font-mono text-[11px]">D</kbd> hoặc phím mũi tên để đi lại. Phím <kbd className="px-1.5 py-0.5 rounded bg-stone-800 text-amber-200 font-mono text-[11px]">Esc</kbd> để đóng ảnh hoặc thoát rạp cưới.
                   </span>
                 </div>
               </div>
