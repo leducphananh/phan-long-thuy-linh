@@ -82,6 +82,7 @@ export const HallScene: React.FC<HallSceneProps> = ({
 
     let animationFrameId: number;
     let isDisposed = false;
+    let hasNotifiedLoaded = false;
 
     // 1. Initial dimensions
     const width = container.clientWidth || window.innerWidth;
@@ -108,7 +109,7 @@ export const HallScene: React.FC<HallSceneProps> = ({
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.setSize(width, height);
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.shadowMap.type = THREE.PCFShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.05;
     renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -348,16 +349,27 @@ export const HallScene: React.FC<HallSceneProps> = ({
       waypointsNav.update(elapsed);
 
       renderer.render(scene, camera);
+
+      if (!hasNotifiedLoaded) {
+        hasNotifiedLoaded = true;
+        onLoadedRef.current?.();
+      }
     };
 
     animate();
 
-    // Notify parent that the 3D scene is initialized and ready
-    onLoadedRef.current?.();
+    // Secondary fallback in case requestAnimationFrame is queued or throttled
+    const readyTimer = setTimeout(() => {
+      if (!hasNotifiedLoaded) {
+        hasNotifiedLoaded = true;
+        onLoadedRef.current?.();
+      }
+    }, 300);
 
     // 11. Cleanup & Disposal on unmount
     return () => {
       isDisposed = true;
+      clearTimeout(readyTimer);
       triggerTransitionRef.current = null;
       cancelAnimationFrame(animationFrameId);
 

@@ -142,12 +142,20 @@ export const VirtualHallModal: React.FC<VirtualHallModalProps> = ({
     };
   }, [isOpen, activePhoto, showGiftPopup, showWishPopup, showHelpModal, onClose]);
 
+  // Safety fallback: auto-dismiss loading overlay after max 2.5s if scene hasn't signaled
+  useEffect(() => {
+    if (!isOpen) return;
+    const fallbackTimer = setTimeout(() => {
+      setIsLoadingScene(false);
+    }, 2500);
+    return () => clearTimeout(fallbackTimer);
+  }, [isOpen]);
+
   // Reset internal states on modal close/open
   useEffect(() => {
     if (isOpen) {
       setCurrentWaypointId('wp-entrance');
       setActivePhoto(null);
-      setIsLoadingScene(true);
       setShowGuideBadge(true);
       setShowGiftPopup(false);
       setShowWishPopup(false);
