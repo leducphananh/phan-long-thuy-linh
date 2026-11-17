@@ -24,6 +24,7 @@ export interface HallSceneHandle {
   stepLeft: (distance?: number) => void;
   stepRight: (distance?: number) => void;
   walkTo: (x: number, z: number) => void;
+  setMoveVector: (x: number, z: number) => void;
 }
 
 interface CameraTransitionState {
@@ -73,6 +74,7 @@ export const HallScene = forwardRef<HallSceneHandle, HallSceneProps>(
     const stepLeftRef = useRef<((distance?: number) => void) | null>(null);
     const stepRightRef = useRef<((distance?: number) => void) | null>(null);
     const walkToRef = useRef<((x: number, z: number) => void) | null>(null);
+    const setMoveVectorRef = useRef<((x: number, z: number) => void) | null>(null);
 
     useImperativeHandle(ref, () => ({
       stepForward: (dist) => stepForwardRef.current?.(dist),
@@ -80,6 +82,7 @@ export const HallScene = forwardRef<HallSceneHandle, HallSceneProps>(
       stepLeft: (dist) => stepLeftRef.current?.(dist),
       stepRight: (dist) => stepRightRef.current?.(dist),
       walkTo: (x, z) => walkToRef.current?.(x, z),
+      setMoveVector: (x, z) => setMoveVectorRef.current?.(x, z),
     }));
 
     // Keep callback refs fresh without triggering full scene re-instantiation
@@ -254,7 +257,7 @@ export const HallScene = forwardRef<HallSceneHandle, HallSceneProps>(
     // Smooth Walk to specific coordinate (Tap-to-Walk & Stepping)
     const walkToPoint = (targetX: number, targetZ: number, duration = 750): void => {
       // Clamp within hall walking area
-      const clampedX = Math.max(-4.2, Math.min(4.2, targetX));
+      const clampedX = Math.max(-4.5, Math.min(4.5, targetX));
       const clampedZ = Math.max(-13.0, Math.min(13.0, targetZ));
 
       transition.startPos.copy(camera.position);
@@ -269,6 +272,18 @@ export const HallScene = forwardRef<HallSceneHandle, HallSceneProps>(
     };
 
     walkToRef.current = (x, z) => walkToPoint(x, z, 750);
+
+    // Continuous Joystick Locomotion input
+    const moveInput = { x: 0, z: 0 };
+    setMoveVectorRef.current = (x: number, z: number) => {
+      moveInput.x = x;
+      moveInput.z = z;
+      if (Math.abs(x) > 0.05 || Math.abs(z) > 0.05) {
+        if (transition.active) {
+          transition.active = false;
+        }
+      }
+    };
 
     stepForwardRef.current = (dist = 2.8) => {
       const targetX = camera.position.x + Math.sin(currentYaw) * dist;
@@ -559,6 +574,21 @@ export const HallScene = forwardRef<HallSceneHandle, HallSceneProps>(
         camera.updateProjectionMatrix();
       }
 
+      // Continuous 360° Joystick analog locomotion
+      if (Math.abs(moveInput.x) > 0.02 || Math.abs(moveInput.z) > 0.02) {
+        const moveSpeed = 4.2; // 4.2 m/s
+        const fwdX = Math.sin(currentYaw);
+        const fwdZ = -Math.cos(currentYaw);
+        const rgtX = Math.cos(currentYaw);
+        const rgtZ = Math.sin(currentYaw);
+
+        const stepX = (fwdX * moveInput.z + rgtX * moveInput.x) * moveSpeed * delta;
+        const stepZ = (fwdZ * moveInput.z + rgtZ * moveInput.x) * moveSpeed * delta;
+
+        camera.position.x += stepX;
+        camera.position.z += stepZ;
+      }
+
       // Constrain Pitch Angle
       currentPitch = Math.max(-maxPitch, Math.min(maxPitch, currentPitch));
 
@@ -575,11 +605,11 @@ export const HallScene = forwardRef<HallSceneHandle, HallSceneProps>(
       );
 
       // Strict Interior Safety Bounds: never breach walls under any circumstances
-      // Hall width: 14m (X: -7 to +7) -> Clamp inside [-5.5, 5.5] (1.5m clearance)
-      // Hall length: 32m (Z: -16 to +16) -> Clamp inside [-13.5, 13.5] (2.5m clearance)
+      // Hall width: 14m (X: -7 to +7) -> Clamp inside [-4.5, 4.5] (2.5m clearance)
+      // Hall length: 32m (Z: -16 to +16) -> Clamp inside [-13.0, 13.0] (3m clearance)
       // Height: Clamp Y inside [1.4, 2.2]
-      camera.position.x = Math.max(-5.5, Math.min(5.5, camera.position.x));
-      camera.position.z = Math.max(-13.5, Math.min(13.5, camera.position.z));
+      camera.position.x = Math.max(-4.5, Math.min(4.5, camera.position.x));
+      camera.position.z = Math.max(-13.0, Math.min(13.0, camera.position.z));
       camera.position.y = Math.max(1.4, Math.min(2.2, camera.position.y));
 
       // Sub-module dynamic updates
@@ -625,6 +655,7 @@ export const HallScene = forwardRef<HallSceneHandle, HallSceneProps>(
       isDisposed = true;
       clearTimeout(readyTimer);
       triggerTransitionRef.current = null;
+      setMoveVectorRef.current = null;
       cancelAnimationFrame(animationFrameId);
 
       // Remove event listeners

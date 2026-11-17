@@ -30,6 +30,7 @@ import { HALL_WAYPOINTS, Waypoint, PhotoFrameData } from '../../types/virtual-ha
 import { weddingCoupleData, galleryPhotos } from '../../data/weddingData';
 import { submitGuestbookWish } from '../../lib/supabase';
 import { HallScene, HallSceneHandle } from './HallScene';
+import { VirtualJoystick } from './VirtualJoystick';
 
 export interface VirtualHallModalProps {
   isOpen: boolean;
@@ -100,85 +101,6 @@ export const VirtualHallModal: React.FC<VirtualHallModalProps> = ({
   const modalRef = useRef<HTMLDivElement | null>(null);
   const hallSceneRef = useRef<HallSceneHandle | null>(null);
 
-  // Auto-dismiss initial 360° navigation guide badge after 6 seconds
-  useEffect(() => {
-    if (!isOpen) return;
-    const timer = setTimeout(() => {
-      setShowGuideBadge(false);
-    }, 6000);
-    return () => clearTimeout(timer);
-  }, [isOpen]);
-
-  // Lock body scroll and handle keyboard events (Escape, Arrow keys, WASD)
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        if (activePhoto) {
-          setActivePhoto(null);
-        } else if (showGiftPopup) {
-          setShowGiftPopup(false);
-        } else if (showWishPopup) {
-          setShowWishPopup(false);
-        } else if (showHelpModal) {
-          setShowHelpModal(false);
-        } else {
-          onClose();
-        }
-      } else if (activePhoto) {
-        if (e.key === 'ArrowRight') {
-          handleNextPhoto();
-        } else if (e.key === 'ArrowLeft') {
-          handlePrevPhoto();
-        }
-      } else if (!showGiftPopup && !showWishPopup && !showHelpModal) {
-        // Walk Controls: WASD and Arrow Keys
-        if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
-          hallSceneRef.current?.stepForward();
-        } else if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') {
-          hallSceneRef.current?.stepBackward();
-        } else if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
-          hallSceneRef.current?.stepLeft();
-        } else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
-          hallSceneRef.current?.stepRight();
-        }
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.body.style.overflow = originalOverflow;
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [isOpen, activePhoto, showGiftPopup, showWishPopup, showHelpModal, onClose]);
-
-  // Safety fallback: auto-dismiss loading overlay after max 2.5s if scene hasn't signaled
-  useEffect(() => {
-    if (!isOpen) return;
-    const fallbackTimer = setTimeout(() => {
-      setIsLoadingScene(false);
-    }, 2500);
-    return () => clearTimeout(fallbackTimer);
-  }, [isOpen]);
-
-  // Reset internal states on modal close/open
-  useEffect(() => {
-    if (isOpen) {
-      setCurrentWaypointId('wp-entrance');
-      setActivePhoto(null);
-      setShowGuideBadge(true);
-      setShowGiftPopup(false);
-      setShowWishPopup(false);
-      setShowHelpModal(false);
-      setWishSuccess(false);
-    }
-  }, [isOpen]);
-
   // Find index in galleryPhotos corresponding to activePhoto
   const currentPhotoIndex = useMemo(() => {
     if (!activePhoto) return -1;
@@ -227,6 +149,108 @@ export const VirtualHallModal: React.FC<VirtualHallModalProps> = ({
       height: activePhoto?.height || 2.4,
     });
   }, [currentPhotoIndex, activePhoto]);
+
+  // Auto-dismiss initial 360° navigation guide badge after 6 seconds
+  useEffect(() => {
+    if (!isOpen) return;
+    const timer = setTimeout(() => {
+      setShowGuideBadge(false);
+    }, 6000);
+    return () => clearTimeout(timer);
+  }, [isOpen]);
+
+  // Lock body scroll and handle keyboard events (Escape, Arrow keys, WASD continuous walking)
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const pressedKeys: { [key: string]: boolean } = {};
+
+    const updateKeyboardMove = () => {
+      let vx = 0;
+      let vz = 0;
+      if (pressedKeys['w'] || pressedKeys['W'] || pressedKeys['ArrowUp']) vz += 1;
+      if (pressedKeys['s'] || pressedKeys['S'] || pressedKeys['ArrowDown']) vz -= 1;
+      if (pressedKeys['d'] || pressedKeys['D'] || pressedKeys['ArrowRight']) vx += 1;
+      if (pressedKeys['a'] || pressedKeys['A'] || pressedKeys['ArrowLeft']) vx -= 1;
+      hallSceneRef.current?.setMoveVector(vx, vz);
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        if (activePhoto) {
+          setActivePhoto(null);
+        } else if (showGiftPopup) {
+          setShowGiftPopup(false);
+        } else if (showWishPopup) {
+          setShowWishPopup(false);
+        } else if (showHelpModal) {
+          setShowHelpModal(false);
+        } else {
+          onClose();
+        }
+      } else if (activePhoto) {
+        if (e.key === 'ArrowRight') {
+          handleNextPhoto();
+        } else if (e.key === 'ArrowLeft') {
+          handlePrevPhoto();
+        }
+      } else if (!showGiftPopup && !showWishPopup && !showHelpModal) {
+        const k = e.key;
+        if (
+          k === 'w' || k === 'W' || k === 'ArrowUp' ||
+          k === 's' || k === 'S' || k === 'ArrowDown' ||
+          k === 'a' || k === 'A' || k === 'ArrowLeft' ||
+          k === 'd' || k === 'D' || k === 'ArrowRight'
+        ) {
+          pressedKeys[k] = true;
+          updateKeyboardMove();
+        }
+      }
+    };
+
+    const handleKeyUp = (e: KeyboardEvent) => {
+      const k = e.key;
+      if (pressedKeys[k]) {
+        delete pressedKeys[k];
+        updateKeyboardMove();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+      hallSceneRef.current?.setMoveVector(0, 0);
+    };
+  }, [isOpen, activePhoto, showGiftPopup, showWishPopup, showHelpModal, onClose, handleNextPhoto, handlePrevPhoto]);
+
+  // Safety fallback: auto-dismiss loading overlay after max 2.5s if scene hasn't signaled
+  useEffect(() => {
+    if (!isOpen) return;
+    const fallbackTimer = setTimeout(() => {
+      setIsLoadingScene(false);
+    }, 2500);
+    return () => clearTimeout(fallbackTimer);
+  }, [isOpen]);
+
+  // Reset internal states on modal close/open
+  useEffect(() => {
+    if (isOpen) {
+      setCurrentWaypointId('wp-entrance');
+      setActivePhoto(null);
+      setShowGuideBadge(true);
+      setShowGiftPopup(false);
+      setShowWishPopup(false);
+      setShowHelpModal(false);
+      setWishSuccess(false);
+    }
+  }, [isOpen]);
 
   // High-performance touch swipe gesture handlers for 3D Photo Lightbox
   const photoTouchStartXRef = useRef<number>(0);
@@ -485,7 +509,7 @@ export const VirtualHallModal: React.FC<VirtualHallModalProps> = ({
             <div className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full bg-stone-950/90 backdrop-blur-md border border-amber-500/40 text-amber-200 text-xs sm:text-sm shadow-[0_4px_25px_rgba(0,0,0,0.6)] animate-fade-in">
               <RotateCw className="w-3.5 h-3.5 text-amber-400 shrink-0 animate-spin" style={{ animationDuration: '4s' }} />
               <span className="font-medium whitespace-nowrap">
-                Chạm sàn để bước tới · Vuốt xoay 360° · Dùng nút đi lại · Chạm tranh để ngắm
+                Gạt Joystick trái để đi lại · Vuốt phải xoay 360° · Chạm sàn hoặc tranh để khám phá
               </span>
               <button
                 type="button"
@@ -499,50 +523,22 @@ export const VirtualHallModal: React.FC<VirtualHallModalProps> = ({
           </div>
         )}
 
-        {/* Floating Walk Controls (D-Pad) */}
+        {/* Luxury Champagne Gold Virtual Joystick (Bottom Left) */}
         {!isLoadingScene && (
-          <div className="absolute bottom-20 right-3 sm:bottom-24 sm:right-6 z-20 pointer-events-auto flex flex-col items-center select-none bg-stone-950/80 backdrop-blur-md p-1.5 rounded-2xl border border-amber-500/35 shadow-[0_8px_30px_rgba(0,0,0,0.6)]">
-            <button
-              type="button"
-              onClick={() => hallSceneRef.current?.stepForward()}
-              className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-stone-900/90 hover:bg-amber-950/80 active:bg-amber-600/70 border border-amber-500/40 text-amber-200 flex flex-col items-center justify-center shadow transition-all active:scale-95 cursor-pointer"
-              title="Bước tới (Phím W / ↑)"
-              aria-label="Bước tới"
-            >
-              <ChevronUp className="w-5 h-5 text-amber-300" />
-            </button>
-            <div className="flex items-center gap-1 my-1">
-              <button
-                type="button"
-                onClick={() => hallSceneRef.current?.stepLeft()}
-                className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-stone-900/90 hover:bg-amber-950/80 active:bg-amber-600/70 border border-amber-500/40 text-amber-200 flex flex-col items-center justify-center shadow transition-all active:scale-95 cursor-pointer"
-                title="Sang trái (Phím A / ←)"
-                aria-label="Sang trái"
-              >
-                <ChevronLeft className="w-5 h-5 text-amber-300" />
-              </button>
-              <div className="w-5 h-5 flex items-center justify-center text-amber-400/60" title="Di chuyển">
-                <Footprints className="w-3.5 h-3.5" />
-              </div>
-              <button
-                type="button"
-                onClick={() => hallSceneRef.current?.stepRight()}
-                className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-stone-900/90 hover:bg-amber-950/80 active:bg-amber-600/70 border border-amber-500/40 text-amber-200 flex flex-col items-center justify-center shadow transition-all active:scale-95 cursor-pointer"
-                title="Sang phải (Phím D / →)"
-                aria-label="Sang phải"
-              >
-                <ChevronRight className="w-5 h-5 text-amber-300" />
-              </button>
-            </div>
-            <button
-              type="button"
-              onClick={() => hallSceneRef.current?.stepBackward()}
-              className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-stone-900/90 hover:bg-amber-950/80 active:bg-amber-600/70 border border-amber-500/40 text-amber-200 flex flex-col items-center justify-center shadow transition-all active:scale-95 cursor-pointer"
-              title="Lùi lại (Phím S / ↓)"
-              aria-label="Lùi lại"
-            >
-              <ChevronDown className="w-5 h-5 text-amber-300" />
-            </button>
+          <div className="absolute bottom-20 left-3.5 sm:bottom-24 sm:left-6 z-20 pointer-events-auto flex flex-col items-center">
+            <VirtualJoystick
+              onMove={(e) => {
+                hallSceneRef.current?.setMoveVector(e.x, e.y);
+              }}
+              onStop={() => {
+                hallSceneRef.current?.setMoveVector(0, 0);
+              }}
+              size={92}
+              knobSize={40}
+            />
+            <span className="mt-1 text-[9px] font-semibold text-amber-300/80 tracking-widest uppercase drop-shadow pointer-events-none select-none">
+              Di chuyển
+            </span>
           </div>
         )}
       </main>
@@ -1107,11 +1103,11 @@ export const VirtualHallModal: React.FC<VirtualHallModalProps> = ({
 
             <div className="mt-4 space-y-3.5 text-xs sm:text-sm text-stone-300 font-sans">
               <div className="flex items-start gap-3 p-2.5 rounded-2xl bg-stone-950/60 border border-stone-800">
-                <span className="text-lg shrink-0">🚶</span>
+                <span className="text-lg shrink-0">🕹️</span>
                 <div>
-                  <strong className="text-amber-200 block mb-0.5">Đi lại &amp; Bước chân tự do</strong>
+                  <strong className="text-amber-200 block mb-0.5">Cần gạt Joystick 360° &amp; Đi lại tự do</strong>
                   <span>
-                    Chạm trực tiếp vào thảm đỏ hoặc sàn cẩm thạch để bước tới vị trí đó với hiệu ứng sóng ánh sáng vàng. Bạn cũng có thể dùng nút điều hướng ở góc phải màn hình hoặc phím W, A, S, D / Mũi tên.
+                    Dùng ngón cái trái gạt cần tròn ở góc dưới bên trái để bước đi 360° mượt mà (tiến, lùi, qua trái, qua phải) hoặc chạm trực tiếp sàn để bước tới. Ngón cái phải vuốt trên màn hình để xoay góc nhìn 360°.
                   </span>
                 </div>
               </div>
