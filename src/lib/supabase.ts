@@ -272,8 +272,9 @@ export function subscribeGuestbookRealtime(
   }
 
   try {
+    const channelId = `guestbook-realtime-${Math.random().toString(36).substring(2, 9)}`;
     const channel = client
-      .channel('guestbook-realtime-channel')
+      .channel(channelId)
       .on(
         'postgres_changes',
         {
